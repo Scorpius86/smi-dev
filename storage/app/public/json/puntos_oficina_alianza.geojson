@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "puntos_oficina_alianza2",
+"features": [
+{ "type": "Feature", "properties": { "OR_": "HUANUCO", "X": 390486.0, "Y": 8972323.0 }, "geometry": { "type": "Point", "coordinates": [ -75.997135316179651, -9.295508714789682 ] } },
+{ "type": "Feature", "properties": { "OR_": "SAN MARTIN", "X": 350270.0, "Y": 9282481.0 }, "geometry": { "type": "Point", "coordinates": [ -76.354081543367329, -6.489532074493941 ] } },
+{ "type": "Feature", "properties": { "OR_": "UCAYALI", "X": 551476.0, "Y": 9073493.0 }, "geometry": { "type": "Point", "coordinates": [ -74.532442229508163, -8.381524630948372 ] } }
+]
+}

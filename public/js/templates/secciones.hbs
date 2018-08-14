@@ -1,0 +1,53 @@
+<ul class="bg-light">
+    {{#each secciones}}
+    <li class="sidebar-dropdown">
+        <a href="#" class="border-2 border-left border-menu-item d-block">
+            <div class="d-inline-flex align-items-center pl-2 bg-item">
+                <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
+                <span>{{nombre}}</span>
+            </div>
+        </a>
+        {{#if hasChildren}}
+        <div class="sidebar-submenu">
+            <ul class="py-0">
+                {{#each children}}
+                <li class="bg-sub-item">
+                    <a class="d-block" href="#">
+                        <div class="p-0">
+                            <!-- custom-control-input-->
+                            <input type="checkbox" class="d-none menu-item" data-value="{{json this}}" data-parent="{{json ../this}}" id="{{id}}">
+                            <label class="w-100 d-inline-flex align-items-center mb-0" for="{{id}}">
+                                <span class="mr-2 px-1 rounded-circle border border-2 border-custom-red bg-custom-red">
+                                    <i class="text-white fas fa-map-marker-alt"></i>
+                                </span>
+                                <span>{{nombre}}</span>
+                            </label>
+                        </div>
+                    </a>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+    </li>
+    {{/each}}
+    <li class="header-menu">
+        <span>Mostrar</span>
+        <div class="sidebar-submenu">
+            <ul>
+                <li>
+                    <a href="#">Google maps</a>
+                </li>
+                <li>
+                    <a href="#">Open street map</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li>
+        <button class="d-block w-100 rounded-0 btn btn-primary">
+            <span>Salir</span>
+            <i class="fas fa-sign-out-alt ml-1"></i>
+        </button>
+    </li>
+</ul>
