@@ -250,6 +250,11 @@
     text-decoration: none;
     position: relative;
     padding: 8px 30px 8px 0px;
+    
+  }
+
+  .sidebar-wrapper .sidebar-menu ul li a div label{
+    cursor: pointer;
   }
   
   /* .sidebar-wrapper .sidebar-menu ul li a i {

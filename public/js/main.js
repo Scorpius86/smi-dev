@@ -5,6 +5,8 @@ const MAP_MARKER_3 = MARKER_PATH + "if_map-marker_299087.png";
 const MAP_MARKER_PIN = MARKER_PATH + "if_Pin_728961.png";
 const MAP_MARKER_LOCATION = MARKER_PATH + "if_location_925919.png";
 
+
+
 var map = {};
 var layers = [];
 
@@ -86,7 +88,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
-        id: 'mapbox.streets',//'mapbox.streets',
+        id: 'mapbox.streets-basic',//'mapbox.streets',
         accessToken: 'pk.eyJ1IjoicHNoYXJweCIsImEiOiJjamljbzN0cngwMzAzM3B0ZDZ6aHNiNmRyIn0.2ZAyLQwArDCLoZsT4Ji3EA'
     }).addTo(map);
 
@@ -201,19 +203,17 @@ function onceMapIsLoaded() {
     const $menu_container = $("#menu-sidebar");
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
     const $whenMenuItemIsChecked = function () {
+        
         const $isChecked = $(this).prop('checked');
         const $id = parseInt($(this).prop('id'));
         const $seccion = $(this).data('value');
         const $parent = $(this).data('parent');
 
-        console.log($(this));
-
-
         if (!$isChecked) {
             removeMarker($id, $seccion.id);
             return;
         }
-
+        showLoading();
         addLegend($id, $seccion);
 
         const $addNewLayer = function ($id, $layer) {
@@ -225,6 +225,7 @@ function onceMapIsLoaded() {
 
 
         const $afterLoadPuntos = function ($seccion, $cacheLayer) {
+            
             const $id = $seccion.seccion.id;
 
             if ($seccion.geoJsonFile) {
@@ -233,14 +234,11 @@ function onceMapIsLoaded() {
                         feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
 
                     if (feature.properties) {
-                        console.log(feature.properties);
 
                         var res = Object.keys(feature.properties)
                         .map(function(k) {
                             return [k, feature.properties[k]];
                         });
-
-                        console.log(res);
 
                         $template = renderHandlebarsTemplate(
                             "#punto-popupcontent-template", null, { properties: res}, null, true
@@ -258,23 +256,47 @@ function onceMapIsLoaded() {
 
                 let $points = JSON.parse($seccion.geoJsonFile);
 
+                const $myCustomColour = $seccion.seccion.color;
+
+                const $markerHtmlStyles = `
+                background-color: ${$myCustomColour};
+                width: 2rem;
+                height: 2rem;
+                display: block;
+                left: -1.5rem;
+                top: -1.5rem;
+                position: relative;
+                border-radius: 3rem 3rem 0;
+                transform: rotate(45deg);
+                border: 1px solid #FFFFFF`;
+
+                const icon = L.divIcon({
+                className: "my-custom-pin",
+                iconAnchor: [0, 24],
+                labelAnchor: [-6, 0],
+                popupAnchor: [0, -36],
+                html: `<span style="${$markerHtmlStyles}" />`
+                });
+
+
+                var iconMarkerPoint= L.icon({
+                    iconUrl: $seccion.fullMarkerUrl,
+                    iconSize: [32, 37],
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -28]
+                });
+
                 const $currentSectionPoints = L.geoJSON($points, {
                     onEachFeature: $onEachFeature,
                     pointToLayer: function (feature, latlng) {
-                        // return L.marker(latlng, {icon: divIcon});
-                        return L.marker(latlng, { icon: markers().markerMapIcon });
-                        // return L.circleMarker(latlng, {
-                        //     radius: 8,
-                        //     fillColor: "#ff7800",
-                        //     color: "#000",
-                        //     weight: 1,
-                        //     opacity: 1,
-                        //     fillOpacity: 0.8
-                        // });
+                        return L.marker(latlng, { icon: icon });                       
                     }
                 }).addTo(map);
+               
                 $cacheLayer($id, $currentSectionPoints);
             }
+
+            hideLoading();
         };
 
         const $afterLoadPoligonos = function ($poligonos) {

@@ -23,6 +23,17 @@
 </head>
 
 <body>
+
+    <div id='loading' class="modal bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" 
+                        aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
         <a class="navbar-brand ml-4" href="#">
             <!-- <i class="fa fa-home fa-2x"></i> -->
@@ -109,11 +120,13 @@
         <div class="d-block w-100">
 
             <div class="row">
-                <div class="col-3"></div>
+                <div class="col-3">
+
+                </div>
                 <div class="col-9">
+                   
                     <div class="row" id="map-legend">
-                        <!-- <button type="button" class="btn btn-sm btn-light">Agentes principales <span class="badge badge-light"> X </span></button> -->
-                    </div>                    
+                    </div>
                 </div>
             </div>
             
@@ -145,12 +158,14 @@
     <script src="js/main.js"></script>
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
         
-
         {{#each properties as |item|}}
-        <p class="mb-0">            
-            <span class="font-weight-light pr-2">{{item.[0]}}</span>
-            <span class="font-weight-bold text-capitalize">{{item.[1]}}</span>
-        </p>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="font-weight-light pr-2">{{item.[0]}}</span>
+            </div>
+            <input type="text" class="form-control" value="{{item.[1]}}">
+           
+        </div>
         {{/each}}
 
         <!-- {{#with properties}}

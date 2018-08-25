@@ -374,3 +374,7 @@ div.custom-tab-content{
 div.custom-tab div.custom-tab-content:not(.active){
   display: none;
 }
+
+.loadingDiv{
+  color: white;
+}

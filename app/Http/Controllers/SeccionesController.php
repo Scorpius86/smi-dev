@@ -47,8 +47,8 @@ class SeccionesController extends Controller
             $fullMarkerUrl= url('/').$baseMarkerUrl.($seccion->marker);
             $markerUrl= $baseMarkerUrl.($seccion->marker);
         }else{
-            $fullMarkerUrl= url('/').$baseMarkerUrl.('marker-default.png');
-            $markerUrl= $baseMarkerUrl.('marker-default.png');
+            $fullMarkerUrl= url('/').$baseMarkerUrl.('marker-default.svg');
+            $markerUrl= $baseMarkerUrl.('marker-default.svg');
         }
 
         $data= array(

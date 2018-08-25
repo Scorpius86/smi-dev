@@ -11,7 +11,7 @@ class Seccion extends Model
     protected $primaryKey="id";
     protected $fillable=array('nombre','descripcion','idTipoGeoData','menuCategoria',
     'menuAccion','idTipoAccion','idSeccionPadre','activo',
-    'geoJsonFile', 'geoJsonData', 'logo','marker',
+    'geoJsonFile', 'geoJsonData', 'logo','marker','color',
     'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');
 
     public function seccionPadre(){
