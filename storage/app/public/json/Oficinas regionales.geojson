@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "Oficinas regionales",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32718" } },
+"features": [
+{ "type": "Feature", "properties": { "ID_SEC": "M010-1" }, "geometry": { "type": "Point", "coordinates": [ 390486.0, 8972323.0 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M010-2" }, "geometry": { "type": "Point", "coordinates": [ 350270.0, 9282481.0 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M010-3" }, "geometry": { "type": "Point", "coordinates": [ 551476.0, 9073493.0 ] } }
+]
+}

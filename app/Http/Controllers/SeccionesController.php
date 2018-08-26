@@ -84,7 +84,30 @@ class SeccionesController extends Controller
         return $data;
     }
 
-    public function save($request){
-        return null;
+    public function save(Request $request){
+
+        error_log('save');
+        error_log($request);
+
+        return Seccion::create($request->all());
+    }
+
+    public function update(Request $request, $id){
+
+        error_log('update');    
+        error_log($request);
+
+        $seccion = Seccion::findOrFail($id);
+        $seccion->update($request->all());
+
+        return $seccion;
+    }
+
+    public function delete(Request $request, $id){
+        $seccion = Seccion::findOrFail($id);
+        $seccion->activo=0;
+        $seccion->update($request->all());
+
+        return $seccion;
     }
 }
