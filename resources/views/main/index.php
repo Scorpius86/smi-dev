@@ -20,6 +20,9 @@
     <link href="css/sidebar.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <title>Peru Cacao</title>
+
+
+
 </head>
 
 <body>
@@ -134,6 +137,16 @@
 
         </div>
     </nav>
+
+    <div id="menu-right">
+        <div class="box">
+            <ul>
+                <li><a href=""><span class="active">Candice Swanepoel</span></a></li>        
+            </ul>
+        </div>
+    </div>
+
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
@@ -153,6 +166,8 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/> 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
 
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>

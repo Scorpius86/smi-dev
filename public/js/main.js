@@ -213,7 +213,9 @@ function onceMapIsLoaded() {
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
     console.log($items);
     const $whenMenuItemIsChecked = function () {
-        console.log('aqui');
+        
+        
+
         const $isChecked = $(this).prop('checked');
         const $id = parseInt($(this).prop('id'));
         const $seccion = $(this).data('value');
@@ -233,6 +235,15 @@ function onceMapIsLoaded() {
             });
         }
 
+        const $styleColor= function($seccion) {
+            return {
+                        color: $seccion.seccion.color,
+                        weight: 2,
+                        opacity: .7,
+                        dashArray: '4,2',
+                        lineJoin: 'round'
+                    };
+        }
 
         const $afterLoadPuntos = function ($seccion, $cacheLayer) {
             
@@ -255,7 +266,8 @@ function onceMapIsLoaded() {
                         );
                         popupContent = $template;
                     }
-                    layer.bindPopup(popupContent);
+                    //layer.bindPopup(popupContent);
+                    
                 }
 
                 const divIcon = L.divIcon({
@@ -297,6 +309,7 @@ function onceMapIsLoaded() {
                 });
 
                 const $currentSectionPoints = L.geoJSON($points, {
+                    style: $styleColor($seccion),
                     onEachFeature: $onEachFeature,
                     pointToLayer: function (feature, latlng) {
                         return L.marker(latlng, { icon: icon });                       
