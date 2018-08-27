@@ -23,8 +23,9 @@ jQuery(function ($) {
     loadUserInformation();
     const $afterLoadSecciones = settings;
     loadSecciones($afterLoadSecciones);
-    const $afterLoadRegiones = initMap;
-    loadRegiones($afterLoadRegiones);
+    
+    // const $afterLoadRegiones = initMap;
+    // loadRegiones($afterLoadRegiones);
 });
 
 function onLogoutButtonClick() {
@@ -43,7 +44,7 @@ function validateAuthentication() {
 }
 
 function settings() {
-    $(".sidebar-dropdown > a").click(function () {
+    $(".sidebar-dropdown > a").click(function () {        
         $(".sidebar-submenu").slideUp(200);
         if ($(this).parent().hasClass("active")) {
             $(".sidebar-dropdown").removeClass("active");
@@ -75,15 +76,21 @@ function settings() {
         });
         $(".sidebar-content").addClass("desktop");
     }
+
+    //Cargar eventos menu
+    const $onceMapIsLoaded = onceMapIsLoaded;
+    initMap([], $onceMapIsLoaded);
 }
 
 function initMap($regiones, $afterMapIsLoaded) {
     console.log('load map');
-    if (typeof $regiones === 'undefined' || $regiones === null)
-        return;
+    // if (typeof $regiones === 'undefined' || $regiones === null)
+    //     return;
     map = L.map('map-container');
-    if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null)
+    if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null){
+        console.log('mapa cargado');
         map.on('load', $afterMapIsLoaded);
+    }
     map.setView([-12.046374, -77.042793], 6);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -118,10 +125,10 @@ function initMap($regiones, $afterMapIsLoaded) {
         "opacity": 0.65
     };
 
-    L.geoJSON($regiones, {
-        style: myStyle,
-        onEachFeature: onEachFeature,
-    }).addTo(map);
+    // L.geoJSON($regiones, {
+    //     style: myStyle,
+    //     onEachFeature: onEachFeature,
+    // }).addTo(map);
 }
 
 function markers() {
@@ -200,10 +207,13 @@ function removeMarker($id, $seccionId) {
 }
 
 function onceMapIsLoaded() {
+    console.log('ahora si aqui');
     const $menu_container = $("#menu-sidebar");
+    console.log($menu_container);
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
+    console.log($items);
     const $whenMenuItemIsChecked = function () {
-        
+        console.log('aqui');
         const $isChecked = $(this).prop('checked');
         const $id = parseInt($(this).prop('id'));
         const $seccion = $(this).data('value');

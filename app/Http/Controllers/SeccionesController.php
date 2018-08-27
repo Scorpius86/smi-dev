@@ -110,4 +110,14 @@ class SeccionesController extends Controller
 
         return $seccion;
     }
+
+    public function uploadFile(Request $request){
+        $seccion = Seccion::findOrFail($id);
+        $seccion->activo=0;
+        $seccion->update($request->all());
+
+        return $seccion;
+    }
+
+    
 }
