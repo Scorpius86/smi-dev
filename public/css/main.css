@@ -378,3 +378,7 @@ div.custom-tab div.custom-tab-content:not(.active){
 .loadingDiv{
   color: white;
 }
+
+.ui-front{
+  z-index: 1000;
+}

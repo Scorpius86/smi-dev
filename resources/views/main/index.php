@@ -16,6 +16,9 @@
         crossorigin="" />
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
     <link href="css/jquery.mCustomScrollbar.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
     <link href="css/floating-labels.css" rel="stylesheet">
     <link href="css/sidebar.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
@@ -26,6 +29,7 @@
 </head>
 
 <body>
+    
 
     <div id='loading' class="modal bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -37,6 +41,7 @@
             </div>
         </div>
     </div>
+    
     <nav class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
         <a class="navbar-brand ml-4" href="#">
             <!-- <i class="fa fa-home fa-2x"></i> -->
@@ -106,14 +111,11 @@
                 </div>
             </nav>
             <main class="page-content">
+                
                 <div class="container-fluid" id="map-container">
-                    <!--<div class="row">
-                        <div class="form-group col-md-12">
-                            <h1>Sidebar template</h1>
-                            <p>This is a responsive sidebar template with dropdown menu based on bootstrap 4 framework.</p>
-
-                        </div>
-                    </div>-->
+                    <div id="dialog-panel" title="Dialog Title">
+                        <div class="dialog-content"></div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -167,28 +169,27 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/> 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
-        
-        {{#each properties as |item|}}
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="font-weight-light pr-2">{{item.[0]}}</span>
-            </div>
-            <input type="text" class="form-control" value="{{item.[1]}}">
-           
-        </div>
-        {{/each}}
+       
+        <table class="table table-sm">             
+            {{#each properties as |item|}}
+            <tr>
+                <td>{{item.nombre}}</td>
+                <td>{{item.valor}}</td>
+            </tr>
+            {{/each}}
 
-        <!-- {{#with properties}}
-        <p class="mb-0">            
-            <span class="font-weight-light pr-2">Descripcio:</span>
-            <span class="font-weight-bold text-capitalize">{{descripcion}}</span>
-        </p>
-        {{/with}} -->
+        </table>
+
+        <div>            
+            <button type="button" class="btn btn-link">Editar</button>            
+        </div>
+
     </script>
     <script id="region-popupcontent-template" type="text/x-handlebars-template">
         <!--"OBJECTID":1,

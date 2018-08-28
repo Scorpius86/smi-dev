@@ -83,12 +83,10 @@ function settings() {
 }
 
 function initMap($regiones, $afterMapIsLoaded) {
-    console.log('load map');
     // if (typeof $regiones === 'undefined' || $regiones === null)
     //     return;
     map = L.map('map-container');
     if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null){
-        console.log('mapa cargado');
         map.on('load', $afterMapIsLoaded);
     }
     map.setView([-12.046374, -77.042793], 6);
@@ -207,11 +205,8 @@ function removeMarker($id, $seccionId) {
 }
 
 function onceMapIsLoaded() {
-    console.log('ahora si aqui');
     const $menu_container = $("#menu-sidebar");
-    console.log($menu_container);
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
-    console.log($items);
     const $whenMenuItemIsChecked = function () {
         
         
@@ -254,17 +249,46 @@ function onceMapIsLoaded() {
                     var popupContent = "<p>I started out as a GeoJSON " +
                         feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
 
+                    layer.on({
+                        click: function(e){
+                            console.log(feature.properties);
+
+                            const titulo= feature.properties['ID_SEC'];
+
+                            const propiedades=[];
+                            propiedades.push({nombre:'Población',valor:'1 500 000'});
+                            propiedades.push({nombre:'Ubigeo',valor:'130101'});
+                            propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
+                            propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
+                            propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
+                            propiedades.push({nombre:'Edad promedio',valor:'5 años'});                            
+
+                            console.log(propiedades);
+
+                            const $template = renderHandlebarsTemplate(
+                                "#punto-popupcontent-template", null, { properties: propiedades}, null, true
+                            );
+
+                            $('#dialog-panel .dialog-content').html($template);
+                                           
+                            $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
+                                title: titulo ,
+                                position: { my: "right", at: "right", of: window }
+                            });
+                            $('#dialog-panel').dialog('open');
+                        }
+                    });
+
                     if (feature.properties) {
+                        // var res = Object.keys(feature.properties)
+                        // .map(function(k) {
+                        //     return [k, feature.properties[k]];
+                        // });
 
-                        var res = Object.keys(feature.properties)
-                        .map(function(k) {
-                            return [k, feature.properties[k]];
-                        });
-
-                        $template = renderHandlebarsTemplate(
-                            "#punto-popupcontent-template", null, { properties: res}, null, true
-                        );
-                        popupContent = $template;
+                        // $template = renderHandlebarsTemplate(
+                        //     "#punto-popupcontent-template", null, { properties: res}, null, true
+                        // );
+                        // popupContent = $template;
                     }
                     //layer.bindPopup(popupContent);
                     
