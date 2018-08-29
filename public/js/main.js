@@ -152,6 +152,28 @@ function markers() {
     };
 }
 
+function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributosSeccionDetalle) {
+    const $url= API + 'secciones/' + $idSeccion + '/detalle/' + $codigoGIS + '/atributos';
+    showLoading();
+    $.ajax({
+        url: $url,
+        type: 'GET',
+        dataType: 'json',
+        success: function ($response) {
+            if (typeof ($response !== 'undefined') && $response !== null) {
+                if ($response.status) {
+                    $afterLoadAtributosSeccionDetalle($response.data);
+                }
+            }
+        },
+        error: function (xhr, status) {
+        },
+        complete: function (xhr, status) {
+            hideLoading();
+        }
+    });
+}
+
 function loadRegiones($afterLoadRegiones) {
     $.ajax({
         url: API_REGIONES,
@@ -253,29 +275,37 @@ function onceMapIsLoaded() {
                         click: function(e){
                             console.log(feature.properties);
 
-                            const titulo= feature.properties['ID_SEC'];
+                            const $codigoGIS= feature.properties['ID_SEC'];
+                            console.log($codigoGIS);
 
-                            const propiedades=[];
-                            propiedades.push({nombre:'Población',valor:'1 500 000'});
-                            propiedades.push({nombre:'Ubigeo',valor:'130101'});
-                            propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
-                            propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
-                            propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
-                            propiedades.push({nombre:'Edad promedio',valor:'5 años'});                            
+                            loadAtributosSeccionDetalle($id, $codigoGIS, function(data){
+                                if(data == undefined || data.length==0){
+                                    const propiedades=[];
+                                    propiedades.push({nombre:'Población',valor:'1 500 000'});
+                                    propiedades.push({nombre:'Ubigeo',valor:'130101'});
+                                    propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
+                                    propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
+                                    propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
+                                    propiedades.push({nombre:'Edad promedio',valor:'5 años'});
 
-                            console.log(propiedades);
+                                    data= propiedades;
+                                }
 
-                            const $template = renderHandlebarsTemplate(
-                                "#punto-popupcontent-template", null, { properties: propiedades}, null, true
-                            );
+                                const $template = renderHandlebarsTemplate(
+                                    "#punto-popupcontent-template", null, { properties: data}, null, true
+                                );
+    
+                                $('#dialog-panel .dialog-content').html($template);
+                                               
+                                $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
+                                    title: $codigoGIS ,
+                                    position: { my: "right", at: "right", of: window }
+                                });
+                                $('#dialog-panel').dialog('open');
 
-                            $('#dialog-panel .dialog-content').html($template);
-                                           
-                            $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                title: titulo ,
-                                position: { my: "right", at: "right", of: window }
                             });
-                            $('#dialog-panel').dialog('open');
+
+                            
                         }
                     });
 

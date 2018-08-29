@@ -8,7 +8,7 @@ class SeccionAtributo extends Model
 {
     protected $table="seccion_atributo";
     protected $primaryKey="id";
-    protected $fillable=array('nombre','valor','idTipoDato','idSeccion','idAtributo',
+    protected $fillable=array('codigoGIS','nombre','valor','idTipoDato','idSeccion','idAtributo',
     'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');
 
     public function seccion(){

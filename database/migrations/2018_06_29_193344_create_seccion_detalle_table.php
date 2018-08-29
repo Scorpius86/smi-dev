@@ -16,6 +16,7 @@ class CreateSeccionDetalleTable extends Migration
         //Schema::defaultStringLength(191);
         Schema::create('seccion_detalle', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('codigoGIS');
             $table->string('codigo');
             $table->string('descripcion'); 
             $table->string('abreviatura'); 

@@ -16,6 +16,7 @@ class CreateSeccionTable extends Migration
         Schema::defaultStringLength(191);
         Schema::create('seccion', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('codigoGIS');
             $table->string('nombre');
             $table->string('descripcion');            
             $table->string('idTipoGeoData')->nullable();

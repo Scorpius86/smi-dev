@@ -19,8 +19,11 @@ class SeccionesController extends Controller
         $baseLogoUrl='/img/seccion/logo/';
         $baseMarkerUrl='/img/seccion/marker/';
 
+        error_log($idSeccion);
 
         $seccion = Seccion::find($idSeccion);
+
+        error_log($seccion);
 
         $dataGeoJson=null;
 
@@ -78,24 +81,25 @@ class SeccionesController extends Controller
         return $data;
     }
 
-    public function getSeccionAtributoByIdSeccion($idSeccion){
-        $detalleAtributo=SeccionAtributo::where([['idSeccion','=',$idSeccion]])->get();
-        $data= array('status'=> true, 'data'=> $detalleAtributo);
-        return $data;
+    public function getSeccionDetalleAtributoByIdSeccion($idSeccion, $codigoGIS){
+        $result= array('status'=> true, 'data'=> array());
+
+        $detalle=SeccionDetalle::where([['idSeccion','=',$idSeccion],['codigoGIS','=',$codigoGIS]])->first();
+        if($detalle <> null){
+            $idSeccionDetalle=$detalle->id;
+            $detalleAtributo=SeccionAtributo::where([['idSeccionDetalle','=',$idSeccionDetalle]])->get();
+            $result= array('status'=> true, 'data'=> $detalleAtributo);
+        }
+        
+        return $result;
+
     }
 
     public function save(Request $request){
-
-        error_log('save');
-        error_log($request);
-
         return Seccion::create($request->all());
     }
 
     public function update(Request $request, $id){
-
-        error_log('update');    
-        error_log($request);
 
         $seccion = Seccion::findOrFail($id);
         $seccion->update($request->all());
