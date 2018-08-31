@@ -298,11 +298,11 @@ function onceMapIsLoaded() {
                         click: function(e){
 
                             const $detalleCodigoGIS= feature.properties['ID_SEC'];
-                            const $idCultivo=null;
+                            const $idCultivo=0;
 
-                            const $listaLimites = ['M004','M005','M006'];
+                            const $listaLimitesSeccionGIS = ['M004','M005','M006'];
 
-                            if($listaLimites.indexOf($detalleCodigoGIS)>=0){
+                            if($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS)>=0){
                                 console.log('load panel');
                                 loadPanel($id,$detalleCodigoGIS,$idCultivo, function(data){
 
@@ -343,7 +343,7 @@ function onceMapIsLoaded() {
                                     $('#dialog-panel .dialog-content').html($template);
                                                    
                                     $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                        title: $codigoGIS ,
+                                        title: $detalleCodigoGIS ,
                                         position: { my: "right", at: "right", of: window }
                                     });
     

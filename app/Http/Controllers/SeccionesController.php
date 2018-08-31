@@ -123,7 +123,7 @@ class SeccionesController extends Controller
         return $seccion;
     }
 
-    public function getSeccionDetalleInformacionPanel($codigoGIS){
+    public function getSeccionDetalleInformacionPanel($id, $codigoGIS, $idCultivo){
         //$path = storage_path() . "/json/${filename}.json";
         $path=base_path() . '/storage/app/public/json/data-panel.json';
 
