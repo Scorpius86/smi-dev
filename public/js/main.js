@@ -174,6 +174,28 @@ function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributos
     });
 }
 
+function loadPanel($idSeccion,$detalleCodigoGIS,$idCultivo,$afterLoadPanel){
+    const $url= API + 'secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/'+ $idCultivo;
+    showLoading();
+    $.ajax({
+        url: $url,
+        type: 'GET',
+        dataType: 'json',
+        success: function ($response) {
+            if (typeof ($response !== 'undefined') && $response !== null) {
+                if ($response.status) {
+                    $afterLoadPanel($response.data);
+                }
+            }
+        },
+        error: function (xhr, status) {
+        },
+        complete: function (xhr, status) {
+            hideLoading();
+        }
+    });
+}
+
 function loadRegiones($afterLoadRegiones) {
     $.ajax({
         url: API_REGIONES,
@@ -265,6 +287,7 @@ function onceMapIsLoaded() {
         const $afterLoadPuntos = function ($seccion, $cacheLayer) {
             
             const $id = $seccion.seccion.id;
+            const $seccionCodigoGIS= $seccion.seccion.codigoGIS;
 
             if ($seccion.geoJsonFile) {
                 const $onEachFeature = function (feature, layer) {
@@ -273,37 +296,65 @@ function onceMapIsLoaded() {
 
                     layer.on({
                         click: function(e){
-                            console.log(feature.properties);
 
-                            const $codigoGIS= feature.properties['ID_SEC'];
-                            console.log($codigoGIS);
+                            const $detalleCodigoGIS= feature.properties['ID_SEC'];
+                            const $idCultivo=null;
 
-                            loadAtributosSeccionDetalle($id, $codigoGIS, function(data){
-                                if(data == undefined || data.length==0){
-                                    const propiedades=[];
-                                    propiedades.push({nombre:'Población',valor:'1 500 000'});
-                                    propiedades.push({nombre:'Ubigeo',valor:'130101'});
-                                    propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
-                                    propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
-                                    propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
-                                    propiedades.push({nombre:'Edad promedio',valor:'5 años'});
+                            const $listaLimites = ['M004','M005','M006'];
 
-                                    data= propiedades;
-                                }
+                            if($listaLimites.indexOf($detalleCodigoGIS)>=0){
+                                console.log('load panel');
+                                loadPanel($id,$detalleCodigoGIS,$idCultivo, function(data){
 
-                                const $template = renderHandlebarsTemplate(
-                                    "#punto-popupcontent-template", null, { properties: data}, null, true
-                                );
+                                    console.log(data);
+
+                                    const $template = renderHandlebarsTemplate(
+                                        "#panel-popupcontent-template", null, { properties: data}, null, true
+                                    );
+        
+                                    $('#dialog-panel .dialog-content').html($template);
+                                                   
+                                    $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
+                                        title: detalleCodigoGIS ,
+                                        position: { my: "right", at: "right", of: window }
+                                    });
     
-                                $('#dialog-panel .dialog-content').html($template);
-                                               
-                                $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                    title: $codigoGIS ,
-                                    position: { my: "right", at: "right", of: window }
+                                    $('#dialog-panel').dialog('open');                            
                                 });
-                                $('#dialog-panel').dialog('open');
+                            }
+                            else{
+                                loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function(data){
+                                    if(data == undefined || data.length==0){
+                                        const propiedades=[];
+                                        propiedades.push({nombre:'Población',valor:'1 500 000'});
+                                        propiedades.push({nombre:'Ubigeo',valor:'130101'});
+                                        propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
+                                        propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
+                                        propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
+                                        propiedades.push({nombre:'Edad promedio',valor:'5 años'});
+    
+                                        data= propiedades;
+                                    }
+    
+                                    const $template = renderHandlebarsTemplate(
+                                        "#punto-popupcontent-template", null, { properties: data}, null, true
+                                    );
+        
+                                    $('#dialog-panel .dialog-content').html($template);
+                                                   
+                                    $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
+                                        title: $codigoGIS ,
+                                        position: { my: "right", at: "right", of: window }
+                                    });
+    
+                                    $('#dialog-panel').dialog('open');
+    
+                                });
+                            }
 
-                            });
+                            
+
+                            
 
                             
                         }

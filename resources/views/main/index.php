@@ -140,15 +140,6 @@
         </div>
     </nav>
 
-    <div id="menu-right">
-        <div class="box">
-            <ul>
-                <li><a href=""><span class="active">Candice Swanepoel</span></a></li>        
-            </ul>
-        </div>
-    </div>
-
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
@@ -191,36 +182,17 @@
         </div>
 
     </script>
-    <script id="region-popupcontent-template" type="text/x-handlebars-template">
-        <!--"OBJECTID":1,
-        "IDDIST":"230110",
-        "IDDPTO":"23",
-        "IDPROV":"2301",
-        "NOMBDIST":"CORONEL GREGORIO ALBARRACIN LANCHIPA",
-        "NOMBPROV":"TACNA",
-        "NOMBDEP":"TACNA",
-        "DCTO":"LEY",
-        "LEY":"27415",
-        "FECHA":"02/02/2001",
-        "NOM_CAP":"ALFONSO UGARTE",
-        "SHAPE_LENG":0.570509667,
-        "SHAPE_AREA":0.0161399587,
-        "SHAPE_LE_1":0.57019506331,
-        "SHAPE_AR_1":0.01598980139,
-        "AREA_MINAM":18834.14-->
-        {{#with properties}}
-        <p class="mb-0">
-            <span class="font-weight-light pr-2">Distrito:</span>
-            <span class="font-weight-bold text-capitalize">{{NOMBDIST}}</span>
-        </p>
-        <p class="my-0">
-            <span class="font-weight-light pr-2">Provincia:</span>
-            <span class="font-weight-bold text-capitalize">{{NOMBPROV}}</span>
-        </p>
-        <p class="mt-0">
-            <span class="font-weight-light pr-2">Departamento:</span>
-            <span class="font-weight-bold text-capitalize">{{NOMBDEP}}</span>
-        </p>
+    <script id="panel-popupcontent-template" type="text/x-handlebars-template">
+        
+        {{#with detalle}}
+
+            {{#each detalle.cultivos}}
+            <p class="mb-0">
+                <span class="font-weight-light pr-2">Distrito:</span>
+                <span class="font-weight-bold text-capitalize">{{NOMBDIST}}</span>
+            </p>
+            {{/each}}
+       
         {{/with}}
     </script>
     <script id="secciones-template" type="text/x-handlebars-template">
