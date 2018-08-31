@@ -28,24 +28,6 @@
             {{/if}}
         </li>
         {{/each}}
-        <li class="header-menu">
-            <span>Mostrar</span>
-            <div class="sidebar-submenu">
-                <ul>
-                    <li>
-                        <a href="#">Google maps</a>
-                    </li>
-                    <li>
-                        <a href="#">Open street map</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li>
-            <button class="d-block w-100 rounded-0 btn btn-primary">
-                <span>Salir</span>
-                <i class="fas fa-sign-out-alt ml-1"></i>
-            </button>
-        </li>
+       
     </ul>
 </script>

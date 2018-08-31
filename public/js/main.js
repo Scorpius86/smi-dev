@@ -309,17 +309,19 @@ function onceMapIsLoaded() {
                                     console.log(data);
 
                                     const $template = renderHandlebarsTemplate(
-                                        "#panel-popupcontent-template", null, { properties: data}, null, true
+                                        "#panel-popupcontent-template", null, { detalle: data}, null, true
                                     );
         
                                     $('#dialog-panel .dialog-content').html($template);
                                                    
                                     $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                        title: detalleCodigoGIS ,
+                                        title: $detalleCodigoGIS ,
                                         position: { my: "right", at: "right", of: window }
                                     });
+
+                                    $('.panel-tabs').tabs();
     
-                                    $('#dialog-panel').dialog('open');                            
+                                    $('#dialog-panel').dialog('open');
                                 });
                             }
                             else{
@@ -352,26 +354,9 @@ function onceMapIsLoaded() {
                                 });
                             }
 
-                            
-
-                            
-
-                            
                         }
                     });
 
-                    if (feature.properties) {
-                        // var res = Object.keys(feature.properties)
-                        // .map(function(k) {
-                        //     return [k, feature.properties[k]];
-                        // });
-
-                        // $template = renderHandlebarsTemplate(
-                        //     "#punto-popupcontent-template", null, { properties: res}, null, true
-                        // );
-                        // popupContent = $template;
-                    }
-                    //layer.bindPopup(popupContent);
                     
                 }
 
@@ -425,88 +410,6 @@ function onceMapIsLoaded() {
             }
 
             hideLoading();
-        };
-
-        const $afterLoadPoligonos = function ($poligonos) {
-            const $id = $poligonos.id;
-            const $geoDatos = $poligonos.geoDatos;
-            var $points = ($geoDatos !== null && $geoDatos.length > 0) ? $geoDatos[0] : false;
-            if ($points) {
-                const $onEachFeature = function (feature, layer) {
-                    var popupContent = "<p>I started out as a GeoJSON " +
-                        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-                    if (feature.properties) {
-                        $template = renderHandlebarsTemplate(
-                            "#punto-popupcontent-template", null, { properties: { descripcion: "A description" } }, null, true
-                        );
-                        popupContent = $template;
-                    }
-                    layer.bindPopup(popupContent);
-                }
-
-                const divIcon = L.divIcon({
-                    className: 'custom-marker',
-                    html: '<div><i class="fas 3x fa-map-marker-alt"></i></div>',
-                    iconSize: [128, 128]
-                });
-
-                $points = $points.dataJson;
-                L.geoJSON($points, {
-                    onEachFeature: $onEachFeature,
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, { icon: divIcon });
-                        // return L.circleMarker(latlng, {
-                        //     radius: 8,
-                        //     fillColor: "#ff7800",
-                        //     color: "#000",
-                        //     weight: 1,
-                        //     opacity: 1,
-                        //     fillOpacity: 0.8
-                        // });
-                    }
-                }).addTo(map);
-            }
-        };
-
-        const $afterLoadLines = function ($lineas) {
-            const $id = $lineas.id;
-            const $geoDatos = $lineas.geoDatos;
-            var $lines = ($geoDatos !== null && $geoDatos.length > 0) ? $geoDatos[0] : false;
-            if ($lines) {
-                const $onEachFeature = function (feature, layer) {
-                    var popupContent = "<p>I started out as a GeoJSON " +
-                        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-                    if (feature.properties) {
-                        $template = renderHandlebarsTemplate(
-                            "#punto-popupcontent-template", null, { properties: { descripcion: "A description" } }, null, true
-                        );
-                        popupContent = $template;
-                    }
-                    layer.bindPopup(popupContent);
-                }
-
-                const divIcon = L.divIcon({
-                    className: 'custom-marker',
-                    html: '<div><i class="fas 3x fa-map-marker-alt"></i></div>',
-                    iconSize: [128, 128]
-                });
-
-                $lines = $lines.dataJson;
-                L.geoJSON($lines, {
-                    onEachFeature: $onEachFeature,
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, { icon: divIcon });
-                        // return L.circleMarker(latlng, {
-                        //     radius: 8,
-                        //     fillColor: "#ff7800",
-                        //     color: "#000",
-                        //     weight: 1,
-                        //     opacity: 1,
-                        //     fillOpacity: 0.8
-                        // });
-                    }
-                }).addTo(map);
-            }
         };
 
         loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);

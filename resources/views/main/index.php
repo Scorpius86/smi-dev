@@ -186,12 +186,35 @@
         
         {{#with detalle}}
 
-            {{#each detalle.cultivos}}
-            <p class="mb-0">
-                <span class="font-weight-light pr-2">Distrito:</span>
-                <span class="font-weight-bold text-capitalize">{{NOMBDIST}}</span>
-            </p>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
+            {{#each cultivos}}
+            
+            <div class="btn-group mr-2" role="group" aria-label="">
+                <button type="button" class="btn btn-secondary selected">{{nombre}}</button>
+            </div>
+           
             {{/each}}
+
+
+            <div class="panel-tabs">
+                <ul>
+                    {{#each proyeccion}}
+                        <li><a href="#tabs-{{id}}">{{variable}}</a></li>
+                    {{/each}}
+                    
+                </ul>
+
+                {{#each proyeccion}}
+                <div id="tabs-{{id}}">
+                    <h4>
+                        Contenido {{variable}}
+                    </h4>
+                </div>
+                {{/each}}                
+            </div>
+
+        </div>
        
         {{/with}}
     </script>
@@ -225,25 +248,7 @@
                 {{/if}}
             </li>
             {{/each}}
-            <li class="header-menu">
-                <span>Mostrar</span>
-                <div class="sidebar-submenu">
-                    <ul>
-                        <li>
-                            <a href="#">Google maps</a>
-                        </li>
-                        <li>
-                            <a href="#">Open street map</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <button class="d-block w-100 rounded-0 btn btn-primary">
-                    <span>Salir</span>
-                    <i class="fas fa-sign-out-alt ml-1"></i>
-                </button>
-            </li>
+            
         </ul>
     </script>
 </body>

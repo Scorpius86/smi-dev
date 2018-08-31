@@ -8,9 +8,10 @@
         {"id":1,"nombre":"Cacao","tasa":2.4,"precio":2.7},
         {"id":2,"nombre":"Madera","tasa":2.9,"precio":2.8},
         {"id":3,"nombre":"Arroz","tasa":5.4,"precio":2.58}
-    ],
+    ],      
     "proyeccion":[
         {
+            "id":1,
             "variable":"Producción",
             "datos":[
                 {"etiqueta":2005,"valor":2500},
@@ -25,6 +26,7 @@
             ]
         },
         {
+            "id":2,
             "variable":"Precios",
             "datos":[
                 {"etiqueta":2005,"valor":2.5},
@@ -39,6 +41,7 @@
             ]
         },
         {
+            "id":3,
             "variable":"Superficie",
             "datos":[
                 {"etiqueta":2005,"valor":100},
