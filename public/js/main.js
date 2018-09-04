@@ -77,6 +77,10 @@ function settings() {
         $(".sidebar-content").addClass("desktop");
     }
 
+    $('#btnShowMenu').on('click',function(){
+        $('#sidebar').toggle();
+    });
+
     //Cargar eventos menu
     const $onceMapIsLoaded = onceMapIsLoaded;
     initMap([], $onceMapIsLoaded);
@@ -196,6 +200,79 @@ function loadPanel($idSeccion,$detalleCodigoGIS,$idCultivo,$afterLoadPanel){
     });
 }
 
+function generarGrafico($idElement, data){
+
+    console.log(data);
+
+    const elements = $('#'+$idElement).find('.chart');
+
+    if(elements.length==0){
+        return;
+    }
+
+    var ctx = elements[0];
+    var myChart = new Chart(ctx, {
+        responsive: true,
+        type: 'line',
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                // backgroundColor: [
+                //     'rgba(255, 99, 132, 0.2)',
+                //     'rgba(54, 162, 235, 0.2)',
+                //     'rgba(255, 206, 86, 0.2)',
+                //     'rgba(75, 192, 192, 0.2)',
+                //     'rgba(153, 102, 255, 0.2)',
+                //     'rgba(255, 159, 64, 0.2)'
+                // ],
+                // borderColor: [
+                //     'rgba(255,99,132,1)',
+                //     'rgba(54, 162, 235, 1)',
+                //     'rgba(255, 206, 86, 1)',
+                //     'rgba(75, 192, 192, 1)',
+                //     'rgba(153, 102, 255, 1)',
+                //     'rgba(255, 159, 64, 1)'
+                // ],
+                borderWidth: 1
+            },
+            {
+                label: '# of asd',
+                data: [7, 10, 3, 7, 4, 1],
+                // backgroundColor: [
+                //     'rgba(255, 99, 132, 0.2)',
+                //     'rgba(54, 162, 235, 0.2)',
+                //     'rgba(255, 206, 86, 0.2)',
+                //     'rgba(75, 192, 192, 0.2)',
+                //     'rgba(153, 102, 255, 0.2)',
+                //     'rgba(255, 159, 64, 0.2)'
+                // ],
+                // borderColor: [
+                //     'rgba(255,99,132,1)',
+                //     'rgba(54, 162, 235, 1)',
+                //     'rgba(255, 206, 86, 1)',
+                //     'rgba(75, 192, 192, 1)',
+                //     'rgba(153, 102, 255, 1)',
+                //     'rgba(255, 159, 64, 1)'
+                // ],
+                borderWidth: 1
+            }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+}
+
 function loadRegiones($afterLoadRegiones) {
     $.ajax({
         url: API_REGIONES,
@@ -306,8 +383,6 @@ function onceMapIsLoaded() {
                                 console.log('load panel');
                                 loadPanel($id,$detalleCodigoGIS,$idCultivo, function(data){
 
-                                    console.log(data);
-
                                     const $template = renderHandlebarsTemplate(
                                         "#panel-popupcontent-template", null, { detalle: data}, null, true
                                     );
@@ -316,10 +391,31 @@ function onceMapIsLoaded() {
                                                    
                                     $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
                                         title: $detalleCodigoGIS ,
-                                        position: { my: "right", at: "right", of: window }
+                                        position: { my: "right", at: "right", of: window },
+                                        width: 500
                                     });
 
+                                    console.log(data.cultivos);
+
+                                    if(data.cultivos && data.cultivos.length>0){
+                                        data.cultivos.forEach(function(cultivo){
+                                            if(cultivo.proyeccion && cultivo.proyeccion.length>0){
+                                                cultivo.proyeccion.forEach(function(x){
+                                                    const $idElement= 'proyeccion-tabs-' + x.id;
+                                                    generarGrafico($idElement, x);
+                                                });
+                                            }
+                                        });
+                                    }
+                                    
+                                    
+                                    
+
+                                    
+
+
                                     $('.panel-tabs').tabs();
+                                    $('.toolbar').controlgroup();
     
                                     $('#dialog-panel').dialog('open');
                                 });

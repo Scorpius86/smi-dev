@@ -43,6 +43,9 @@
     </div>
     
     <nav class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
+        <a class="nav-link pl-3" id="btnShowMenu">
+            <i class="fas fa-2x fa-bars"></i>
+        </a>
         <a class="navbar-brand ml-4" href="#">
             <!-- <i class="fa fa-home fa-2x"></i> -->
             <img src="img/logos/usaid-logo.jpg" />
@@ -69,18 +72,12 @@
                             </span>                            
                             <span id="username" class="mt-1 font-weight-light"></span>
                         </a>
-                    </div>
-                    
+                    </div>                    
                     <div class="nav-item">
                         <a class="border-right px-3 nav-link logout-button">
                             <i class="fas fa-2x fa-sign-out-alt"></i>
                         </a>
-                    </div>
-                    <div class="nav-item">
-                        <a class="nav-link pl-3" href="#">
-                            <i class="fas fa-2x fa-bars"></i>
-                        </a>
-                    </div>
+                    </div>                    
                 </div>
                 <!-- <div class="d-flex justify-content-between">
                     <div class="nav-item active">
@@ -163,6 +160,9 @@
     
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
@@ -186,36 +186,86 @@
         
         {{#with detalle}}
 
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <!-- <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"> -->
+
+        <ul class="nav nav-tabs" role="tablist">
 
             {{#each cultivos}}
-            
-            <div class="btn-group mr-2" role="group" aria-label="">
-                <button type="button" class="btn btn-secondary selected">{{nombre}}</button>
+
+            <li class="nav-item">
+                <a class="nav-link" id="cultivo-{{id}}-tab" data-toggle="pill" href="#cultivo-{{id}}" role="tab" aria-controls="cultivo-{{id}}" aria-selected="true">
+                    {{nombre}}
+                </a>
+            </li>
+          
+            {{/each}}
+        </ul>
+        <div class="tab-content">
+            {{#each cultivos}}
+            <div class="tab-pane fade show" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
+                <div class="panel-tabs">
+                    <ul>
+                        {{#each ../proyeccion}}
+                            <li><a href="#proyeccion-tabs-{{id}}">{{variable}}</a></li>
+                        {{/each}}                        
+                    </ul>
+
+                    {{#each ../proyeccion}}
+                    <div id="proyeccion-tabs-{{id}}">
+                        <h5>
+                            Contenido {{variable}}
+                        </h5>
+                        <div style="height:300px;">
+                            <canvas class="chart" width="350" height="200"></canvas>
+                        </div>  
+                    </div>
+                    {{/each}}
+                </div>            
             </div>
            
             {{/each}}
-
-
-            <div class="panel-tabs">
-                <ul>
-                    {{#each proyeccion}}
-                        <li><a href="#tabs-{{id}}">{{variable}}</a></li>
-                    {{/each}}
-                    
-                </ul>
-
-                {{#each proyeccion}}
-                <div id="tabs-{{id}}">
-                    <h4>
-                        Contenido {{variable}}
-                    </h4>
-                </div>
-                {{/each}}                
-            </div>
-
         </div>
-       
+
+
+            <!-- {{#each cultivos}}
+
+            <div class="toolbar">
+                
+
+                <div class="card" style="width: 8rem;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{nombre}}</h6>
+                        <span class="card-subtitle mb-2 text-muted">Tasa&nbsp;&nbsp;: {{tasa}} </span>
+                        <span class="card-subtitle mb-2 text-muted">Precio: {{precio}}</span>                       
+                    </div>
+                </div>
+
+            </div>
+                       
+            {{/each}} -->
+
+        <!-- </div> -->
+
+        <!-- <div class="panel-tabs">
+            <ul>
+                {{#each proyeccion}}
+                    <li><a href="#tabs-{{id}}">{{variable}}</a></li>
+                {{/each}}
+                
+            </ul>
+
+            {{#each proyeccion}}
+            <div id="tabs-{{id}}">
+                <h5>
+                    Contenido {{variable}}
+                </h5>
+                <div style="height:300px;">
+                    <canvas class="chart" width="350" height="200"></canvas>
+                </div>  
+            </div>
+            {{/each}}
+        </div> -->
+
         {{/with}}
     </script>
     <script id="secciones-template" type="text/x-handlebars-template">
