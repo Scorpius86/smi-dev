@@ -41,6 +41,14 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div id="modal-content-atributos" class="modal-content">
+                
+            </div>
+        </div>
+    </div>    
     
     <nav class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
         <a class="nav-link pl-3" id="btnShowMenu">
@@ -178,7 +186,7 @@
         </table>
 
         <div>            
-            <button type="button" class="btn btn-link">Editar</button>            
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Editar</button>
         </div>
 
     </script>
@@ -188,7 +196,7 @@
 
         <!-- <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"> -->
 
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-pills mb-3" role="tablist">
 
             {{#each cultivos}}
 
@@ -201,20 +209,21 @@
             {{/each}}
         </ul>
         <div class="tab-content">
-            {{#each cultivos}}
+            {{#each cultivos}}            
             <div class="tab-pane fade show" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
+                <div>
+                    <span style="font-weight:bold;">Tasa&nbsp;&nbsp;:</span>{{tasa}}
+                    <span style="font-weight:bold;">Precio:</span>{{precio}}
+                </div>
                 <div class="panel-tabs">
                     <ul>
-                        {{#each ../proyeccion}}
+                        {{#each proyeccion}}
                             <li><a href="#proyeccion-tabs-{{id}}">{{variable}}</a></li>
                         {{/each}}                        
                     </ul>
 
-                    {{#each ../proyeccion}}
-                    <div id="proyeccion-tabs-{{id}}">
-                        <h5>
-                            Contenido {{variable}}
-                        </h5>
+                    {{#each proyeccion}}
+                    <div id="proyeccion-tabs-{{id}}">                        
                         <div style="height:300px;">
                             <canvas class="chart" width="350" height="200"></canvas>
                         </div>  
@@ -225,46 +234,6 @@
            
             {{/each}}
         </div>
-
-
-            <!-- {{#each cultivos}}
-
-            <div class="toolbar">
-                
-
-                <div class="card" style="width: 8rem;">
-                    <div class="card-body">
-                        <h6 class="card-title">{{nombre}}</h6>
-                        <span class="card-subtitle mb-2 text-muted">Tasa&nbsp;&nbsp;: {{tasa}} </span>
-                        <span class="card-subtitle mb-2 text-muted">Precio: {{precio}}</span>                       
-                    </div>
-                </div>
-
-            </div>
-                       
-            {{/each}} -->
-
-        <!-- </div> -->
-
-        <!-- <div class="panel-tabs">
-            <ul>
-                {{#each proyeccion}}
-                    <li><a href="#tabs-{{id}}">{{variable}}</a></li>
-                {{/each}}
-                
-            </ul>
-
-            {{#each proyeccion}}
-            <div id="tabs-{{id}}">
-                <h5>
-                    Contenido {{variable}}
-                </h5>
-                <div style="height:300px;">
-                    <canvas class="chart" width="350" height="200"></canvas>
-                </div>  
-            </div>
-            {{/each}}
-        </div> -->
 
         {{/with}}
     </script>
@@ -301,6 +270,55 @@
             
         </ul>
     </script>
+
+    <script id="secciones-editar-atributos" type="text/x-handlebars-template">
+        {{#with detalle}}
+        <div class="modal-header">
+            <h3 class="modal-title"> {{titulo}} </h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="overflow-y:scroll; height:400px;">
+            <div>
+            <button type="button" class="btn btn-primary" onClick="agregarAtributo()">Agregar</button>
+            </div>
+            <form>
+                <table id ="table-atributo" class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Atributo</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each data}}
+                        <tr>
+                            <td>
+                                <input type="text" class="atributo-nombre" data-id="{{id}}" value="{{nombre}}">
+                            </td>
+                            <td>
+                                <input type="text" class="atributo-valor" data-id="{{id}}" value="{{valor}}">
+                            </td>
+                            <td>
+                                <a class="nav-link">
+                                    <i class="fas fa-trash-alt" onClick="quitarAtributo('{{id}}')"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>                    
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onClick="guardarAtributo()">Aceptar</button>
+        </div>
+        {{/with}}
+    </script>
+
 </body>
 
 </html>

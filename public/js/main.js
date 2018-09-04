@@ -23,7 +23,7 @@ jQuery(function ($) {
     loadUserInformation();
     const $afterLoadSecciones = settings;
     loadSecciones($afterLoadSecciones);
-    
+
     // const $afterLoadRegiones = initMap;
     // loadRegiones($afterLoadRegiones);
 });
@@ -44,7 +44,7 @@ function validateAuthentication() {
 }
 
 function settings() {
-    $(".sidebar-dropdown > a").click(function () {        
+    $(".sidebar-dropdown > a").click(function () {
         $(".sidebar-submenu").slideUp(200);
         if ($(this).parent().hasClass("active")) {
             $(".sidebar-dropdown").removeClass("active");
@@ -77,7 +77,7 @@ function settings() {
         $(".sidebar-content").addClass("desktop");
     }
 
-    $('#btnShowMenu').on('click',function(){
+    $('#btnShowMenu').on('click', function () {
         $('#sidebar').toggle();
     });
 
@@ -90,7 +90,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     // if (typeof $regiones === 'undefined' || $regiones === null)
     //     return;
     map = L.map('map-container');
-    if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null){
+    if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null) {
         map.on('load', $afterMapIsLoaded);
     }
     map.setView([-12.046374, -77.042793], 6);
@@ -157,7 +157,7 @@ function markers() {
 }
 
 function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributosSeccionDetalle) {
-    const $url= API + 'secciones/' + $idSeccion + '/detalle/' + $codigoGIS + '/atributos';
+    const $url = API + 'secciones/' + $idSeccion + '/detalle/' + $codigoGIS + '/atributos';
     showLoading();
     $.ajax({
         url: $url,
@@ -178,8 +178,8 @@ function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributos
     });
 }
 
-function loadPanel($idSeccion,$detalleCodigoGIS,$idCultivo,$afterLoadPanel){
-    const $url= API + 'secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/'+ $idCultivo;
+function loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, $afterLoadPanel) {
+    const $url = API + 'secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/' + $idCultivo;
     showLoading();
     $.ajax({
         url: $url,
@@ -200,25 +200,28 @@ function loadPanel($idSeccion,$detalleCodigoGIS,$idCultivo,$afterLoadPanel){
     });
 }
 
-function generarGrafico($idElement, data){
+function generarGrafico($idElement, data) {
 
-    console.log(data);
+    const elements = $('#' + $idElement).find('.chart');
 
-    const elements = $('#'+$idElement).find('.chart');
-
-    if(elements.length==0){
+    if (elements.length == 0) {
         return;
     }
+
+    data.grafico = data.grafico == undefined ? 'line' : data.grafico;
+
+    const dataLabels = data.datos.map(x => x.etiqueta);
+    const dataValues = data.datos.map(x => x.valor);
 
     var ctx = elements[0];
     var myChart = new Chart(ctx, {
         responsive: true,
-        type: 'line',
+        type: data.grafico,
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: dataLabels,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '# ' + data.variable,
+                data: dataValues,
                 // backgroundColor: [
                 //     'rgba(255, 99, 132, 0.2)',
                 //     'rgba(54, 162, 235, 0.2)',
@@ -236,36 +239,14 @@ function generarGrafico($idElement, data){
                 //     'rgba(255, 159, 64, 1)'
                 // ],
                 borderWidth: 1
-            },
-            {
-                label: '# of asd',
-                data: [7, 10, 3, 7, 4, 1],
-                // backgroundColor: [
-                //     'rgba(255, 99, 132, 0.2)',
-                //     'rgba(54, 162, 235, 0.2)',
-                //     'rgba(255, 206, 86, 0.2)',
-                //     'rgba(75, 192, 192, 0.2)',
-                //     'rgba(153, 102, 255, 0.2)',
-                //     'rgba(255, 159, 64, 0.2)'
-                // ],
-                // borderColor: [
-                //     'rgba(255,99,132,1)',
-                //     'rgba(54, 162, 235, 1)',
-                //     'rgba(255, 206, 86, 1)',
-                //     'rgba(75, 192, 192, 1)',
-                //     'rgba(153, 102, 255, 1)',
-                //     'rgba(255, 159, 64, 1)'
-                // ],
-                borderWidth: 1
-            }
-            ]
+            }]
         },
         options: {
             maintainAspectRatio: false,
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero:true
+                        beginAtZero: true
                     }
                 }]
             }
@@ -329,8 +310,8 @@ function onceMapIsLoaded() {
     const $menu_container = $("#menu-sidebar");
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
     const $whenMenuItemIsChecked = function () {
-        
-        
+
+
 
         const $isChecked = $(this).prop('checked');
         const $id = parseInt($(this).prop('id'));
@@ -351,20 +332,20 @@ function onceMapIsLoaded() {
             });
         }
 
-        const $styleColor= function($seccion) {
+        const $styleColor = function ($seccion) {
             return {
-                        color: $seccion.seccion.color,
-                        weight: 2,
-                        opacity: .7,
-                        dashArray: '4,2',
-                        lineJoin: 'round'
-                    };
+                color: $seccion.seccion.color,
+                weight: 2,
+                opacity: .7,
+                dashArray: '4,2',
+                lineJoin: 'round'
+            };
         }
 
         const $afterLoadPuntos = function ($seccion, $cacheLayer) {
-            
+
             const $id = $seccion.seccion.id;
-            const $seccionCodigoGIS= $seccion.seccion.codigoGIS;
+            const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
             if ($seccion.geoJsonFile) {
                 const $onEachFeature = function (feature, layer) {
@@ -372,88 +353,92 @@ function onceMapIsLoaded() {
                         feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
 
                     layer.on({
-                        click: function(e){
+                        click: function (e) {
 
-                            const $detalleCodigoGIS= feature.properties['ID_SEC'];
-                            const $idCultivo=0;
+                            const $detalleCodigoGIS = feature.properties['ID_SEC'];
+                            const $idCultivo = 0;
 
-                            const $listaLimitesSeccionGIS = ['M004','M005','M006'];
+                            const $listaLimitesSeccionGIS = ['M004', 'M005', 'M006'];
 
-                            if($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS)>=0){
+                            if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
                                 console.log('load panel');
-                                loadPanel($id,$detalleCodigoGIS,$idCultivo, function(data){
+                                loadPanel($id, $detalleCodigoGIS, $idCultivo, function (data) {
 
                                     const $template = renderHandlebarsTemplate(
-                                        "#panel-popupcontent-template", null, { detalle: data}, null, true
+                                        "#panel-popupcontent-template", null, { detalle: data }, null, true
                                     );
-        
+
                                     $('#dialog-panel .dialog-content').html($template);
-                                                   
-                                    $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                        title: $detalleCodigoGIS ,
+
+                                    $('#dialog-panel').dialog({
+                                        autoOpen: false, closeText: '',
+                                        title: $detalleCodigoGIS,
                                         position: { my: "right", at: "right", of: window },
-                                        width: 500
+                                        width: 400
                                     });
 
-                                    console.log(data.cultivos);
-
-                                    if(data.cultivos && data.cultivos.length>0){
-                                        data.cultivos.forEach(function(cultivo){
-                                            if(cultivo.proyeccion && cultivo.proyeccion.length>0){
-                                                cultivo.proyeccion.forEach(function(x){
-                                                    const $idElement= 'proyeccion-tabs-' + x.id;
+                                    if (data.cultivos && data.cultivos.length > 0) {
+                                        data.cultivos.forEach(function (cultivo) {
+                                            if (cultivo.proyeccion && cultivo.proyeccion.length > 0) {
+                                                cultivo.proyeccion.forEach(function (x) {
+                                                    const $idElement = 'proyeccion-tabs-' + x.id;
                                                     generarGrafico($idElement, x);
                                                 });
                                             }
                                         });
                                     }
-                                    
-                                    
-                                    
-
-                                    
-
 
                                     $('.panel-tabs').tabs();
-                                    $('.toolbar').controlgroup();
-    
+                                    //$('.toolbar').controlgroup();
+
                                     $('#dialog-panel').dialog('open');
                                 });
                             }
-                            else{
-                                loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function(data){
-                                    if(data == undefined || data.length==0){
-                                        const propiedades=[];
-                                        propiedades.push({nombre:'Población',valor:'1 500 000'});
-                                        propiedades.push({nombre:'Ubigeo',valor:'130101'});
-                                        propiedades.push({nombre:'N° Familias Cacao',valor:'54'});
-                                        propiedades.push({nombre:'N° hectáreas Prod',valor:'92,200'});
-                                        propiedades.push({nombre:'Productividad Promedio',valor:'9500 toneladas'});
-                                        propiedades.push({nombre:'Edad promedio',valor:'5 años'});
-    
-                                        data= propiedades;
+                            else {
+                                loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function (data) {
+                                    if (data == undefined || data.length == 0) {
+                                        const propiedades = [];
+                                        propiedades.push({ id:'1', nombre: 'Población', valor: '1 500 000' });
+                                        propiedades.push({ id:'2', nombre: 'Ubigeo', valor: '130101' });
+                                        propiedades.push({ id:'3', nombre: 'N° Familias Cacao', valor: '54' });
+                                        propiedades.push({ id:'4', nombre: 'N° hectáreas Prod', valor: '92,200' });
+                                        propiedades.push({ id:'5', nombre: 'Productividad Promedio', valor: '9500 toneladas' });
+                                        propiedades.push({ id:'6', nombre: 'Edad promedio', valor: '5 años' });
+
+                                        data = propiedades;
                                     }
-    
+
+                                    let dataDetalle={};
+                                    dataDetalle.titulo=$detalleCodigoGIS;
+                                    dataDetalle.data=data;
+
                                     const $template = renderHandlebarsTemplate(
-                                        "#punto-popupcontent-template", null, { properties: data}, null, true
+                                        "#punto-popupcontent-template", null, { properties: dataDetalle.data }, null, true
                                     );
-        
+
+                                    const $templateAtributos = renderHandlebarsTemplate(
+                                        "#secciones-editar-atributos", null, { detalle: dataDetalle }, null, true
+                                    );
+
                                     $('#dialog-panel .dialog-content').html($template);
-                                                   
-                                    $('#dialog-panel').dialog({ autoOpen: false, closeText:'', 
-                                        title: $detalleCodigoGIS ,
+
+                                    $('#dialog-panel').dialog({
+                                        autoOpen: false, closeText: '',
+                                        title: $detalleCodigoGIS,
                                         position: { my: "right", at: "right", of: window }
                                     });
-    
+
                                     $('#dialog-panel').dialog('open');
-    
+
+                                    $('#modal-content-atributos').html($templateAtributos);
+
                                 });
                             }
 
                         }
                     });
 
-                    
+
                 }
 
                 const divIcon = L.divIcon({
@@ -479,15 +464,15 @@ function onceMapIsLoaded() {
                 border: 1px solid #FFFFFF`;
 
                 const icon = L.divIcon({
-                className: "my-custom-pin",
-                iconAnchor: [0, 24],
-                labelAnchor: [-6, 0],
-                popupAnchor: [0, -36],
-                html: `<span style="${$markerHtmlStyles}" />`
+                    className: "my-custom-pin",
+                    iconAnchor: [0, 24],
+                    labelAnchor: [-6, 0],
+                    popupAnchor: [0, -36],
+                    html: `<span style="${$markerHtmlStyles}" />`
                 });
 
 
-                var iconMarkerPoint= L.icon({
+                var iconMarkerPoint = L.icon({
                     iconUrl: $seccion.fullMarkerUrl,
                     iconSize: [32, 37],
                     iconAnchor: [16, 37],
@@ -498,10 +483,10 @@ function onceMapIsLoaded() {
                     style: $styleColor($seccion),
                     onEachFeature: $onEachFeature,
                     pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, { icon: icon });                       
+                        return L.marker(latlng, { icon: icon });
                     }
                 }).addTo(map);
-               
+
                 $cacheLayer($id, $currentSectionPoints);
             }
 
@@ -662,3 +647,53 @@ function renderHandlebarsTemplate(withTemplate, inElement, withData, callback, i
         if (callback) { callback() }
     })
 };
+
+
+
+$('#btn-modal-aceptar').on('click',function(){
+   
+
+});
+
+function guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+function agregarAtributo(){
+    let table=$('#table-atributo');
+
+    let rowTemplate='<tr><td><input type="text" class="atributo-nombre" data-id="' + guid() + '" value=""></td><td><input type="text" class="atributo-valor" data-id="' + guid() + '" value=""></td><td><a class="nav-link"><i class="fas fa-trash-alt" onClick="quitarAtributo("' + guid() + '");"></i></a></td></tr>;';
+
+    table.append(rowTemplate);
+}
+
+function quitarAtributo($id){
+    let row= $('#table-atributo').find('[data-id=' + $id +']');
+    row.remove();
+}
+
+function guardarAtributo(){
+    let data=[];
+
+    let atributosNombre= $('#modal-content-atributos').find('.atributo-nombre');
+    console.log(atributosNombre);
+    let atributosValor= $('#modal-content-atributos').find('.atributo-valor');
+
+    for (let index = 0; index < atributosNombre.length; index++) {
+        let row={};
+        row.id= $(atributosNombre[index]).attr('data-id');
+        row.nombre=$(atributosNombre[index]).val();
+        row.valor=$(atributosValor[index]).val();
+        data.push(row);
+    }
+
+    console.log(data);
+
+    alert('guardado');
+
+}

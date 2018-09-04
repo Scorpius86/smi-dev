@@ -144,6 +144,7 @@
                 {
                     "id":4,
                     "variable":"Producción",
+                    "grafico":"line",
                     "datos":[
                         {"etiqueta":2005,"valor":2500},
                         {"etiqueta":2008,"valor":5000},
@@ -159,6 +160,7 @@
                 {
                     "id":5,
                     "variable":"Precios",
+                    "grafico":"bar",
                     "datos":[
                         {"etiqueta":2005,"valor":2.5},
                         {"etiqueta":2008,"valor":2.8},
@@ -174,6 +176,7 @@
                 {
                     "id":6,
                     "variable":"Superficie",
+                    "grafico":"line",
                     "datos":[
                         {"etiqueta":2005,"valor":100},
                         {"etiqueta":2008,"valor":140},
@@ -197,6 +200,7 @@
                 {
                     "id":7,
                     "variable":"Producción",
+                    "grafico":"line",
                     "datos":[
                         {"etiqueta":2005,"valor":2500},
                         {"etiqueta":2008,"valor":5000},
@@ -212,6 +216,7 @@
                 {
                     "id":8,
                     "variable":"Precios",
+                    "grafico":"bar",
                     "datos":[
                         {"etiqueta":2005,"valor":2.5},
                         {"etiqueta":2008,"valor":2.8},
@@ -227,6 +232,7 @@
                 {
                     "id":9,
                     "variable":"Superficie",
+                    "grafico":"line",
                     "datos":[
                         {"etiqueta":2005,"valor":100},
                         {"etiqueta":2008,"valor":140},
@@ -241,5 +247,5 @@
                 }
             ]
         }
-    ],
+    ]
 }
