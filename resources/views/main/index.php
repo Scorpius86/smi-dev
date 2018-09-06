@@ -174,11 +174,17 @@
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
-       
-        <table class="table table-sm">             
-            {{#each properties as |item|}}
+       {{#with data}}
+        <table class="table table-sm">
+            {{#with detalle}}
             <tr>
-                <td>{{item.nombre}}</td>
+                <th>Nombre</th>
+                <td>{{nombre}}{{abreviatura}}</td>
+            </tr>
+            {{/with}}
+            {{#each atributos as |item|}}
+            <tr>
+                <th>{{item.nombre}}</th>
                 <td>{{item.valor}}</td>
             </tr>
             {{/each}}
@@ -188,7 +194,7 @@
         <div>            
             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Editar</button>
         </div>
-
+        {{/with}}
     </script>
     <script id="panel-popupcontent-template" type="text/x-handlebars-template">
         
@@ -272,7 +278,7 @@
     </script>
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
-        {{#with detalle}}
+        {{#with data}}
         <div class="modal-header">
             <h3 class="modal-title"> {{titulo}} </h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -280,41 +286,78 @@
             </button>
         </div>
         <div class="modal-body" style="overflow-y:scroll; height:400px;">
-            <div>
-            <button type="button" class="btn btn-primary" onClick="agregarAtributo()">Agregar</button>
-            </div>
             <form>
-                <table id ="table-atributo" class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Atributo</th>
-                            <th>Valor</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each data}}
-                        <tr>
-                            <td>
-                                <input type="text" class="atributo-nombre" data-id="{{id}}" value="{{nombre}}">
-                            </td>
-                            <td>
-                                <input type="text" class="atributo-valor" data-id="{{id}}" value="{{valor}}">
-                            </td>
-                            <td>
-                                <a class="nav-link">
-                                    <i class="fas fa-trash-alt" onClick="quitarAtributo('{{id}}')"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>                    
-                </table>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#seccion-informacion" role="tab" aria-controls="seccion-informacion" aria-selected="true">Informaci&oacute;n</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#seccion-atributos" role="tab" aria-controls="seccion-informacion" aria-selected="false">Atributos</a>
+                    </li>           
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="seccion-informacion" role="tabpanel" aria-labelledby="seccion-informacion-tab">
+                        <br>
+                        {{#with detalle}}
+                        <input type="hidden" data-validate="true" data-field="idSeccion" value="{{idSeccion}}">
+                        <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{id}}">
+                        <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{codigoGIS}}">
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Nombre</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="nombre" placeholder="Nombre" value="{{nombre}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput2">Abreviatura</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="abreviatura" placeholder="Abreviatura" value="{{abreviatura}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput2">Descripci&oacute;n</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="descripcion" placeholder="Descripcion"  value="{{descripcion}}">
+                        </div>
+                        {{/with}}
+                    </div>
+                    <div class="tab-pane fade" id="seccion-atributos" role="tabpanel" aria-labelledby="seccion-informacion-tab">
+                        <br>
+                        <div>
+                            <button type="button" class="btn btn-primary" onClick="agregarAtributo()">Agregar</button>
+                        </div>
+                        <table id ="table-atributo" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Atributo</th>
+                                    <th>Valor</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each atributos}}
+                                <tr  data-id="{{id}}">
+                                    <td>
+                                        <input type="text" class="atributo-nombre" value="{{nombre}}" data-field-id="{{id}}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="atributo-valor" value="{{valor}}" data-field-id="{{id}}">
+                                    </td>
+                                    <td>
+                                        <a class="nav-link" style="cursor: pointer;" onClick="quitarAtributo('{{id}}')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>                    
+                        </table>
+                    </div>
+                </div>
+
+            
+
+                
             </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onClick="guardarAtributo()">Aceptar</button>
+            <button type="button" class="btn btn-primary" onClick="saveSeccionDetalleClick()">Aceptar</button>
         </div>
         {{/with}}
     </script>

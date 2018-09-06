@@ -19,11 +19,7 @@ class SeccionesController extends Controller
         $baseLogoUrl='/img/seccion/logo/';
         $baseMarkerUrl='/img/seccion/marker/';
 
-        error_log($idSeccion);
-
         $seccion = Seccion::find($idSeccion);
-
-        error_log($seccion);
 
         $dataGeoJson=null;
 
@@ -73,26 +69,12 @@ class SeccionesController extends Controller
 
         $data= array(
             'status'=> true, 
-            'data'=> $detalleSeccion            
+            'data'=> $detalleSeccion
         );
         
         $json = json_encode($data); 
 
         return $data;
-    }
-
-    public function getSeccionDetalleAtributoByIdSeccion($idSeccion, $codigoGIS){
-        $result= array('status'=> true, 'data'=> array());
-
-        $detalle=SeccionDetalle::where([['idSeccion','=',$idSeccion],['codigoGIS','=',$codigoGIS]])->first();
-        if($detalle <> null){
-            $idSeccionDetalle=$detalle->id;
-            $detalleAtributo=SeccionAtributo::where([['idSeccionDetalle','=',$idSeccionDetalle]])->get();
-            $result= array('status'=> true, 'data'=> $detalleAtributo);
-        }
-        
-        return $result;
-
     }
 
     public function save(Request $request){

@@ -178,6 +178,30 @@ function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributos
     });
 }
 
+function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
+    const $url = API + 'secciones/' + $idSeccion + '/detalle';
+    showLoading();
+    $.ajax({
+        url: $url,
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify($seccionDetalle),
+        success: function ($response) {
+            console.log($response);
+            if (typeof ($response !== 'undefined') && $response !== null) {
+                if ($response.status) {
+                    alert('guardado');
+                }
+            }
+        },
+        error: function (xhr, status) {
+        },
+        complete: function (xhr, status) {
+            hideLoading();
+        }
+    });
+}
+
 function loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, $afterLoadPanel) {
     const $url = API + 'secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/' + $idCultivo;
     showLoading();
@@ -344,7 +368,7 @@ function onceMapIsLoaded() {
 
         const $afterLoadPuntos = function ($seccion, $cacheLayer) {
 
-            const $id = $seccion.seccion.id;
+            const $idSeccion = $seccion.seccion.id;
             const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
             if ($seccion.geoJsonFile) {
@@ -362,8 +386,8 @@ function onceMapIsLoaded() {
 
                             if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
                                 console.log('load panel');
-                                loadPanel($id, $detalleCodigoGIS, $idCultivo, function (data) {
-
+                                loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, function (data) {
+                                    
                                     const $template = renderHandlebarsTemplate(
                                         "#panel-popupcontent-template", null, { detalle: data }, null, true
                                     );
@@ -396,6 +420,7 @@ function onceMapIsLoaded() {
                             }
                             else {
                                 loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function (data) {
+                                    console.log(data);
                                     if (data == undefined || data.length == 0) {
                                         const propiedades = [];
                                         propiedades.push({ id:'1', nombre: 'Población', valor: '1 500 000' });
@@ -407,17 +432,18 @@ function onceMapIsLoaded() {
 
                                         data = propiedades;
                                     }
-
-                                    let dataDetalle={};
-                                    dataDetalle.titulo=$detalleCodigoGIS;
-                                    dataDetalle.data=data;
+                                   
+                                    data.titulo=$detalleCodigoGIS;
+                                    if(data.detalle != null && data.detalle.nombre != null){
+                                        data.titulo= data.detalle.nombre;
+                                    }
 
                                     const $template = renderHandlebarsTemplate(
-                                        "#punto-popupcontent-template", null, { properties: dataDetalle.data }, null, true
+                                        "#punto-popupcontent-template", null, { data: data }, null, true
                                     );
 
                                     const $templateAtributos = renderHandlebarsTemplate(
-                                        "#secciones-editar-atributos", null, { detalle: dataDetalle }, null, true
+                                        "#secciones-editar-atributos", null, { data: data }, null, true
                                     );
 
                                     $('#dialog-panel .dialog-content').html($template);
@@ -519,44 +545,6 @@ function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer) {
     });
 }
 
-function loadLineas($afterLoadLineas) {
-    $.ajax({
-        url: API_SECCIONES_LINEAS,
-        type: 'GET',
-        dataType: 'json',
-        success: function ($response) {
-            if (typeof ($response !== 'undefined') && $response !== null) {
-                if ($response.status) {
-                    $afterLoadLineas($response.data);
-                }
-            }
-        },
-        error: function (xhr, status) {
-        },
-        complete: function (xhr, status) {
-        }
-    });
-}
-
-function loadPoligonos($afterLoadPoligonos) {
-    $.ajax({
-        url: API_SECCIONES_POLIGONOS,
-        type: 'GET',
-        dataType: 'json',
-        success: function ($response) {
-            if (typeof ($response !== 'undefined') && $response !== null) {
-                if ($response.status) {
-                    $afterLoadPoligonos($response.data);
-                }
-            }
-        },
-        error: function (xhr, status) {
-        },
-        complete: function (xhr, status) {
-        }
-    });
-}
-
 function loadSecciones($afterLoadSecciones) {
     const $urlSecciones = API_SECCIONES;
 
@@ -648,13 +636,6 @@ function renderHandlebarsTemplate(withTemplate, inElement, withData, callback, i
     })
 };
 
-
-
-$('#btn-modal-aceptar').on('click',function(){
-   
-
-});
-
 function guid() {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -667,9 +648,12 @@ function guid() {
 function agregarAtributo(){
     let table=$('#table-atributo');
 
-    let rowTemplate='<tr><td><input type="text" class="atributo-nombre" data-id="' + guid() + '" value=""></td><td><input type="text" class="atributo-valor" data-id="' + guid() + '" value=""></td><td><a class="nav-link"><i class="fas fa-trash-alt" onClick="quitarAtributo("' + guid() + '");"></i></a></td></tr>;';
+    let $guid= guid();
+
+    let rowTemplate='<tr data-id="' + $guid + '"><td><input type="text" data-field-id="0" class="atributo-nombre" value=""></td><td><input type="text" data-field-id="0" class="atributo-valor" value=""></td><td><a class="nav-link" style="cursor: pointer;" onClick="quitarAtributo(\'' + $guid + '\');"><i class="fas fa-trash-alt" ></i></a></td></tr>;';
 
     table.append(rowTemplate);
+    
 }
 
 function quitarAtributo($id){
@@ -677,23 +661,31 @@ function quitarAtributo($id){
     row.remove();
 }
 
-function guardarAtributo(){
-    let data=[];
+function saveSeccionDetalleClick(){
+    let $seccionDetalle={};
+    let $atributos=[];
 
-    let atributosNombre= $('#modal-content-atributos').find('.atributo-nombre');
-    console.log(atributosNombre);
+    let atributosNombre= $('#modal-content-atributos').find('.atributo-nombre');    
     let atributosValor= $('#modal-content-atributos').find('.atributo-valor');
 
     for (let index = 0; index < atributosNombre.length; index++) {
         let row={};
-        row.id= $(atributosNombre[index]).attr('data-id');
+        row.id= $(atributosNombre[index]).attr('data-field-id');
         row.nombre=$(atributosNombre[index]).val();
         row.valor=$(atributosValor[index]).val();
-        data.push(row);
+        $atributos.push(row);
     }
 
-    console.log(data);
+    let $fields = $('#modal-content-atributos').find("input[data-validate = 'true']");
 
-    alert('guardado');
+    $($fields).each(function(){
+        $seccionDetalle[$(this).attr('data-field')]=$(this).val();
+    });
+    
+    $seccionDetalle.atributos=$atributos;
+    
+    console.log($seccionDetalle);
+
+    saveSeccionDetalleRequest($seccionDetalle.idSeccion, $seccionDetalle);
 
 }
