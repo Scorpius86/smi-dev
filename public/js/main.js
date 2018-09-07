@@ -185,7 +185,7 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
         url: $url,
         type: 'POST',
         dataType: 'json',
-        data: JSON.stringify($seccionDetalle),
+        data: $seccionDetalle,
         success: function ($response) {
             console.log($response);
             if (typeof ($response !== 'undefined') && $response !== null) {

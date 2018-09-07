@@ -184,7 +184,7 @@
             {{/with}}
             {{#each atributos as |item|}}
             <tr>
-                <th>{{item.nombre}}</th>
+                <td>{{item.nombre}}</td>
                 <td>{{item.valor}}</td>
             </tr>
             {{/each}}
