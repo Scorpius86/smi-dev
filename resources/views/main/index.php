@@ -171,8 +171,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
+    <!-- Se agrega la librería VueJS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
+    
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
        {{#with data}}
         <table class="table table-sm">

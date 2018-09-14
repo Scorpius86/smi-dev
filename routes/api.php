@@ -38,6 +38,9 @@ Route::group(['middleware' => 'cors'], function() {
     Route::delete('/secciones/{id}','SeccionesController@delete');
     Route::post('/secciones/{idSeccion}/detalle','AtributosController@saveMultiple');
 
+    Route::get('/parametros','ParametrosController@get');
+    Route::get('/parametros/{id}','ParametrosController@getById');
+
     Route::get('/mapas/regiones','MapasController@getRegiones' );
     Route::get('/mapas/distritos','MapasController@getDistritos' );
  });
