@@ -40,6 +40,7 @@ Route::group(['middleware' => 'cors'], function() {
 
     Route::get('/parametros','ParametrosController@get');
     Route::get('/parametros/{id}','ParametrosController@getById');
+    Route::post('/parametros','ParametrosController@save');
 
     Route::get('/mapas/regiones','MapasController@getRegiones' );
     Route::get('/mapas/distritos','MapasController@getDistritos' );

@@ -1,5 +1,5 @@
 var smiParametro = Vue.component("Parametro", {
-    template: `
+  template: `
   
           <div class="container">
               <div class="row">
@@ -7,6 +7,7 @@ var smiParametro = Vue.component("Parametro", {
                       <legend>{{title}}</legend>
                      
                       <button type="button" class="btn btn-primary" v-on:click="onBuscar()">Refrescar</button>
+                      <button type="button" class="btn btn-primary" v-on:click="onGuardar()">Guardar</button>
                   </form>
               </div>
               
@@ -18,21 +19,25 @@ var smiParametro = Vue.component("Parametro", {
                     <tr>
                         <th>Codigo</th>
                         <th>Nombre</th>
-                        <th>Valor</th>
-                        <th></th>
+                        <th>Valor</th>                        
                     </tr>
                 
                     <tr v-for="parametro in parametros">
                         <td>{{parametro.codigo}}</td>
                         <td>{{parametro.nombre}}</td>
-                        <td>{{parametro.valor}}</td>
-                        <td>
-                            <a class="border-right pr-3 nav-link d-inline-flex" v-on:click="onEditar(parametro)" title="Editar">
-                                <span class="mr-2 fa-stack fa-1x">                                        
-                                    <i class="fas fa-edit fa-stack-1x "></i>                                
-                                </span>                            
-                            </a>                           
+                        <td style="background-color: #CCEBF3;">
+                            <template v-if="parametro.codigo==parametro_ACTIVAR_AUTENTICACION_PUBLICA">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" v-model="parametro.valorBool">
+                                    </label>
+                                </div>
+                            </template>
+                            <template v-else>
+                                {{parametro.valor}}
+                            </template>
                         </td>
+                      
                         
                     </tr>
                     
@@ -42,51 +47,76 @@ var smiParametro = Vue.component("Parametro", {
               
           </div>
       `,
-    data() {
-      return {
-        title: "Mantenimiento de Parámetros",
-        parametros: [],
-        filtro: {
-          textoBusqueda: ""
+  data() {
+    return {
+      title: "Mantenimiento de Parámetros",
+      parametro_ACTIVAR_AUTENTICACION_PUBLICA: "ACTIVAR_AUTENTICACION_PUBLICA",
+      parametros: [],
+      filtro: {
+        textoBusqueda: ""
+      }
+    };
+  },
+
+  created() {
+    this.load(this.filtro);
+  },
+  methods: {
+    load: function() {
+      this.$http.get("http://smi.alianzacacaoperu.org/api/parametros").then(
+        response => {
+          if (response.body.status == true) {
+            this.parametros = response.body.data.filter(
+              x => x.idSeccionPadre == null
+            );
+            this.parametros = _.orderBy(this.parametros, ["nombre"], ["asc"]);
+
+            this.parametros.forEach(element => {
+              element.valorBool = element.valor == 1;
+            });
+
+            //$('#categoria-table').DataTable();
+          }
+        },
+        error => {
+          console.log(error);
         }
-      };
+      );
     },
-  
-    created() {
+    onBuscar: function() {
+      console.log(this.filtro);
       this.load(this.filtro);
     },
-    methods: {
-      load: function() {
-        this.$http.get("http://smi.alianzacacaoperu.org/api/parametros").then(
-          response => {
-           
-            if (response.body.status == true) {
-              this.parametros = response.body.data.filter(
-                x => x.idSeccionPadre == null
-              );
-              this.parametros = _.orderBy(this.parametros, ["nombre"], ["asc"]);
+    onEliminar: function(seccion) {},
+    onAgregar: function(event) {},
+    onEditar: function(seccion) {},
+    onGuardar: function(event) {
+      var param = {};
+      param.parametros = this.parametros;
 
-              //$('#categoria-table').DataTable();
-
-            }
-          },
-          response => {
-            console.log("Error");
+      this.parametros.forEach(element => {
+        if (element.codigo == this.parametro_ACTIVAR_AUTENTICACION_PUBLICA) {
+          element.valor = 0;
+          if (element.valorBool) {
+            element.valor = 1;
           }
-        );
-      },
-      onBuscar: function() {
-        console.log(this.filtro);
-        this.load(this.filtro);
-      },
-      onEliminar: function(seccion) {},
-      onAgregar: function(event) {},
-      onEditar: function(seccion) {},
-      onGuardar: function(event) {}
-    },
-    // props: ['title'],
-    $_veeValidate: {
-      validator: "new"
+        }
+      });
+
+      this.$http.post("http://smi.alianzacacaoperu.org/api/parametros").then(
+        response => {
+          if (response.body.status == true) {
+            alert("guardado");
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
-  });
-  
+  },
+  // props: ['title'],
+  $_veeValidate: {
+    validator: "new"
+  }
+});

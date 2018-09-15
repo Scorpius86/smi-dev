@@ -204,6 +204,7 @@
     
 
 <!-- Vue Pages and Components here -->
+    <script src="js/shared/constantes.js"></script>
     <script src="js/pages/home/home.vue.js"></script>
     <script src="js/pages/seccion/seccion.vue.js"></script>
     <script src="js/pages/categoria/categoria.vue.js"></script>
