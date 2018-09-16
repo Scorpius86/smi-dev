@@ -1,7 +1,7 @@
 var smiParametro = Vue.component("Parametro", {
   template: `
   
-          <div class="container">
+          <div class="container-fluid">
               <div class="row">
                   <form >
                       <legend>{{title}}</legend>
@@ -14,7 +14,7 @@ var smiParametro = Vue.component("Parametro", {
               <br>
               
               <div class="row">
-                <table id="parametro-table" class="table" title="">
+                <table id="parametro-table" class="table responsive" title="">
                     
                     <tr>
                         <th>Codigo</th>

@@ -1,7 +1,7 @@
 var smiCategoria = Vue.component("Categoria", {
     template: `
   
-          <div class="container">
+          <div class="container-fluid">
               <div class="row">
                   <form >
                       <legend>{{title}}</legend>

@@ -8,6 +8,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
     <!-- Custom styles for this template -->
     <link href="css/bootstrap/theme/lumen/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
@@ -43,7 +45,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div id="modal-content-atributos" class="modal-content">
                 
@@ -202,6 +204,11 @@
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
     <script src="https://unpkg.com/vuetify@1.0.17/dist/vuetify.min.js"></script>
     
+    <!-- https://bootstrap-vue.js.org/docs/ -->
+    
+    <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    
 
 <!-- Vue Pages and Components here -->
     <script src="js/shared/constantes.js"></script>
@@ -211,6 +218,12 @@
     <script src="js/pages/parametro/parametro.vue.js"></script>
 
     <script>
+
+        //Ocultar menu
+        $('#btnShowMenu').on('click', function () {
+            $('#sidebar').toggle();
+        });
+
         Vue.use(VueRouter);
         Vue.use(VeeValidate);
         const routes = [{
