@@ -1,6 +1,5 @@
 var smiParametro = Vue.component("Parametro", {
   template: `
-  
           <div class="container-fluid">
               <div class="row">
                   <form >

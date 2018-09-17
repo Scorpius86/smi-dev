@@ -382,3 +382,12 @@ div.custom-tab div.custom-tab-content:not(.active){
 .ui-front{
   z-index: 1000;
 }
+
+
+.button-link-smi {
+  cursor: default;
+}
+
+.button-link-smi:hover {
+  cursor: pointer;
+}

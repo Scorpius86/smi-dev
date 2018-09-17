@@ -104,25 +104,21 @@
                     <div id="menu-sidebar" class="sidebar-menu mt-4">
                         <ul class="bg-light">
                             <li class="sidebar-dropdown">
-                                <a href="./admin#/categoria" class="border-2 border-left border-menu-item d-block">
-                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                                        <span>Categor&iacute;as</span>
-                                    </div>
-                                </a>
-
-
-                            </li>
-
-                            <li class="sidebar-dropdown">
                                 <a href="./admin#/seccion" class="border-2 border-left border-menu-item d-block">
                                     <div class="d-inline-flex align-items-center pl-2 bg-white">
                                         <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
                                         <span>Secciones</span>
                                     </div>
                                 </a>
+                            </li>
 
-
+                            <li class="sidebar-dropdown">
+                                <a href="./admin#/categoria" class="border-2 border-left border-menu-item d-block">
+                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
+                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
+                                        <span>Categor&iacute;as</span>
+                                    </div>
+                                </a>
                             </li>
 
                             <li class="sidebar-dropdown">
@@ -132,10 +128,7 @@
                                         <span>Parámetros</span>
                                     </div>
                                 </a>
-
-
                             </li>
-
                             
                         </ul>
                     </div>

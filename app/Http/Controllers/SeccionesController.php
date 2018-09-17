@@ -11,6 +11,7 @@ class SeccionesController extends Controller
 {
     public function get(){
         $secciones=Seccion::where([['activo','=','1'],['eliminado','=','0']])->get();
+
         $data= array('status'=> true, 'data'=> $secciones);
         return $data;
     }
