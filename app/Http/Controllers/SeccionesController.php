@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use smi\Seccion;
 use smi\SeccionDetalle;
 use smi\SeccionAtributo;
+use Carbon\Carbon;
 
 class SeccionesController extends Controller
 {
     public function get(){
-        $secciones=Seccion::where([['activo','=','1'],['eliminado','=','0']])->get();
+        $secciones=Seccion::where([['eliminado','=','0']])->get();
 
         $data= array('status'=> true, 'data'=> $secciones);
         return $data;
@@ -79,7 +80,60 @@ class SeccionesController extends Controller
     }
 
     public function save(Request $request){
-        return Seccion::create($request->all());
+        $user='admin';
+        $terminal= $request->getHttpHost();
+
+        error_log($request->input('id'));
+
+        $seccion= new Seccion;
+
+        if($request->input('id')==0){            
+            $seccion->codigoGIS=$request->input('codigoGIS');
+            $seccion->nombre=$request->input('nombre');
+            $seccion->descripcion=$request->input('descripcion');
+            $seccion->idSeccionPadre=$request->input('idSeccionPadre');
+            $seccion->idTipoGeoData=$request->input('idTipoGeoData');
+            $seccion->menuCategoria=$request->input('menuCategoria');
+            $seccion->menuAccion=$request->input('menuAccion');
+            $seccion->idTipoAccion=$request->input('idTipoAccion');
+            $seccion->color=$request->input('color');
+            $seccion->logo=$request->input('logo');
+            $seccion->marker='';
+            $seccion->activo=$request->input('activo');
+            $seccion->fechaCrea= Carbon::now();
+            $seccion->usuarioCrea=$user;
+            $seccion->terminalCrea=$terminal;
+            $seccion->fechaCambio=null;
+            $seccion->usuarioCambio=null;
+            $seccion->terminalCambio=null;
+            $seccion->eliminado=0; 
+            $seccion->save();
+        }
+        else{
+            $seccion = Seccion::find($request->input('id'));
+            $seccion->codigoGIS=$request->input('codigoGIS');
+            $seccion->nombre=$request->input('nombre');
+            $seccion->descripcion=$request->input('descripcion');
+            $seccion->idSeccionPadre=$request->input('idSeccionPadre');
+            $seccion->idTipoGeoData=$request->input('idTipoGeoData');
+            $seccion->menuCategoria=$request->input('menuCategoria');
+            $seccion->menuAccion=$request->input('menuAccion');
+            $seccion->idTipoAccion=$request->input('idTipoAccion');
+            $seccion->color=$request->input('color');
+            $seccion->logo=$request->input('logo');
+            $seccion->marker='';
+            $seccion->activo=$request->input('activo');
+            $seccion->fechaCambio=Carbon::now();
+            $seccion->usuarioCambio=$user;
+            $seccion->terminalCambio=$terminal;
+            $seccion->eliminado=0; 
+            $seccion->save();
+
+        }
+
+        $data= array('status'=> true, 'data'=> $seccion);
+        return $data;
+
     }
 
     public function update(Request $request, $id){
@@ -87,15 +141,17 @@ class SeccionesController extends Controller
         $seccion = Seccion::findOrFail($id);
         $seccion->update($request->all());
 
-        return $seccion;
+        $data= array('status'=> true, 'data'=> $seccion);
+        return $data;
     }
 
     public function delete(Request $request, $id){
         $seccion = Seccion::findOrFail($id);
-        $seccion->activo=0;
+        $seccion->eliminado=0;
         $seccion->update($request->all());
 
-        return $seccion;
+        $data= array('status'=> true, 'data'=> $seccion);
+        return $data;
     }
 
     public function uploadFile(Request $request){

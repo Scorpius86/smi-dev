@@ -2,15 +2,15 @@ var smiSeccion = Vue.component("Seccion", {
   template: `
         <div class="container-fluid">
             <div class="row">
-                <b-modal ref="modalMensaje" hide-footer title="Información">
+                <b-modal ref="modalMensaje" hide-footer v-bind:title="mensaje.title">
                     <div class="d-block text-center">
-                        <h5>{{mensajeAlerta}}</h5>
+                        <h5>{{mensaje.text}}</h5>
                     </div>
                     <b-btn class="mt-3" block @click="onOcultarMensaje">Aceptar</b-btn>
                 </b-modal>
-                <b-modal ref="modalConfirmacion" hide-footer title="Confirmación">
+                <b-modal ref="modalConfirmacion" hide-footer v-bind:title="mensaje.title">
                     <div class="d-block text-center">
-                        <h5>{{mensajeAlerta}}</h5>
+                        <h5>{{mensaje.text}}</h5>
                     </div>
                     <div class="text-right">
                         <b-btn class="mt-3" variant="primary" @click="onAceptarConfirmacion">Aceptar</b-btn>
@@ -138,63 +138,67 @@ var smiSeccion = Vue.component("Seccion", {
                     <legend>{{title}}</legend>
                     <div class="form-group">
                        <label for="">Nombre</label>                        
-                       <input type="text" v-model="filtro.textoBusqueda" class="form-control" required="required">                        
+                       <input type="text" v-on:blur="onBuscar()" v-model="filtro.textoBusqueda" class="form-control" required="required">                        
                     </div>
                     <div class="form-group">
                         <label for="">Categor&iacute;a</label>                        
-                        <select v-model="filtro.categoriaSeleccionada" class="form-control" required="required">
+                        <select v-on:change="onChangeCategoria" v-model="filtro.categoriaSeleccionada" class="form-control" required="required">
                             <option value="0">- Todas -</option>
                             <option v-for="categoria in categorias" v-bind:value="categoria.id">{{categoria.nombre}}</option>
                         </select>
                     </div>
                     <button type="button" class="btn btn-primary" v-on:click="onBuscar()">Buscar</button>
+                    <button type="button" class="btn btn-primary" v-on:click="onAgregar()">Nuevo</button>
                 </form>
             </div>
             
             <br>
             
             <div class="row">
-                <table class="table table-responsive">
-                    <tr>
-                        <th>Codigo</th>
-                        <th>CodigoGIS</th>
-                        <th>Nombre</th>
-                        <th>GeoJSON</th>
-                        <th>Activo</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                    <tr v-for="seccion in secciones">
-                        <td>{{seccion.id}}</td>
-                        <td>{{seccion.codigoGIS}}</td>
-                        <td>{{seccion.nombre}}</td>
-                        <td>{{seccion.geoJsonFile}}</td>
-                        <td>
-                            <div class="checkbox">
-                                <label>
-                                    <input disabled="disabled" type="checkbox" v-model="seccion.activoBoolean">
-                                </label>
-                            </div>                            
-                        </td>
-                        <td>
-                            <a class="border-right pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onEditar(seccion)" title="Editar">
-                                <span class="mr-2 fa-stack fa-1x">
-                                    <i class="fas fa-edit fa-stack-1x "></i>
-                                </span>
-                            </a>
-                            <a class="border-right pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onEliminar(seccion)" title="Eliminar">
-                                <span class="mr-2 fa-stack fa-1x">                                        
-                                    <i class="fas fa-trash-alt fa-stack-1x "></i>                                
-                                </span>                            
-                            </a>
-                            <a class="pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onUpload(seccion)" title="Upload">
-                                <span class="mr-2 fa-stack fa-1x">
-                                    <i class="fas fa-upload fa-stack-1x "></i>
-                                </span>                          
-                            </a>
-                        </td>
-                       
-                    </tr>
-                </table>
+                <div class="col-12">
+                    <table class="table table-responsive w-100">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>CodigoGIS</th>
+                            <th>Nombre</th>
+                            <th>GeoJSON</th>
+                            <th>Activo</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                        <tr v-for="seccion in secciones">
+                            <td>{{seccion.id}}</td>
+                            <td>{{seccion.codigoGIS}}</td>
+                            <td>{{seccion.nombre}}</td>
+                            <td>{{seccion.geoJsonFile}}</td>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                        <input disabled="disabled" type="checkbox" v-model="seccion.activoBoolean">
+                                    </label>
+                                </div>                            
+                            </td>
+                            <td>
+                                <a class="border-right pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onEditar(seccion)" title="Editar">
+                                    <span class="mr-2 fa-stack fa-1x">
+                                        <i class="fas fa-edit fa-stack-1x "></i>
+                                    </span>
+                                </a>
+                                <a class="border-right pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onEliminar(seccion)" title="Eliminar">
+                                    <span class="mr-2 fa-stack fa-1x">                                        
+                                        <i class="fas fa-trash-alt fa-stack-1x "></i>                                
+                                    </span>                            
+                                </a>
+                                <a class="pr-3 nav-link d-inline-flex button-link-smi" v-on:click="onUpload(seccion)" title="Upload">
+                                    <span class="mr-2 fa-stack fa-1x">
+                                        <i class="fas fa-upload fa-stack-1x "></i>
+                                    </span>                          
+                                </a>
+                            </td>
+                        
+                        </tr>
+                    </table>
+                </div>
+                
             </div>
             
         </div>
@@ -205,7 +209,10 @@ var smiSeccion = Vue.component("Seccion", {
       categorias: [],
       seccionEditar: null,
       seccionNuevo: null,
-      mensajeAlerta: '',
+      mensaje: {
+          title:'',
+          text:''
+      },
       filtro: {
         categoriaSeleccionada: 0,
         textoBusqueda: ""
@@ -220,7 +227,7 @@ var smiSeccion = Vue.component("Seccion", {
   },
   methods: {
     loadCategoria: function() {
-      this.$http.get("http://smi.alianzacacaoperu.org/api/secciones").then(
+      this.$http.get(UrlAPI.base + '/secciones').then(
         response => {
          
           if (response.body.status == true) {
@@ -231,20 +238,20 @@ var smiSeccion = Vue.component("Seccion", {
           }
         },
         response => {
-          console.log("Error");
+            console.log(response);
+            this.onMostrarMensajeError();
         }
       );
     },
     loadSeccion: function(filtro) {
-      this.$http.get("http://smi.alianzacacaoperu.org/api/secciones").then(
+      this.$http.get(UrlAPI.base + '/secciones').then(
         response => {
-            console.log(response);
             if (response.body.status==true) {
 
+                this.secciones=  response.body.data.filter(x=> x.idSeccionPadre != null);
+
                 if(filtro.textoBusqueda && filtro.textoBusqueda.length > 0){
-                    this.secciones= response.body.data.filter(x=> x.nombre.indexOf(filtro.textoBusqueda)>=0);
-                }else{
-                    this.secciones = response.body.data;
+                    this.secciones= this.secciones.filter(x=> _.toUpper(x.nombre).indexOf(_.toUpper(filtro.textoBusqueda))>=0);
                 }
 
                 if(filtro.categoriaSeleccionada  && filtro.categoriaSeleccionada != 0){
@@ -258,31 +265,44 @@ var smiSeccion = Vue.component("Seccion", {
                     }
                 });
 
-                console.log(this.secciones);
-
                 this.secciones = _.orderBy(this.secciones, ['nombre'],['asc']);
             }
         },
         response => {
-          console.log("Error");
+            console.log(response);
+            this.onMostrarMensajeError();
         }
       );
     },
 
+    onChangeCategoria: function(){
+        this.loadSeccion(this.filtro);
+    },
     onBuscar: function() {
-      console.log(this.filtro);
-      this.loadSeccion(this.filtro);
+        this.loadSeccion(this.filtro);
     },
     onEliminar: function(seccion) {
-        this.mensajeAlerta='Va ha eliminar la sección "' + seccion.nombre + '". Desea continuar ?';
+        this.seccionEditar=seccion;
+        this.mensaje.title='Confirmación';
+        this.mensaje.text='Va ha eliminar la sección "' + seccion.nombre + '". Desea continuar ?';
         this.onMostrarConfirmacion();
     },
-    onAgregar: function(event) {},
-    onEditar: function(seccion) {
-        this.seccionEditar= seccion;     
+    onAgregar: function(event) {
+        let seccion= {};
+        seccion.id=0;
+        seccion.activoBoolean=true;
+        seccion.color='#ffffff';
+        seccion.idTipoGeoData=0;
+        seccion.idSeccionPadre=0;
+        this.seccionEditar=seccion;
         this.$refs.modalEditar.show();
     },
-    onGuardar: function(event) {},
+    onEditar: function(seccion) {
+        this.seccionEditar= seccion;
+        console.log(this.seccionEditar);
+        this.$refs.modalEditar.show();
+    },
+   
     onUpload: function(event) {
         this.$refs.modalUpload.show();
     },
@@ -293,12 +313,41 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.modalUpload.hide();
     },
     onAceptarEditar: function(){
-        console.log(seccionEditar);
-        this.seccionEditar=null;
+        
+        if(this.seccionEditar.nombre.length==0){
+            this.mensaje.title='Datos incompletos !!';
+            this.mensaje.text='Debe ingresar el nombre';
+            return;
+        }
+        if(this.seccionEditar.idSeccionPadre == null || this.seccionEditar.idSeccionPadre==0){
+            this.mensaje.title='Datos incompletos !!';
+            this.mensaje.text='Debe seleccionar una categoría';
+            return;
+        }
+
+        this.seccionEditar.menuAccion=1;
+        this.seccionEditar.menuCategoria=0;
+        this.seccionEditar.logo=null; //TODO: Temporal hasta que se implemente el logo
+        this.seccionEditar.idTipoAccion=1;
+        this.seccionEditar.activo= this.seccionEditar.activoBoolean ? 1: 0;
+
+        this.$http.post(UrlAPI.base + '/secciones', this.seccionEditar).then(
+            response => {
+                if (response.body.status==true) {
+                    this.mensaje.title='Info';
+                    this.mensaje.text='Se guardó la sección correctamente.';
+                    this.onMostrarMensaje();
+                }
+            },
+            response => {
+                console.log(response);
+                this.onMostrarMensajeError();
+            }
+        );
+
         this.$refs.modalEditar.hide();
     },
-    onOcultarEditar: function(){
-        
+    onOcultarEditar: function(){        
         this.$refs.modalEditar.hide();
     },
     onMostrarMensaje: function(){
@@ -314,9 +363,29 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.modalConfirmacion.hide();
     },
     onAceptarConfirmacion: function(){
+        //Eliminar
+        this.$http.delete(UrlAPI.base + '/secciones/' + this.seccionEditar.id ).then(
+            response => {
+                if (response.body.status==true) {
+                    this.mensaje.title='Info';
+                    this.mensaje.text='Se eliminó la sección correctamente.';
+                    this.onMostrarMensaje();
+                }
+                this.onBuscar();
+            },
+            response => {
+                console.log(response);
+                this.onMostrarMensajeError();
+            }
+        );
         this.$refs.modalConfirmacion.hide();
-    }
-   
+        this.seccionEditar=null;
+    },
+    onMostrarMensajeError: function(){
+        this.mensaje.title='OOPS !!';
+        this.mensaje.text='Ha ocurrido un error. Consulte al administrador';
+        this.onMostrarMensaje();
+    }   
   },
   // props: ['title'],
   $_veeValidate: {

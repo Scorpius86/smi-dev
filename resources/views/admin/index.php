@@ -204,6 +204,7 @@
     
 
 <!-- Vue Pages and Components here -->
+    <script src="js/utils/environment.js"></script>
     <script src="js/shared/constantes.js"></script>
     <script src="js/pages/home/home.vue.js"></script>
     <script src="js/pages/seccion/seccion.vue.js"></script>
@@ -219,6 +220,10 @@
 
         Vue.use(VueRouter);
         Vue.use(VeeValidate);
+        // Vue.http.headers.common['Content-Type'] = 'application/json';
+        // Vue.http.headers.common['Access-Control-Allow-Origin'] = '*';
+        // Vue.http.headers.common['Accept'] = 'application/json, text/plain, */*';
+        // Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin';
         const routes = [{
                 path: '/',
                 component: smiHomeAdmin
