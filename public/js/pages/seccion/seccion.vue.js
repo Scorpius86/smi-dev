@@ -294,6 +294,10 @@ var smiSeccion = Vue.component("Seccion", {
         seccion.color='#ffffff';
         seccion.idTipoGeoData=0;
         seccion.idSeccionPadre=0;
+        seccion.nombre=null;
+        seccion.descripcion=null;
+        seccion.codigoGIS=null;
+        seccion.logo=null;
         this.seccionEditar=seccion;
         this.$refs.modalEditar.show();
     },
@@ -313,16 +317,18 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.modalUpload.hide();
     },
     onAceptarEditar: function(){
-        
-        if(this.seccionEditar.nombre.length==0){
+        console.log(this.seccionEditar);
+        if(this.seccionEditar.nombre == null || this.seccionEditar.nombre.length==0){
             this.mensaje.title='Datos incompletos !!';
             this.mensaje.text='Debe ingresar el nombre';
-            return;
+            this.onMostrarMensaje();
+            return false;
         }
         if(this.seccionEditar.idSeccionPadre == null || this.seccionEditar.idSeccionPadre==0){
             this.mensaje.title='Datos incompletos !!';
             this.mensaje.text='Debe seleccionar una categoría';
-            return;
+            this.onMostrarMensaje();
+            return false;
         }
 
         this.seccionEditar.menuAccion=1;
