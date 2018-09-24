@@ -187,6 +187,7 @@
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
     <script src="js/utils/environment.js"></script>
+    <script src="js/shared/constantes.js"></script>
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
 

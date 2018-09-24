@@ -369,7 +369,12 @@ function onceMapIsLoaded() {
             const $idSeccion = $seccion.seccion.id;
             const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
-            if ($seccion.geoJsonFile) {
+            if ($seccion.geoJsonFile && $seccion.geoJsonFile != null) {
+
+                //Agregar en data temporal
+                // DATA.add($seccion.seccion.id, $seccion);
+                // console.log(DATA);
+
                 const $onEachFeature = function (feature, layer) {
                     var popupContent = "<p>I started out as a GeoJSON " +
                         feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
@@ -512,13 +517,14 @@ function onceMapIsLoaded() {
                 }).addTo(map);
 
                 $cacheLayer($id, $currentSectionPoints);
+                hideLoading();
             }
             else{
+                hideLoading();                
                 smiMensaje.$refs.message.mensaje.text='No se encontró representación para esta opción.';
                 smiMensaje.$refs.message.onMostrarMensaje();
             }
-
-            hideLoading();
+            
         };
 
         loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
