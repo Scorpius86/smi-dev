@@ -523,6 +523,7 @@ function onceMapIsLoaded() {
                 hideLoading();                
                 smiMensaje.$refs.message.mensaje.text='No se encontró representación para esta opción.';
                 smiMensaje.$refs.message.onMostrarMensaje();
+                console.log(smiMensaje);
             }
             
         };
