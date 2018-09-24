@@ -24,13 +24,14 @@
     <link href="css/main.css" rel="stylesheet">
     <title>Peru Cacao</title>
 
-
-
 </head>
 
 <body>
-    
 
+    <div id="vue-modal">
+        <vue-mensaje-modal ref="message"></vue-mensaje-modal>
+    </div>
+    
     <div id='loading' class="modal bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -171,11 +172,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
-    <!-- Se agrega la librería VueJS -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
+    <!-- Se agrega la librería VueJS -->
+    <script src="https://unpkg.com/vee-validate@2.0.0-rc.25/dist/vee-validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/vuetify@1.0.17/dist/vuetify.min.js"></script>
+    
+    <!-- https://bootstrap-vue.js.org/docs/ -->
+    
+    <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+    <script src="js/utils/environment.js"></script>
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
+
+    <script src="js/pages/ui/message.vue.js"></script>
     
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
        {{#with data}}
@@ -364,6 +379,10 @@
             <button type="button" class="btn btn-primary" onClick="saveSeccionDetalleClick()">Aceptar</button>
         </div>
         {{/with}}
+    </script>
+
+    <<script>
+        var smiMensaje=new Vue({ el: '#vue-modal' });
     </script>
 
 </body>

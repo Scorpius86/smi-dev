@@ -29,7 +29,13 @@ class SeccionesController extends Controller
             $fileName= $seccion->geoJsonFile;
             $baseSrc='/storage/app/public/json//';
             $file= base_path().$baseSrc.($fileName);
-            $dataGeoJson = file_get_contents($file);
+
+            $geoFile = @file_get_contents($file);
+
+            if ($geoFile != false) {
+                $dataGeoJson = file_get_contents($file);
+            }
+            
         }
 
         $logoUrl=null;

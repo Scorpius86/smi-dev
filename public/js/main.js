@@ -335,8 +335,6 @@ function onceMapIsLoaded() {
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
     const $whenMenuItemIsChecked = function () {
 
-
-
         const $isChecked = $(this).prop('checked');
         const $id = parseInt($(this).prop('id'));
         const $seccion = $(this).data('value');
@@ -514,6 +512,10 @@ function onceMapIsLoaded() {
                 }).addTo(map);
 
                 $cacheLayer($id, $currentSectionPoints);
+            }
+            else{
+                smiMensaje.$refs.message.mensaje.text='No se encontró representación para esta opción.';
+                smiMensaje.$refs.message.onMostrarMensaje();
             }
 
             hideLoading();
