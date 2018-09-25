@@ -24,14 +24,18 @@ var smiSeccion = Vue.component("Seccion", {
                                 <div class="col-sm-12">                                    
                                     <label for="">Archivo GeoJson</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input">
-                                        <label class="custom-file-label">Seleccionar archivo .geojson</label>
+                                        <input type="file" class="custom-file-input" ref="file" v-on:change="onFileUpload()">
+                                        <label class="custom-file-label">
+                                            <template v-if="fileUpload.file == null">
+                                                Seleccionar archivo .geojson
+                                            </template>
+                                            <template v-else>
+                                                {{fileUpload.name}}
+                                            </template>
+                                        </label>
                                     </div>
                                 </div>                               
-                            </div>
-                            <div class="form-group row">
-                               
-                            </div>
+                            </div>                           
                         </form>
                     </div>
                     <div class="text-right">
@@ -209,6 +213,10 @@ var smiSeccion = Vue.component("Seccion", {
       categorias: [],
       seccionEditar: null,
       seccionNuevo: null,
+      fileUpload: {
+          file: null,
+          name: ''
+      },
       mensaje: {
           title:'',
           text:''
@@ -274,7 +282,18 @@ var smiSeccion = Vue.component("Seccion", {
         }
       );
     },
-
+    onFileUpload: function(){
+        if(this.$refs.file != null && this.$refs.file.files.length>0){
+            this.fileUpload.file = this.$refs.file.files[0];
+            this.fileUpload.name=this.fileUpload.file.name;
+        }
+        else{
+            this.fileUpload.file = null;
+            this.fileUpload.name='';
+        }
+        
+        console.log(this.fileUpload);
+    },   
     onChangeCategoria: function(){
         this.loadSeccion(this.filtro);
     },
@@ -283,6 +302,7 @@ var smiSeccion = Vue.component("Seccion", {
     },
     onEliminar: function(seccion) {
         this.seccionEditar=seccion;
+        this.mensaje={};
         this.mensaje.title='Confirmación';
         this.mensaje.text='Va ha eliminar la sección "' + seccion.nombre + '". Desea continuar ?';
         this.onMostrarConfirmacion();
@@ -307,13 +327,39 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.modalEditar.show();
     },
    
-    onUpload: function(event) {
+    onUpload: function(seccion) {
+        this.seccionEditar=seccion;
         this.$refs.modalUpload.show();
     },
     onUploadAceptar:function(){
-        this.$refs.modalUpload.hide();
+        const me= this;
+        let formData = new FormData();
+        formData.append('file', this.fileUpload.file);
+
+        axios.post( UrlAPI.base + '/secciones/' + this.seccionEditar.id + '/upload',
+        formData,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        ).then(function(){
+            me.mensaje.title='Información';
+            me.mensaje.text='Se cargo el archivo correctamente.';
+            me.onMostrarMensaje();
+            me.$refs.modalUpload.hide();
+            me.seccionEditar=null;
+        })
+        .catch(function(error){
+            console.log(error);
+            me.mensaje.title='Error';
+            me.mensaje.text='Ha ocurrido un error un error no controlado. Contacte al administrador.';
+            me.onMostrarMensaje();
+        });
+        
     },
     onUploadCancelar: function(){
+        this.seccionEditar=null;
         this.$refs.modalUpload.hide();
     },
     onAceptarEditar: function(){

@@ -202,6 +202,7 @@
     <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <!-- Vue Pages and Components here -->
     <script src="js/utils/environment.js"></script>

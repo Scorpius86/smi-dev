@@ -369,6 +369,8 @@ function onceMapIsLoaded() {
             const $idSeccion = $seccion.seccion.id;
             const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
+            console.log($seccion);
+
             if ($seccion.geoJsonFile && $seccion.geoJsonFile != null) {
 
                 //Agregar en data temporal
@@ -520,7 +522,8 @@ function onceMapIsLoaded() {
                 hideLoading();
             }
             else{
-                hideLoading();                
+                console.log($seccion.geoJsonFile);
+                hideLoading();
                 smiMensaje.$refs.message.mensaje.text='No se encontró representación para esta opción.';
                 smiMensaje.$refs.message.onMostrarMensaje();
                 console.log(smiMensaje);

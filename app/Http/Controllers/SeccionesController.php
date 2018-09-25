@@ -3,6 +3,7 @@
 namespace smi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use smi\Seccion;
 use smi\SeccionDetalle;
 use smi\SeccionAtributo;
@@ -160,12 +161,28 @@ class SeccionesController extends Controller
         return $data;
     }
 
-    public function uploadFile(Request $request){
-        $seccion = Seccion::findOrFail($id);
-        $seccion->activo=0;
-        $seccion->update($request->all());
+    public function uploadFile(Request $request, $id){
 
-        return $seccion;
+        $pathBase= 'public/json/';
+
+        $seccion = Seccion::findOrFail($id);
+        $fileName= "Seccion-".$id."-file.geojson";
+
+        error_log(Storage::exists($pathBase.$fileName));
+
+        if(Storage::exists($pathBase.$fileName)){
+           //Eliminar
+           Storage::delete($pathBase.$fileName); 
+        }
+        
+        $path = $request->file('file')->storeAs($pathBase, $fileName);
+        $seccion->activo=0;
+        $seccion->geoJsonFile=$fileName;
+        $seccion->save();
+
+        $data= array('status'=> true, 'data'=> $seccion);
+
+        return $data;
     }
 
     public function getSeccionDetalleInformacionPanel($id, $codigoGIS, $idCultivo){

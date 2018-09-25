@@ -34,10 +34,11 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/secciones/{id}/detalle/{codigoGIS}/panel/{idCultivo}','SeccionesController@getSeccionDetalleInformacionPanel');
     Route::get('/secciones/{id}/atributos/','SeccionesController@getSeccionAtributoByIdSeccion');
     Route::post('/secciones','SeccionesController@save');
+    Route::post('/secciones/{id}/upload','SeccionesController@uploadFile');
     Route::put('/secciones/{id}','SeccionesController@update');
     Route::delete('/secciones/{id}','SeccionesController@delete');
     Route::post('/secciones/{idSeccion}/detalle','AtributosController@saveMultiple');
-
+    
     Route::get('/parametros','ParametrosController@get');
     Route::get('/parametros/{id}','ParametrosController@getById');
     Route::post('/parametros','ParametrosController@save');
