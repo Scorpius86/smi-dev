@@ -5,8 +5,6 @@ const MAP_MARKER_3 = MARKER_PATH + "if_map-marker_299087.png";
 const MAP_MARKER_PIN = MARKER_PATH + "if_Pin_728961.png";
 const MAP_MARKER_LOCATION = MARKER_PATH + "if_location_925919.png";
 
-
-
 var map = {};
 var layers = [];
 
@@ -24,8 +22,6 @@ jQuery(function ($) {
     const $afterLoadSecciones = settings;
     loadSecciones($afterLoadSecciones);
 
-    // const $afterLoadRegiones = initMap;
-    // loadRegiones($afterLoadRegiones);
 });
 
 function onLogoutButtonClick() {
@@ -87,8 +83,7 @@ function settings() {
 }
 
 function initMap($regiones, $afterMapIsLoaded) {
-    // if (typeof $regiones === 'undefined' || $regiones === null)
-    //     return;
+
     map = L.map('map-container');
     if (typeof $afterMapIsLoaded === 'function' && $afterMapIsLoaded !== null) {
         map.on('load', $afterMapIsLoaded);
@@ -127,10 +122,6 @@ function initMap($regiones, $afterMapIsLoaded) {
         "opacity": 0.65
     };
 
-    // L.geoJSON($regiones, {
-    //     style: myStyle,
-    //     onEachFeature: onEachFeature,
-    // }).addTo(map);
 }
 
 function markers() {
@@ -157,7 +148,7 @@ function markers() {
 }
 
 function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributosSeccionDetalle) {
-    const $url = API + 'secciones/' + $idSeccion + '/detalle/' + $codigoGIS + '/atributos';
+    const $url = UrlAPI.base + '/secciones/' + $idSeccion + '/detalle/' + $codigoGIS + '/atributos';
     showLoading();
     $.ajax({
         url: $url,
@@ -179,7 +170,7 @@ function loadAtributosSeccionDetalle($idSeccion, $codigoGIS, $afterLoadAtributos
 }
 
 function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
-    const $url = API + 'secciones/' + $idSeccion + '/detalle';
+    const $url = UrlAPI.base + '/secciones/' + $idSeccion + '/detalle';
     showLoading();
     $.ajax({
         url: $url,
@@ -203,7 +194,7 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
 }
 
 function loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, $afterLoadPanel) {
-    const $url = API + 'secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/' + $idCultivo;
+    const $url = UrlAPI.base + '/secciones/' + $idSeccion + '/detalle/' + $detalleCodigoGIS + '/panel/' + $idCultivo;
     showLoading();
     $.ajax({
         url: $url,
@@ -305,6 +296,7 @@ function addLegend($idElement, $seccion) {
 }
 
 function removeLegend($seccionId) {
+    console.log($seccionId);
     const $map_legend = $("#map-legend");
     var $seccionItem = $map_legend.find('[seccion-id="SECCION-' + $seccionId + '"]');
     $seccionItem.remove();
@@ -322,8 +314,6 @@ function removeMarker($id, $seccionId) {
         _.remove(layers, function ($item) {
             return $item.id === $checkedLayer.id;
         });
-        //let $index = layers.indexOf($checkedLayer);
-        //layers.splice($index);
     }
 
     $('#' + $id).prop('checked', false);
@@ -369,13 +359,7 @@ function onceMapIsLoaded() {
             const $idSeccion = $seccion.seccion.id;
             const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
-            console.log($seccion);
-
             if ($seccion.geoJsonFile && $seccion.geoJsonFile != null) {
-
-                //Agregar en data temporal
-                // DATA.add($seccion.seccion.id, $seccion);
-                // console.log(DATA);
 
                 const $onEachFeature = function (feature, layer) {
                     var popupContent = "<p>I started out as a GeoJSON " +
@@ -469,7 +453,6 @@ function onceMapIsLoaded() {
                         }
                     });
 
-
                 }
 
                 const divIcon = L.divIcon({
@@ -478,51 +461,60 @@ function onceMapIsLoaded() {
                     iconSize: [128, 128]
                 });
 
-                let $points = JSON.parse($seccion.geoJsonFile);
+                try {
+                    let $points = JSON.parse($seccion.geoJsonFile);
+                    const $myCustomColour = $seccion.seccion.color;
 
-                const $myCustomColour = $seccion.seccion.color;
+                    const $markerHtmlStyles = `
+                    background-color: ${$myCustomColour};
+                    width: 2rem;
+                    height: 2rem;
+                    display: block;
+                    left: -1.5rem;
+                    top: -1.5rem;
+                    position: relative;
+                    border-radius: 3rem 3rem 0;
+                    transform: rotate(45deg);
+                    border: 1px solid #FFFFFF`;
 
-                const $markerHtmlStyles = `
-                background-color: ${$myCustomColour};
-                width: 2rem;
-                height: 2rem;
-                display: block;
-                left: -1.5rem;
-                top: -1.5rem;
-                position: relative;
-                border-radius: 3rem 3rem 0;
-                transform: rotate(45deg);
-                border: 1px solid #FFFFFF`;
-
-                const icon = L.divIcon({
-                    className: "my-custom-pin",
-                    iconAnchor: [0, 24],
-                    labelAnchor: [-6, 0],
-                    popupAnchor: [0, -36],
-                    html: `<span style="${$markerHtmlStyles}" />`
-                });
+                    const icon = L.divIcon({
+                        className: "my-custom-pin",
+                        iconAnchor: [0, 24],
+                        labelAnchor: [-6, 0],
+                        popupAnchor: [0, -36],
+                        html: `<span style="${$markerHtmlStyles}" />`
+                    });
 
 
-                var iconMarkerPoint = L.icon({
-                    iconUrl: $seccion.fullMarkerUrl,
-                    iconSize: [32, 37],
-                    iconAnchor: [16, 37],
-                    popupAnchor: [0, -28]
-                });
+                    var iconMarkerPoint = L.icon({
+                        iconUrl: $seccion.fullMarkerUrl,
+                        iconSize: [32, 37],
+                        iconAnchor: [16, 37],
+                        popupAnchor: [0, -28]
+                    });
 
-                const $currentSectionPoints = L.geoJSON($points, {
-                    style: $styleColor($seccion),
-                    onEachFeature: $onEachFeature,
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, { icon: icon });
-                    }
-                }).addTo(map);
+                    const $currentSectionPoints = L.geoJSON($points, {
+                        style: $styleColor($seccion),
+                        onEachFeature: $onEachFeature,
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, { icon: icon });
+                        }
+                    }).addTo(map);
 
-                $cacheLayer($id, $currentSectionPoints);
-                hideLoading();
+                    $cacheLayer($id, $currentSectionPoints);
+                    hideLoading();
+
+                } catch (error) {
+                    removeMarker($id, $seccion.seccion.id);
+                    hideLoading();
+                    smiMensaje.$refs.message.mensaje.text='Formato de representación geojson inválido.';
+                    smiMensaje.$refs.message.onMostrarMensaje();
+                    console.log(error);
+                } 
+                
             }
             else{
-                console.log($seccion.geoJsonFile);
+                removeMarker($id, $seccion.seccion.id);
                 hideLoading();
                 smiMensaje.$refs.message.mensaje.text='No se encontró representación para esta opción.';
                 smiMensaje.$refs.message.onMostrarMensaje();
@@ -532,8 +524,7 @@ function onceMapIsLoaded() {
         };
 
         loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
-        // loadPoligonos($afterLoadPoligonos);
-        // loadLineas($afterLoadLines);
+
     };
     $items.on("change", $whenMenuItemIsChecked);
 }
@@ -551,8 +542,13 @@ function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer) {
             }
         },
         error: function (xhr, status) {
+            hideLoading();
+            smiMensaje.$refs.message.mensaje.text='Ha ocurrido un error no controlado. Consulte al administrador.';
+            smiMensaje.$refs.message.onMostrarMensaje();
+            console.log(smiMensaje);
         },
         complete: function (xhr, status) {
+
         }
     });
 }
@@ -579,6 +575,8 @@ function loadSecciones($afterLoadSecciones) {
 }
 
 function buildSecciones($secciones, $afterBuildSecciones) {
+    $secciones=  $secciones.filter(x=> x.activo == 1);
+
     if (typeof $secciones == 'undefined' || $secciones === null)
         return false;
     if (typeof _ == 'undefined')
@@ -608,7 +606,6 @@ function buildSecciones($secciones, $afterBuildSecciones) {
             return true;
     });
 
-    //renderHandlebarsTemplate("js/templates/secciones.hbs", "#menu-sidebar", $cabecera);
     renderHandlebarsTemplate(
         "#secciones-template", "#menu-sidebar", { secciones: $cabecera }, $afterBuildSecciones, true
     );

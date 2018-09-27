@@ -44,7 +44,7 @@ var smiSeccion = Vue.component("Seccion", {
                     </div>
                 </b-modal>
 
-                <b-modal ref="modalEditar" hide-footer title="Editar Sección" >
+                <b-modal ref="modalEditar" hide-footer v-bind:title="title" >
                     <template v-if="seccionEditar != null">
 
                     <div class="row">
@@ -128,6 +128,13 @@ var smiSeccion = Vue.component("Seccion", {
                         </form>
                    
                     </div>
+                    <b-alert variant="danger"
+                            dismissible
+                            fade
+                            :show="mensajeValidacion.visible"
+                            @dismissed="mensajeValidacion.visible=false">
+                            {{mensajeValidacion.text}}
+                    </b-alert>
                     <div class="text-right">
                         <b-btn class="mt-3" variant="primary" @click="onAceptarEditar">Aceptar</b-btn>
                         <b-btn class="mt-3" @click="onOcultarEditar">Cancelar</b-btn>
@@ -218,8 +225,12 @@ var smiSeccion = Vue.component("Seccion", {
           name: ''
       },
       mensaje: {
-          title:'',
-          text:''
+        title:'',
+        text:''
+      },
+      mensajeValidacion:{
+        visible: false,
+        text:''
       },
       filtro: {
         categoriaSeleccionada: 0,
@@ -308,8 +319,10 @@ var smiSeccion = Vue.component("Seccion", {
         this.onMostrarConfirmacion();
     },
     onAgregar: function(event) {
+        this.mensajeValidacion.visible=false;
         let seccion= {};
         seccion.id=0;
+        seccion.activo=1;
         seccion.activoBoolean=true;
         seccion.color='#ffffff';
         seccion.idTipoGeoData=0;
@@ -318,12 +331,13 @@ var smiSeccion = Vue.component("Seccion", {
         seccion.descripcion=null;
         seccion.codigoGIS=null;
         seccion.logo=null;
+
         this.seccionEditar=seccion;
         this.$refs.modalEditar.show();
     },
     onEditar: function(seccion) {
         this.seccionEditar= seccion;
-        console.log(this.seccionEditar);
+        this.mensajeValidacion.visible=false;
         this.$refs.modalEditar.show();
     },
    
@@ -362,18 +376,36 @@ var smiSeccion = Vue.component("Seccion", {
         this.seccionEditar=null;
         this.$refs.modalUpload.hide();
     },
-    onAceptarEditar: function(){
-        console.log(this.seccionEditar);
+
+    onValidarGuardar: function(){
         if(this.seccionEditar.nombre == null || this.seccionEditar.nombre.length==0){
-            this.mensaje.title='Datos incompletos !!';
-            this.mensaje.text='Debe ingresar el nombre';
-            this.onMostrarMensaje();
+            //this.mensaje.title='Datos incompletos !!';
+            this.mensajeValidacion.text='Debe ingresar el nombre';
+            this.mensajeValidacion.visible=true;
             return false;
         }
+        if(this.seccionEditar.descripcion == null || this.seccionEditar.descripcion.length==0){
+            //this.mensaje.title='Datos incompletos !!';
+            this.mensajeValidacion.text='Debe ingresar la descripción';
+            this.mensajeValidacion.visible=true;
+            return false;
+        }        
         if(this.seccionEditar.idSeccionPadre == null || this.seccionEditar.idSeccionPadre==0){
-            this.mensaje.title='Datos incompletos !!';
-            this.mensaje.text='Debe seleccionar una categoría';
-            this.onMostrarMensaje();
+            //this.mensaje.title='Datos incompletos !!';
+            this.mensajeValidacion.text='Debe seleccionar una categoría';
+            this.mensajeValidacion.visible=true;
+            //this.onMostrarMensaje();
+            return false;
+        }
+
+        this.mensajeValidacion.visible=false;
+        return true;
+    },
+
+    onAceptarEditar: function(){
+
+        if(! this.onValidarGuardar()){
+            console.log('no valido');
             return false;
         }
 
