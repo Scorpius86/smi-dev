@@ -105,12 +105,21 @@ var smiSeccion = Vue.component("Seccion", {
                                 <div class="col-sm-6">                                    
                                     <label for="">Logo</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input">
-                                        <label class="custom-file-label">Seleccionar imagen.png</label>
+                                        <input type="file" class="custom-file-input" accept="image/*" ref="fileLogo" v-on:change="onLogoUpload()">
+                                        <label class="custom-file-label">
+                                            <template v-if="logoUpload.file == null">
+                                                Seleccionar logo
+                                            </template>
+                                            <template v-else>
+                                                {{logoUpload.name}}
+                                            </template>
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <img src="..." class="rounded mx-auto d-block" alt="...">
+                                <div class="col-sm-6">     
+                                    <template v-if="logoUpload.file != null">
+                                        <b-img v-bind:src="logoUpload.valueBase64" width="64px" fluid alt="Fluid image" />
+                                    </template>                                    
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -224,6 +233,11 @@ var smiSeccion = Vue.component("Seccion", {
           file: null,
           name: ''
       },
+      logoUpload: {
+          file:null,
+          name:'',
+          valueBase64: null
+      },
       mensaje: {
         title:'',
         text:''
@@ -243,6 +257,7 @@ var smiSeccion = Vue.component("Seccion", {
   created() {
     this.loadCategoria();
     this.loadSeccion(this.categorias);
+    
   },
   methods: {
     loadCategoria: function() {
@@ -293,7 +308,51 @@ var smiSeccion = Vue.component("Seccion", {
         }
       );
     },
+    onLogoUpload: function(){
+        const validFileExtensions = [".jpg",".jpeg",".png"];
+
+        if(this.$refs.fileLogo != null && this.$refs.fileLogo.files.length>0){
+            this.logoUpload.file = this.$refs.fileLogo.files[0];
+            this.logoUpload.name=this.logoUpload.file.name;
+            this.readFile(this.logoUpload.file);
+        }
+        else{
+            this.logoUpload.file = null;
+            this.logoUpload.name='';
+            this.logoUpload.valueBase64=null;
+        }
+        if(!this.validExtension(this.fileUpload.name, validFileExtensions)){
+            this.mensajeValidacion.text='Formato de imagen no válido. Los formatos válidos son: .jpg, .jpeg, .png';
+            this.mensajeValidacion.visible=true;
+            this.fileUpload.file = null;
+            this.fileUpload.name='';
+        }
+    },
+
+    readFile: function(file) {
+        const reader = new FileReader();
+        const me = this;
+        reader.onloadend = function (e) {
+          me.logoUpload.valueBase64 = reader.result;
+          console.log(me.logoUpload.valueBase64);
+        }
+    
+        reader.onerror = function () {
+            me.mensajeValidacion.text='Formato de archivo no válido.';
+            me.mensajeValidacion.visible=true;
+        }
+    
+        reader.readAsDataURL(file);
+    },
+
+    validExtension: function (fileName, exts) {
+        return true;
+        //return (new RegExp('(' + exts.join('|').replace(/\./g, '\\.') + ')$')).test(fileName);
+    },
+
     onFileUpload: function(){
+        const validFileExtensions = [".geojson"];
+
         if(this.$refs.file != null && this.$refs.file.files.length>0){
             this.fileUpload.file = this.$refs.file.files[0];
             this.fileUpload.name=this.fileUpload.file.name;
@@ -302,8 +361,14 @@ var smiSeccion = Vue.component("Seccion", {
             this.fileUpload.file = null;
             this.fileUpload.name='';
         }
+        if(!this.validExtension(this.fileUpload.name, validFileExtensions)){
+            this.mensajeValidacion.text='Formato de archivo no válido. Se aceptan solo formatos .geojson';
+            this.mensajeValidacion.visible=true;
+
+            this.fileUpload.file = null;
+            this.fileUpload.name='';
+        }
         
-        console.log(this.fileUpload);
     },   
     onChangeCategoria: function(){
         this.loadSeccion(this.filtro);
@@ -320,6 +385,13 @@ var smiSeccion = Vue.component("Seccion", {
     },
     onAgregar: function(event) {
         this.mensajeValidacion.visible=false;
+        this.seccionEditar=null;
+        this.fileUpload.file=null;
+        this.fileUpload.name=null;
+        this.logoUpload.file=null;
+        this.logoUpload.name=null;
+        this.logoUpload.valueBase64=null;
+
         let seccion= {};
         seccion.id=0;
         seccion.activo=1;
@@ -336,7 +408,20 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.modalEditar.show();
     },
     onEditar: function(seccion) {
-        this.seccionEditar= seccion;
+
+        if(this.$refs != null && this.$refs.fileLogo != null){
+            this.$refs.fileLogo.type='text';
+            this.$refs.fileLogo.type='file';
+        }
+        
+        this.logoUpload.file=null;
+        this.logoUpload.name=null;
+        this.logoUpload.valueBase64=null;
+        this.seccionEditar= _.cloneDeep(seccion);
+
+        if(seccion.logo != null){
+            this.logoUpload.valueBase64 = seccion.logo;
+        }
         this.mensajeValidacion.visible=false;
         this.$refs.modalEditar.show();
     },
@@ -411,7 +496,9 @@ var smiSeccion = Vue.component("Seccion", {
 
         this.seccionEditar.menuAccion=1;
         this.seccionEditar.menuCategoria=0;
-        this.seccionEditar.logo=null; //TODO: Temporal hasta que se implemente el logo
+        if(this.logoUpload.file != null){
+            this.seccionEditar.logo=this.logoUpload.valueBase64;
+        }        
         this.seccionEditar.idTipoAccion=1;
         this.seccionEditar.activo= this.seccionEditar.activoBoolean ? 1: 0;
 
@@ -422,6 +509,8 @@ var smiSeccion = Vue.component("Seccion", {
                     this.mensaje.text='Se guardó la sección correctamente.';
                     this.onMostrarMensaje();
                 }
+
+                this.loadSeccion(this.filtro);
             },
             response => {
                 console.log(response);
