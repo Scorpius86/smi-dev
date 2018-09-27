@@ -153,9 +153,10 @@ class SeccionesController extends Controller
     }
 
     public function delete(Request $request, $id){
+        error_log($id);
         $seccion = Seccion::findOrFail($id);
-        $seccion->eliminado=0;
-        $seccion->update($request->all());
+        $seccion->eliminado=1;
+        $seccion->save();
 
         $data= array('status'=> true, 'data'=> $seccion);
         return $data;

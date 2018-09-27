@@ -191,7 +191,7 @@ var smiCategoria = Vue.component("Categoria", {
           this.seccionEditar=seccion;
           this.mensaje={};
           this.mensaje.title='Confirmación';
-          this.mensaje.text='Va ha eliminar la sección "' + seccion.nombre + '". Desea continuar ?';
+          this.mensaje.text='Va ha eliminar la categoría "' + seccion.nombre + '". Desea continuar ?';
           this.onMostrarConfirmacion();
       },
       onAgregar: function(event) {
