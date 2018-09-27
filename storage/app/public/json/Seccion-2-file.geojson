@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "Capital departamental",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "ID_SEC": "M007-1" }, "geometry": { "type": "Point", "coordinates": [ -76.239645659999965, -9.9295450599999 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M007-2" }, "geometry": { "type": "Point", "coordinates": [ -74.532240339999959, -8.383242949999957 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M007-3" }, "geometry": { "type": "Point", "coordinates": [ -76.974666649999989, -6.0346687699999 ] } }
+]
+}

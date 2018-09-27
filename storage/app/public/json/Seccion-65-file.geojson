@@ -1,0 +1,62 @@
+1;Cultivos;Cultivos;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;29/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+2;Cacao;Cacao;NULL;1;0;NULL;1;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+3;Producción;Producción de Cacao;1;0;1;NULL;2;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+4;Mantenimiento;Mantenimiento de Cacao;1;0;1;NULL;2;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+5;Platano;Platano;NULL;1;0;NULL;1;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+6;Producción;Producción de Plátano;1;0;1;NULL;5;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+7;Mantenimiento;Mantenimiento de Plátano;1;0;1;NULL;5;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;0;0;NULL;NULL
+8;Areas Protegidas;Areas Protegidas;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+9;ANP nacional;ANP nacional;2;0;1;NULL;8;NULL;ANP nacional.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+10;ANP privada;ANP privada;2;0;1;NULL;8;NULL;ANP privada.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+11;ANP regional;ANP regional;2;0;1;NULL;8;NULL;ANP regional.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+12;Zona de amortiguamiento;Zona de amortiguamiento;2;0;1;NULL;8;NULL;Zona de amortiguamiento.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+13;Catastro Forestal;Catastro Forestal;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+14;Bosques de producción permanente (BPP);Bosques de producción permanente (BPP);2;0;1;1;13;NULL;BPP.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+15;Concesiones Maderables;Concesiones Maderables;2;0;1;1;13;NULL;Conc_Maderable.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+16;Conservación;Conservación;2;0;1;1;13;NULL;Conc_conservacion.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+17;Ecoturismo;Ecoturismo;2;0;1;1;13;NULL;Conc_Ecoturismo.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+18;Manejo de Fauna;Manejo de Fauna;2;0;1;1;13;NULL;Conc_Fauna.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+19;Bosque local;Bosque local;2;0;1;1;13;NULL;Bosques locales.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+20;Reforestación;Reforestación;2;0;1;1;13;NULL;Conc_Reforestacion.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+21;Capacidad de Uso Mayor;Capacidad de Uso Mayor;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+22;Capacidad de Uso Mayor - Huánuco;Capacidad de Uso Mayor - Huánuco;2;0;1;NULL;21;NULL;Capacidad Uso Mayor_Huanuco.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+23;Capacidad de Uso Mayor - San Martín;Capacidad de Uso Mayor - San Martín;2;0;1;NULL;21;NULL;Capacidad Uso Mayor_San Martin.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+24;Capacidad de Uso Mayor - Ucayali;Capacidad de Uso Mayor - Ucayali;2;0;1;NULL;21;NULL;Capacidad Uso Mayor_Ucayali.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+25;Capacidad de uso mayor agrícola - Huánuco;Capacidad de uso mayor agrícola - Huánuco;2;0;1;NULL;21;NULL;CUM_agricola_Huanuco.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+26;Capacidad de uso mayor agrícola - San Martín;Capacidad de uso mayor agrícola - San Martín;2;0;1;NULL;21;NULL;CUM_agricola_San Martin.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+27;Capacidad de uso mayor agrícola - Ucayali;Capacidad de uso mayor agrícola - Ucayali;2;0;1;NULL;21;NULL;CUM_agricola_Ucayali.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+28;Ciudades Principales;Ciudades Principales;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+29;Ciudades Principales;Ciudades Principales;1;0;1;1;28;NULL;Ciudades principales.geojson;NULL;NULL;#BD2E9D;15/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+30;Capitales departamentales;Capitales departamentales;1;0;1;1;28;NULL;Capital departamental.geojson;NULL;NULL;#BD2E9D;15/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+31;Capitales provinciales;Capitales provinciales;1;0;1;1;28;NULL;Capital provincial.geojson;NULL;NULL;#BD2E9D;15/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+32;Capitales distritales;Capitales distritales;1;0;1;1;28;NULL;Capital distrital.geojson;NULL;NULL;#BD2E9D;15/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+33;Comunidades por Producto;Comunidades por Producto;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+34;Comunidades Cacao;Comunidades Cacao;1;0;1;1;33;NULL;Comunidades_cacao.geojson;NULL;NULL;#BD2E9D;23/07/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+35;Familia / Productores;Familia / Productores;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+36;Agricultores;Agricultores;1;0;1;1;35;NULL;Parcelas ACP1.geojson;NULL;NULL;#BD2E9D;23/07/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+37;Módulos de Beneficio centralizado;Módulos de Beneficio centralizado;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+38;Instituciones Financieras;Instituciones Financieras;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+39;Cooperativas/organizaciones;Cooperativas/organizaciones;1;0;1;NULL;38;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+40;Oficinas de la Alianza;Oficinas de la Alianza;1;0;1;NULL;38;NULL;Oficinas regionales.geojson;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+41;Empresas de Servicio;Empresas de Servicio;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+42;Socios de la Alianza;Socios de la Alianza;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+43;Proveedores de insumos agrícolas;Proveedores de insumos agrícolas;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+44;Empresas de Servicio;Empresas de Servicio;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+45;Centros de Investigación;Centros de Investigación;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+46;Empresas certificadoras;Empresas certificadoras;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+47;Empresas de logística;Empresas de logística;1;0;1;NULL;41;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+48;Agentes tecnológicos;Agentes tecnológicos;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+49;Agentes Principales;Agentes Principales;1;0;1;1;48;NULL;Agentes tecnologicos.geojson;NULL;NULL;#BD2E9D;23/07/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+50;Infraestructuras de regadío;Infraestructuras de regadío;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+51;Servicios de Estado;Servicios de Estado;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;30/06/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+52;Vías Principales;Vías Principales;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+53;Nacionales;Nacionales;3;0;1;1;52;NULL;Vias nacionales.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+54;Vías Departamentales;Vías Departamentales;3;0;1;1;52;NULL;Vias departamentales.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+55;Vías Vecinales;Vías Vecinales;3;0;1;1;52;NULL;Vias vecinales.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+56;Vias vecinales Huánuco;Vias vecinales Huánuco;3;0;1;1;52;NULL;Vias vecinales_Huanuco.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+57;Vias vecinales San Martín;Vias vecinales San Martín;3;0;1;1;52;NULL;Vias vecinales_San Martin.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+58;Vias vecinales Ucayali;Vias vecinales Ucayali;3;0;1;1;52;NULL;Vias vecinales_Ucayali.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+59;Límites;Limites;NULL;1;0;NULL;NULL;NULL;NULL;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+60;Limites departamentales;Limites departamentales;2;0;1;1;59;NULL;Departamentos.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+61;Limites provinciales;Limites provinciales;2;0;1;1;59;NULL;Provincias.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
+62;Limites distritales;Limites distritales;2;0;1;1;59;NULL;Distritos.geojson;NULL;NULL;#BD2E9D;8/08/2018 00:00;admin;local;NULL;NULL;NULL;1;0;NULL;NULL
