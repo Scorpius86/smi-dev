@@ -310,8 +310,19 @@ var smiSeccion = Vue.component("Seccion", {
     },
     onLogoUpload: function(){
         const validFileExtensions = [".jpg",".jpeg",".png"];
+        const TAMANIO_MAXIMO_LOGO=200 * 1024;
 
         if(this.$refs.fileLogo != null && this.$refs.fileLogo.files.length>0){
+
+            console.log(this.$refs.fileLogo.files[0]);
+            if(this.$refs.fileLogo.files[0].size > TAMANIO_MAXIMO_LOGO){
+                this.mensajeValidacion.text='Tamaño no permitido. El tamaño máximo es de 250kb.';
+                this.mensajeValidacion.visible=true;
+                this.fileUpload.file = null;
+                this.fileUpload.name='';
+                return;
+            }
+
             this.logoUpload.file = this.$refs.fileLogo.files[0];
             this.logoUpload.name=this.logoUpload.file.name;
             this.readFile(this.logoUpload.file);
@@ -330,6 +341,7 @@ var smiSeccion = Vue.component("Seccion", {
     },
 
     readFile: function(file) {
+        
         const reader = new FileReader();
         const me = this;
         reader.onloadend = function (e) {

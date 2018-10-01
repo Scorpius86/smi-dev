@@ -62,7 +62,7 @@ var smiParametro = Vue.component("Parametro", {
   },
   methods: {
     load: function() {
-      this.$http.get("http://smi.alianzacacaoperu.org/api/parametros").then(
+      this.$http.get(UrlAPI.base + "/parametros").then(
         response => {
           if (response.body.status == true) {
             this.parametros = response.body.data.filter(
@@ -91,7 +91,7 @@ var smiParametro = Vue.component("Parametro", {
     onEditar: function(seccion) {},
     onGuardar: function(event) {
       var param = {};
-      
+
       this.parametros.forEach(element => {
         if (element.codigo == this.parametro_ACTIVAR_AUTENTICACION_PUBLICA) {
           element.valor = 0;
@@ -103,7 +103,7 @@ var smiParametro = Vue.component("Parametro", {
 
       param.parametros = this.parametros;
 
-      this.$http.post("http://smi.alianzacacaoperu.org/api/parametros", param).then(
+      this.$http.post(UrlAPI.base + "/parametros", param).then(
         response => {
           if (response.body.status == true) {
             alert("guardado");
