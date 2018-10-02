@@ -269,7 +269,13 @@
             <li class="sidebar-dropdown">
                 <a href="#" class="border-2 border-left border-menu-item d-block">
                     <div class="d-inline-flex align-items-center pl-2 bg-white">
-                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
+                        {{#if logo}}
+                            <i class="mr-2 fas fa-2x">
+                                <img src="{{logo}}" alt="" width="24px">
+                            </i>
+                        {{else}}
+                            <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
+                        {{/if}}                        
                         <span>{{nombre}}</span>
                     </div>
                 </a>
@@ -280,7 +286,13 @@
                         <li class="bg-light">
                             <a class="d-block" href="#">
                                 <div class="d-inline-flex align-items-center">
-                                    <i class="mr-2 fas fa-map-marker-alt"></i>
+                                    {{#if logo}}
+                                        <i class="mr-2 fas">
+                                            <img src="{{logo}}" alt="" width="24px">
+                                        </i>
+                                    {{else}}
+                                        <i class="mr-2 fas fa-map-marker-alt"></i>
+                                    {{/if}}
                                     <!-- custom-control-input-->
                                     <input type="checkbox" class="d-none menu-item" data-value="{{json this}}" data-parent="{{json ../this}}" id="{{id}}">
                                     <label class="mb-0" for="{{id}}">{{nombre}}</label>
