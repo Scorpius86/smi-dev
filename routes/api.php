@@ -45,6 +45,12 @@ Route::group(['middleware' => 'cors'], function() {
 
     Route::get('/mapas/regiones','MapasController@getRegiones' );
     Route::get('/mapas/distritos','MapasController@getDistritos' );
+
+    Route::get('/usuarios','UsuarioController@get');
+    Route::get('/usuarios/{id}','UsuarioController@getById');
+    Route::post('/usuarios','UsuarioController@save');
+    Route::delete('/usuarios/{id}','UsuarioController@delete');
+
  });
 
 Route::get('/status', 'MapasController@test')->name('getStatus');

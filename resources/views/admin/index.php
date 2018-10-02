@@ -121,6 +121,15 @@
                                 </a>
                             </li>
 
+                            <!-- <li class="sidebar-dropdown">
+                                <a href="./admin#/usuario" class="border-2 border-left border-menu-item d-block">
+                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
+                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
+                                        <span>Usuarios</span>
+                                    </div>
+                                </a>
+                            </li> -->
+
                             <li class="sidebar-dropdown">
                                 <a href="./admin#/parametro" class="border-2 border-left border-menu-item d-block">
                                     <div class="d-inline-flex align-items-center pl-2 bg-white">
@@ -129,6 +138,8 @@
                                     </div>
                                 </a>
                             </li>
+
+                           
                             
                         </ul>
                     </div>
@@ -211,6 +222,7 @@
     <script src="js/pages/seccion/seccion.vue.js"></script>
     <script src="js/pages/categoria/categoria.vue.js"></script>
     <script src="js/pages/parametro/parametro.vue.js"></script>
+    <script src="js/pages/usuario/usuario.vue.js"></script>
 
     <script>
 
@@ -240,6 +252,10 @@
             {
                 path: '/parametro',
                 component: smiParametro
+            },            
+            {
+                path: '/usuario',
+                component: smiUsuario
             }
         ]
         let router = new VueRouter({

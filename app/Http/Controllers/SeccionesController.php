@@ -137,40 +137,9 @@ class SeccionesController extends Controller
             $seccion->save();
 
         }
-
-        // if ($request->input('logo') != null){
-        //     //Guardar logo
-        //     $pathBase= 'public/img/logo';
-            
-        //     $fileName= "Seccion-".$seccion->id."-file.tmp";
-
-        //     $data = substr($request->input('logo'), strpos($request->input('logo'), ',') + 1);
-
-        //     error_log($data);
-
-        //     error_log(Storage::exists($pathBase.$fileName));
-
-        //     if(Storage::exists($pathBase.$fileName)){
-        //         //Eliminar
-        //         Storage::delete($pathBase.$fileName); 
-        //     }
-            
-        //     error_log(base64_decode($data));
-
-        //     //File::put($pathBase.$fileName, base64_decode($data));
-        //     \Storage::disk('public')->put($fileName,base64_decode($data));
-
-        //     //$path = base64_decode($data)->storeAs($pathBase, $fileName);
-        //     $seccion->activo=0;
-        //     $seccion->logo=$fileName;
-        //     $seccion->save();
-
-
-        // }
         
         $data= array('status'=> true, 'data'=> $seccion);
         return $data;
-
     }
 
     public function update(Request $request, $id){
