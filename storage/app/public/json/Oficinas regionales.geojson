@@ -1,10 +1,10 @@
 {
 "type": "FeatureCollection",
-"name": "Oficinas regionales",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32718" } },
+"name": "Oficinas regionales_proy",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
-{ "type": "Feature", "properties": { "ID_SEC": "M010-1" }, "geometry": { "type": "Point", "coordinates": [ 390486.0, 8972323.0 ] } },
-{ "type": "Feature", "properties": { "ID_SEC": "M010-2" }, "geometry": { "type": "Point", "coordinates": [ 350270.0, 9282481.0 ] } },
-{ "type": "Feature", "properties": { "ID_SEC": "M010-3" }, "geometry": { "type": "Point", "coordinates": [ 551476.0, 9073493.0 ] } }
+{ "type": "Feature", "properties": { "ID_SEC": "M010-1" }, "geometry": { "type": "Point", "coordinates": [ -75.997135316179666, -9.295508714789682 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M010-2" }, "geometry": { "type": "Point", "coordinates": [ -76.3540815433674, -6.48953207449394 ] } },
+{ "type": "Feature", "properties": { "ID_SEC": "M010-3" }, "geometry": { "type": "Point", "coordinates": [ -74.532442229508149, -8.38152463094837 ] } }
 ]
 }
