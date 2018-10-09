@@ -121,14 +121,14 @@
                                 </a>
                             </li>
 
-                            <!-- <li class="sidebar-dropdown">
+                            <li class="sidebar-dropdown">
                                 <a href="./admin#/usuario" class="border-2 border-left border-menu-item d-block">
                                     <div class="d-inline-flex align-items-center pl-2 bg-white">
                                         <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
                                         <span>Usuarios</span>
                                     </div>
                                 </a>
-                            </li> -->
+                            </li>
 
                             <li class="sidebar-dropdown">
                                 <a href="./admin#/parametro" class="border-2 border-left border-menu-item d-block">

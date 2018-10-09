@@ -38,16 +38,42 @@ var smiUsuario = Vue.component("Usuario", {
                                       <input type="text" class="form-control" placeholder="Nombre" v-model="usuarioEditar.nombre">
                                   </div>
                               </div>
-                              
+                              <div class="form-group row">
+                                  <div class="col-sm-12">
+                                      <label for="">Email</label>
+                                      <input type="text" class="form-control" placeholder="Email" v-model="usuarioEditar.email">
+                                  </div>
+                              </div>
                               <div class="form-group row">
                                   <div class="col-sm-6">
-                                      <b-form-checkbox
-                                          v-model="usuarioEditar.activoBoolean">
-                                          Activo
-                                      </b-form-checkbox>
+                                      <label for="">Usuario</label>
+                                      <input type="text" class="form-control" placeholder="Usuario" v-model="usuarioEditar.login">
                                   </div>
                                   <div class="col-sm-6">
-                                      
+                                    
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <div class="col-sm-6">
+                                    <label for="">Tel&eacute;fono</label>
+                                    <input type="text" class="form-control" placeholder="Teléfono" v-model="usuarioEditar.telefono">
+                                  </div>
+                                  <div class="col-sm-6">
+                                    
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <div class="col-sm-6">
+                                    <b-form-checkbox
+                                      v-model="usuarioEditar.esAdminBoolean">
+                                      Es Administrador
+                                    </b-form-checkbox>                                    
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <b-form-checkbox
+                                      v-model="usuarioEditar.activoBoolean">
+                                      Activo
+                                    </b-form-checkbox>
                                   </div>
                               </div>
                               
@@ -76,8 +102,7 @@ var smiUsuario = Vue.component("Usuario", {
                       <div class="form-group">
                          <label for="">Nombre</label>                        
                          <input type="text" v-on:blur="onBuscar()" v-model="filtro.textoBusqueda" class="form-control" required="required">                        
-                      </div>
-                      
+                      </div>                      
                       <button type="button" class="btn btn-primary" v-on:click="onBuscar()">Buscar</button>
                       <button type="button" class="btn btn-primary" v-on:click="onAgregar()">Nuevo</button>
                   </form>
@@ -91,12 +116,16 @@ var smiUsuario = Vue.component("Usuario", {
                           <tr>
                               <th>Codigo</th>
                               <th>Nombre</th>
+                              <th>Login</th>
+                              <th>Email</th>
                               <th>Activo</th>
                               <th class="text-center">Acciones</th>
                           </tr>
                           <tr v-for="usuario in usuarios">
                               <td>{{usuario.id}}</td>
                               <td>{{usuario.nombre}}</td>
+                              <td>{{usuario.login}}</td>
+                              <td>{{usuario.email}}</td>
                               <td>
                                   <div class="checkbox">
                                       <label>
@@ -155,6 +184,11 @@ var smiUsuario = Vue.component("Usuario", {
         response => {
           if (response.body.status == true) {
             console.log(response);
+            this.usuarios = response.body.data;
+            this.usuarios.forEach(x => {
+              x.activoBoolean = x.activo == 1 ? true : false;
+              x.esAdminBoolean = x.esAdmin == 1 ? true : false;
+            });
           }
         },
         response => {
@@ -177,6 +211,19 @@ var smiUsuario = Vue.component("Usuario", {
       this.onMostrarConfirmacion();
     },
     onAgregar: function(event) {
+      let usuario = {};
+      usuario.nombre = null;
+      usuario.email = null;
+      usuario.login = null;
+      //usuario.password = null;
+      //usuario.passwordConfirmar = null;
+      usuario.idPerfil = null;
+      usuario.telefono = null;
+      usuario.esAdmin = 0;
+      usuario.esAdminBoolean = false;
+      usuario.activo = 1;
+      usuario.activoBoolean = false;
+
       this.usuarioEditar = usuario;
       this.$refs.modalEditar.show();
     },
@@ -192,8 +239,25 @@ var smiUsuario = Vue.component("Usuario", {
         this.usuarioEditar.nombre == null ||
         this.usuarioEditar.nombre.length == 0
       ) {
-        //this.mensaje.title='Datos incompletos !!';
         this.mensajeValidacion.text = "Debe ingresar el nombre";
+        this.mensajeValidacion.visible = true;
+        return false;
+      }
+
+      if (
+        this.usuarioEditar.email == null ||
+        this.usuarioEditar.email.length == 0
+      ) {
+        this.mensajeValidacion.text = "Debe ingresar el email";
+        this.mensajeValidacion.visible = true;
+        return false;
+      }
+
+      if (
+        this.usuarioEditar.login == null ||
+        this.usuarioEditar.login.length == 0
+      ) {
+        this.mensajeValidacion.text = "Debe ingresar el usuario";
         this.mensajeValidacion.visible = true;
         return false;
       }
@@ -209,6 +273,7 @@ var smiUsuario = Vue.component("Usuario", {
       }
 
       this.usuarioEditar.activo = this.usuarioEditar.activoBoolean ? 1 : 0;
+      this.usuarioEditar.esAdmin = this.usuarioEditar.esAdminBoolean ? 1 : 0;
 
       this.$http.post(UrlAPI.base + "/usuarios", this.usuarioEditar).then(
         response => {

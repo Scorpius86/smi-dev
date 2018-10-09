@@ -20,18 +20,19 @@ class UsuarioController extends Controller
     }
     public function save(Request $request){
         $user='admin';
+        $passwordDefault='c@c@operu1234';
         $terminal= $request->getHttpHost();
 
         $usuario= new Usuario;
 
         if($request->input('id')==0){            
             $usuario->login=$request->input('login');
-            $usuario->password=$request->input('password');
+            $usuario->password=$passwordDefault;
             $usuario->nombre=$request->input('nombre');
             $usuario->idPerfil=$request->input('idPerfil');
             $usuario->telefono=$request->input('telefono');
             $usuario->email=$request->input('email');
-            $usuario->esAdministrador=$request->input('esAdministrador');           
+            $usuario->esAdmin=$request->input('esAdmin');           
             $usuario->activo=$request->input('activo');
             $usuario->fechaCrea= Carbon::now();
             $usuario->usuarioCrea=$user;
@@ -43,13 +44,14 @@ class UsuarioController extends Controller
             $usuario->save();
         }
         else{
-            $usuario->login=$request->input('login');
-            $usuario->password=$request->input('password');
+            $usuario = Usuario::findOrFail($request->input('id'));
+            //$usuario->login=$request->input('login');
+            //$usuario->password=$request->input('password');
             $usuario->nombre=$request->input('nombre');
             $usuario->idPerfil=$request->input('idPerfil');
             $usuario->telefono=$request->input('telefono');
             $usuario->email=$request->input('email');
-            $usuario->esAdministrador=$request->input('esAdministrador');           
+            $usuario->esAdmin=$request->input('esAdmin');           
             $usuario->activo=$request->input('activo');
             $usuario->fechaCambio=Carbon::now();
             $usuario->usuarioCambio=$user;
