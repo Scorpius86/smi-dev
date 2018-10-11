@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use smi\Seccion;
 use smi\SeccionDetalle;
 use smi\SeccionAtributo;
+use smi\Forecast;
 use Carbon\Carbon;
 
 class SeccionesController extends Controller
@@ -189,7 +190,22 @@ class SeccionesController extends Controller
         //$path = storage_path() . "/json/${filename}.json";
         $path=base_path() . '/storage/app/public/json/data-panel.json';
 
+        error_log($codigoGIS);
+
         $jsonData = json_decode(file_get_contents($path), true);
+
+        // if($codigoGIS != null){
+        //     $forecast=Forecast::where([['codigoGIS','=',$codigoGIS]])->with('cultivos')->get();
+
+        //     error_log($forecast);
+            
+        //     foreach ($forecast->cultivos as $cultivo) {
+        //         error_log($cultivo);
+        //     }
+
+        //     $jsonData=$forecast;
+
+        // }
         
         $data= array(
             'status'=> true, 

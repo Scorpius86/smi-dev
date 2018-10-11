@@ -122,10 +122,7 @@ function initMap($regiones, $afterMapIsLoaded) {
   });
 
   const onEachFeature = function onEachFeature(feature, layer) {
-    var popupContent =
-      "<p>I started out as a GeoJSON " +
-      feature.geometry.type +
-      ", but now I'm a Leaflet vector!</p>";
+    var popupContent = null;
 
     if (feature.properties && feature.properties.NOMBDEP) {
       $template = renderHandlebarsTemplate(
@@ -591,7 +588,6 @@ function onceMapIsLoaded() {
           smiMensaje.$refs.message.mensaje.text =
             "Formato de representación geojson inválido.";
           smiMensaje.$refs.message.onMostrarMensaje();
-          console.log(error);
         }
       } else {
         removeMarker($id, $seccion.seccion.id);
@@ -599,7 +595,6 @@ function onceMapIsLoaded() {
         smiMensaje.$refs.message.mensaje.text =
           "No se encontró representación para esta opción.";
         smiMensaje.$refs.message.onMostrarMensaje();
-        console.log(smiMensaje);
       }
     };
 

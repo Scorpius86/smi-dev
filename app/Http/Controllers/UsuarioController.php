@@ -65,6 +65,24 @@ class UsuarioController extends Controller
         return $data;
     }
 
+    public function changePassword(Request $request){
+
+        $user='admin';
+        $terminal= $request->getHttpHost();
+
+        $usuario = Usuario::findOrFail($request->input('id'));
+        $usuario->password=$request->input('password');
+        $usuario->fechaCambio=Carbon::now();
+        $usuario->usuarioCambio=$user;
+        $usuario->terminalCambio=$terminal;
+        $usuario->eliminado=0; 
+        $usuario->save();
+
+        $data= array('status'=> true, 'data'=> $usuario);
+        return $data;
+
+    }
+
     public function delete($id){
         $usuario = Usuario::findOrFail($id);
         $usuario->eliminado=1;
