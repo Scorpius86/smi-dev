@@ -26,7 +26,7 @@
 
 </head>
 
-<body>
+<body >
 
     <div id="vue-modal">
         <vue-mensaje-modal ref="message"></vue-mensaje-modal>
@@ -51,7 +51,7 @@
         </div>
     </div>    
     
-    <nav class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
+    <nav id="app" class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
         <a class="nav-link pl-3" id="btnShowMenu">
             <i class="fas fa-2x fa-bars"></i>
         </a>
@@ -69,10 +69,22 @@
                 <a href="#">
                     <img src="img/logos/alianza-cacao-logo.jpg" />
                 </a>
-                <span class="font-weight-light custom-text-title text-capitalize">PORTAL DE INVERSIONES</span>
+                <!-- <span class="font-weight-light custom-text-title text-capitalize">PORTAL DE INVERSIONES</span> -->
+                <span class="font-weight-light custom-text-title text-capitalize"> {{ $t("label.main_title") }} </span>
+
             </div>
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
+                    <div class="nav-item">
+                        <a class="border-right px-3 nav-link" href="#" @click="onChangeLanguage('es')">
+                            <img src="img/app/spain-flag-icon-128.png" width="24" />
+                        </a>                      
+                    </div>                   
+                    <div class="nav-item">
+                        <a class="border-right px-3 nav-link" href="#" @click="onChangeLanguage('en')">
+                            <img src="img/app/usa-flag-icon-128.png" width="28" />
+                        </a>
+                    </div>
                     <div class="nav-item">
                         <a class="border-right pr-3 nav-link d-inline-flex" href="#">
                             <span class="mr-2 fa-stack fa-1x">
@@ -81,12 +93,12 @@
                             </span>                            
                             <span id="username" class="mt-1 font-weight-light"></span>
                         </a>
-                    </div>                    
+                    </div>
                     <div class="nav-item">
                         <a class="border-right px-3 nav-link logout-button">
                             <i class="fas fa-2x fa-sign-out-alt"></i>
                         </a>
-                    </div>                    
+                    </div>
                 </div>
                 <!-- <div class="d-flex justify-content-between">
                     <div class="nav-item active">
@@ -174,20 +186,31 @@
 
 
     <!-- Se agrega la librería VueJS -->
-    <script src="https://unpkg.com/vee-validate@2.0.0-rc.25/dist/vee-validate.js"></script>
+    <!-- <script src="https://unpkg.com/vee-validate@2.0.0-rc.25/dist/vee-validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
     <script src="https://unpkg.com/http-vue-loader"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-    <script src="https://unpkg.com/vuetify@1.0.17/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/vuetify@1.0.17/dist/vuetify.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/2.1.1/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.3.5/vuetify.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/8.3.0/vue-i18n.min.js"></script>
+    
     
     <!-- https://bootstrap-vue.js.org/docs/ -->
     
-    <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
     <script src="js/utils/environment.js"></script>
     <script src="js/shared/constantes.js"></script>
+    <script src="js/shared/lang.js"></script>
     <script src="js/app/app.js"></script>
     <script src="js/main.js"></script>
 
@@ -395,6 +418,36 @@
     </script>
 
     <<script>
+
+
+        //Vue.use(VueRouter);
+        //Vue.use(VeeValidate);
+        
+       
+
+        // Create VueI18n instance with options
+        const i18n = new VueI18n({
+            locale: "es", // set locale
+            messages, // set locale messages
+        });
+        
+        var app = new Vue({
+            el: '#app',
+            watch: {},
+            mounted() {
+            },
+            data: {
+                msg: 'Hello',
+                email: ''
+            },
+            methods: {
+                onChangeLanguage: function(language){
+                    i18n.locale= language;
+                }
+            },
+            i18n
+        });
+
         var smiMensaje=new Vue({ el: '#vue-modal' });
     </script>
 
