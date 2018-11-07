@@ -144,7 +144,7 @@
 
         // Create VueI18n instance with options
         const i18n = new VueI18n({
-            locale: "es", // set locale
+            locale: getLanguage(), // set locale
             messages, // set locale messages
         });
         
@@ -160,6 +160,8 @@
             methods: {
                 onChangeLanguage: function(language){
                     i18n.locale= language;
+
+                    setLanguage(language);
                 }
             },
             i18n

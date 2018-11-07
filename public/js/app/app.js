@@ -9,8 +9,20 @@ const API_AUTHENTICATE = UrlAPI.base + "/authenticate";
 const API_VALIDAR_ACCESO = UrlAPI.base + "/validateLogin";
 const KEY_AUTHENTICATED_USER = "auth";
 
+const KEY_LANGUAGE = "lang";
+const DEFAULT_LANGUAGE = "es";
+
 const URL_HOME = "main";
 const URL_LOGIN = "login";
+
+function getLanguage() {
+  if (localStorage.getItem(KEY_LANGUAGE) == null) return DEFAULT_LANGUAGE;
+  return JSON.parse(localStorage.getItem(KEY_LANGUAGE));
+}
+
+function setLanguage($language) {
+  localStorage.setItem(KEY_LANGUAGE, JSON.stringify($language));
+}
 
 function authenticatedUser() {
   return JSON.parse(localStorage.getItem(KEY_AUTHENTICATED_USER));
