@@ -124,7 +124,9 @@
             <nav id="sidebar" class="sidebar-wrapper">
                 <div class="sidebar-content">
                     <!-- sidebar-header  -->
-                    <div id="menu-sidebar" class="sidebar-menu mt-4"></div>
+                    <div id="menu-sidebar" class="sidebar-menu mt-4">
+                        <vue-seccion-component ref="param"></vue-seccion-component>
+                    </div>
                     <!-- sidebar-menu  -->
                 </div>
             </nav>
@@ -215,6 +217,7 @@
     <script src="js/main.js"></script>
 
     <script src="js/pages/ui/message.vue.js"></script>
+    <script src="js/pages/seccion/seccion.component.vue.js"></script>
     
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
        {{#with data}}
@@ -286,6 +289,7 @@
 
         {{/with}}
     </script>
+
     <script id="secciones-template" type="text/x-handlebars-template">
         <ul class="bg-light">
             {{#each secciones}}
@@ -405,9 +409,6 @@
                     </div>
                 </div>
 
-            
-
-                
             </form>
         </div>
         <div class="modal-footer">
@@ -419,11 +420,8 @@
 
     <<script>
 
-
         //Vue.use(VueRouter);
         //Vue.use(VeeValidate);
-        
-       
 
         // Create VueI18n instance with options
         const i18n = new VueI18n({
@@ -444,10 +442,13 @@
                 onChangeLanguage: function(language){
                     i18n.locale= language;
                     setLanguage(language)
+                    smiSeccion.$refs.param.language = language;
                 }
             },
             i18n
         });
+
+        var smiSeccion=new Vue({ el: '#menu-sidebar' });
 
         var smiMensaje=new Vue({ el: '#vue-modal' });
     </script>

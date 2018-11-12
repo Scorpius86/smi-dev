@@ -9,7 +9,7 @@ class Seccion extends Model
 {
     protected $table="seccion";
     protected $primaryKey="id";
-    protected $fillable=array('codigoGIS','nombre','descripcion','idTipoGeoData','menuCategoria',
+    protected $fillable=array('codigoGIS','nombre' ,'nombreIdioma','idTipoGeoData','menuCategoria',
     'menuAccion','idTipoAccion','idSeccionPadre','activo',
     'geoJsonFile', 'geoJsonData', 'logo','marker','color',
     'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');

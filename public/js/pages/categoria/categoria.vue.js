@@ -40,8 +40,8 @@ var smiCategoria = Vue.component("Categoria", {
                               </div>
                               <div class="form-group row">
                                   <div class="col-sm-12">
-                                      <label for="">Descripcion</label>
-                                      <input type="text" class="form-control" placeholder="Nombre" v-model="seccionEditar.descripcion">
+                                      <label for="">Nombre Idioma</label>
+                                      <input type="text" class="form-control" placeholder="Nombre" v-model="seccionEditar.nombreIdioma">
                                   </div>
                               </div>
                               <div class="form-group row">
@@ -243,7 +243,7 @@ var smiCategoria = Vue.component("Categoria", {
       seccion.idTipoGeoData = 0;
       seccion.idSeccionPadre = null;
       seccion.nombre = null;
-      seccion.descripcion = null;
+      seccion.nombreIdioma = null;
       seccion.codigoGIS = null;
       seccion.logo = null;
 
@@ -281,11 +281,11 @@ var smiCategoria = Vue.component("Categoria", {
         return false;
       }
       if (
-        this.seccionEditar.descripcion == null ||
-        this.seccionEditar.descripcion.length == 0
+        this.seccionEditar.nombreIdioma == null ||
+        this.seccionEditar.nombreIdioma.length == 0
       ) {
         //this.mensaje.title='Datos incompletos !!';
-        this.mensajeValidacion.text = "Debe ingresar la descripción";
+        this.mensajeValidacion.text = "Debe ingresar el nombre";
         this.mensajeValidacion.visible = true;
         return false;
       }

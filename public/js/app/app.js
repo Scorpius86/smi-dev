@@ -22,6 +22,7 @@ function getLanguage() {
 
 function setLanguage($language) {
   localStorage.setItem(KEY_LANGUAGE, JSON.stringify($language));
+  Environment.language = $language;
 }
 
 function authenticatedUser() {

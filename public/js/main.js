@@ -371,8 +371,10 @@ function onceMapIsLoaded() {
   const $whenMenuItemIsChecked = function() {
     const $isChecked = $(this).prop("checked");
     const $id = parseInt($(this).prop("id"));
-    const $seccion = $(this).data("value");
-    const $parent = $(this).data("parent");
+    const $seccion = {};
+    $seccion.id = $(this).data("data-id");
+    $seccion.nombre = $(this).data("data-nombre");
+    //const $parent = $(this).data("parent");
 
     if (!$isChecked) {
       removeMarker($id, $seccion.id);
@@ -674,13 +676,24 @@ function buildSecciones($secciones, $afterBuildSecciones) {
     if ($key !== "" || $key !== null) return true;
   });
 
-  renderHandlebarsTemplate(
-    "#secciones-template",
-    "#menu-sidebar",
-    { secciones: $cabecera },
-    $afterBuildSecciones,
-    true
-  );
+  // renderHandlebarsTemplate(
+  //   "#secciones-template",
+  //   "#menu-sidebar",
+  //   { secciones: $cabecera },
+  //   $afterBuildSecciones,
+  //   true
+  // );
+
+  Environment.global.secciones = $cabecera;
+
+  console.log(smiSeccion);
+  console.log(smiSeccion.$refs.param);
+  smiSeccion.$refs.param.secciones = $cabecera;
+  smiSeccion.$refs.param.language = getLanguage();
+
+  console.log($afterBuildSecciones);
+
+  setTimeout($afterBuildSecciones, 1000);
 }
 
 function getTemplateAjax(path, callback) {

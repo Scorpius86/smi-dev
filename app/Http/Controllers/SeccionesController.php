@@ -98,7 +98,7 @@ class SeccionesController extends Controller
         if($request->input('id')==0){            
             $seccion->codigoGIS=$request->input('codigoGIS');
             $seccion->nombre=$request->input('nombre');
-            $seccion->descripcion=$request->input('descripcion');
+            $seccion->nombreIdioma=$request->input('nombreIdioma');
             $seccion->idSeccionPadre=$request->input('idSeccionPadre');
             $seccion->idTipoGeoData=$request->input('idTipoGeoData');
             $seccion->menuCategoria=$request->input('menuCategoria');
@@ -121,7 +121,7 @@ class SeccionesController extends Controller
             $seccion = Seccion::find($request->input('id'));
             $seccion->codigoGIS=$request->input('codigoGIS');
             $seccion->nombre=$request->input('nombre');
-            $seccion->descripcion=$request->input('descripcion');
+            $seccion->nombreIdioma=$request->input('nombreIdioma');
             $seccion->idSeccionPadre=$request->input('idSeccionPadre');
             $seccion->idTipoGeoData=$request->input('idTipoGeoData');
             $seccion->menuCategoria=$request->input('menuCategoria');
