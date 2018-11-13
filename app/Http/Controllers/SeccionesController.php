@@ -32,6 +32,8 @@ class SeccionesController extends Controller
             $baseSrc='/storage/app/public/json//';
             $file= base_path().$baseSrc.($fileName);
 
+            error_log($file);
+
             $geoFile = @file_get_contents($file);
 
             if ($geoFile != false) {
