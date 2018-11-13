@@ -371,9 +371,13 @@ function onceMapIsLoaded() {
   const $whenMenuItemIsChecked = function() {
     const $isChecked = $(this).prop("checked");
     const $id = parseInt($(this).prop("id"));
+
+    console.log($(this));
+
     const $seccion = {};
-    $seccion.id = $(this).data("data-id");
-    $seccion.nombre = $(this).data("data-nombre");
+    $seccion.id = $(this).attr("data-id");
+    $seccion.nombre = $(this).attr("data-nombre");
+    $seccion.color = $(this).attr("data-color");
     //const $parent = $(this).data("parent");
 
     if (!$isChecked) {
@@ -599,6 +603,8 @@ function onceMapIsLoaded() {
         smiMensaje.$refs.message.onMostrarMensaje();
       }
     };
+
+    console.log($seccion);
 
     loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
   };
