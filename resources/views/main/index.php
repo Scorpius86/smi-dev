@@ -269,12 +269,12 @@
                 </div>
                 <div class="panel-tabs">
                     <ul>
-                        {{#each proyeccion}}
+                        {{#each proyecciones}}
                             <li><a href="#proyeccion-tabs-{{id}}">{{variable}}</a></li>
                         {{/each}}                        
                     </ul>
 
-                    {{#each proyeccion}}
+                    {{#each proyecciones}}
                     <div id="proyeccion-tabs-{{id}}">                        
                         <div style="height:300px;">
                             <canvas class="chart" width="350" height="200"></canvas>

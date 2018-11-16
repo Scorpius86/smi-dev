@@ -10,4 +10,12 @@ class Proyeccion extends Model
     protected $primaryKey="id";
     protected $fillable=array('tipoGrafico',
     'variable','abreviatura','idCultivo','eliminado');
+
+    public function cultivo(){
+        return $this-> belongsTo(Cultivo::class, 'idCultivo');
+    }
+
+    public function detalle(){
+        return $this-> hasMany(ProyeccionDetalle::class, 'idProyeccion');
+    }
 }

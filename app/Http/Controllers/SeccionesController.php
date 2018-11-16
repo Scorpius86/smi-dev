@@ -196,18 +196,18 @@ class SeccionesController extends Controller
 
         $jsonData = json_decode(file_get_contents($path), true);
 
-        // if($codigoGIS != null){
-        //     $forecast=Forecast::where([['codigoGIS','=',$codigoGIS]])->with('cultivos')->get();
+        if($codigoGIS != null){
+            $forecast=Forecast::where([['codigoGIS','=',$codigoGIS]])->with('cultivos.proyecciones.detalle')->first();
 
-        //     error_log($forecast);
+            error_log($forecast);
             
-        //     foreach ($forecast->cultivos as $cultivo) {
-        //         error_log($cultivo);
-        //     }
+            foreach ($forecast->cultivos as $cultivo) {
+                error_log($cultivo);
+            }
 
-        //     $jsonData=$forecast;
+            $jsonData=$forecast;
 
-        // }
+        }
         
         $data= array(
             'status'=> true, 

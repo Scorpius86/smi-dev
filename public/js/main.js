@@ -252,14 +252,30 @@ function loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, $afterLoadPanel) {
 function generarGrafico($idElement, data) {
   const elements = $("#" + $idElement).find(".chart");
 
+  console.log("aqui");
+  console.log($idElement);
+
   if (elements.length == 0) {
     return;
   }
 
-  data.grafico = data.grafico == undefined ? "line" : data.grafico;
+  data.grafico = data.tipoGrafico == undefined ? "line" : data.grafico;
 
-  const dataLabels = data.datos.map(x => x.etiqueta);
-  const dataValues = data.datos.map(x => x.valor);
+  data.grafico = data.tipoGrafico == "lineal" ? "line" : data.grafico;
+  data.grafico = data.tipoGrafico == "barras" ? "bar" : data.grafico;
+
+  data.detalle.filter(function(y) {
+    return y.eliminado === 0;
+  });
+
+  const dataLabels = data.detalle
+    .filter(y => y.eliminado === 0)
+    .map(x => x.dato);
+  const dataValues = data.detalle
+    .filter(y => y.eliminado === 0)
+    .map(x => x.valor);
+
+  console.log(data);
 
   var ctx = elements[0];
   var myChart = new Chart(ctx, {
@@ -427,6 +443,7 @@ function onceMapIsLoaded() {
                 loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, function(
                   data
                 ) {
+                  console.log(data);
                   const $template = renderHandlebarsTemplate(
                     "#panel-popupcontent-template",
                     null,
@@ -447,8 +464,12 @@ function onceMapIsLoaded() {
 
                   if (data.cultivos && data.cultivos.length > 0) {
                     data.cultivos.forEach(function(cultivo) {
-                      if (cultivo.proyeccion && cultivo.proyeccion.length > 0) {
-                        cultivo.proyeccion.forEach(function(x) {
+                      if (
+                        cultivo.proyecciones &&
+                        cultivo.proyecciones.length > 0
+                      ) {
+                        cultivo.proyecciones.forEach(function(x) {
+                          console.log(x);
                           const $idElement = "proyeccion-tabs-" + x.id;
                           generarGrafico($idElement, x);
                         });

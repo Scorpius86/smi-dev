@@ -11,4 +11,8 @@ class ProyeccionDetalle extends Model
     protected $fillable=array('dato',
     'valor','idProyeccion','eliminado');
 
+    public function proyeccion(){
+        return $this->belongTo(Proyeccion::class, 'idProyeccion');
+    }
+
 }

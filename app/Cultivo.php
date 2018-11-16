@@ -14,4 +14,8 @@ class Cultivo extends Model
     public function forecast(){
         return $this->belongsTo('smi/Forecast','idForecast');
     }
+
+    public function proyecciones(){
+        return $this->hasMany(Proyeccion::class,'idCultivo');
+    }
 }

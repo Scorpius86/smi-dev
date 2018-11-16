@@ -11,6 +11,6 @@ class Forecast extends Model
     protected $fillable=array('nombre','anio','codigoGIS','eliminado');
 
     public function cultivos(){
-        return $this->hasMany('smi/Cultivo');
+        return $this->hasMany(Cultivo::class,'idForecast');
     }
 }
