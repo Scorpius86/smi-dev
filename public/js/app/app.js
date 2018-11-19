@@ -26,7 +26,10 @@ function setLanguage($language) {
 }
 
 function authenticatedUser() {
-  return JSON.parse(localStorage.getItem(KEY_AUTHENTICATED_USER));
+  if (localStorage.getItem(KEY_AUTHENTICATED_USER) != null) {
+    return JSON.parse(localStorage.getItem(KEY_AUTHENTICATED_USER));
+  }
+  return null;
 }
 
 function saveUserCredentials($credentials) {

@@ -58,8 +58,6 @@ function validarAcceso() {
             window.location.replace("/main");
           }
         } else {
-          console.log($mensaje);
-          console.log($response);
           $mensaje.val(response.error);
         }
       }

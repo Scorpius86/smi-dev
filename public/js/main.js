@@ -207,7 +207,6 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
     dataType: "json",
     data: $seccionDetalle,
     success: function($response) {
-      console.log($response);
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           alert("guardado");
@@ -252,9 +251,6 @@ function loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, $afterLoadPanel) {
 function generarGrafico($idElement, data) {
   const elements = $("#" + $idElement).find(".chart");
 
-  console.log("aqui");
-  console.log($idElement);
-
   if (elements.length == 0) {
     return;
   }
@@ -274,8 +270,6 @@ function generarGrafico($idElement, data) {
   const dataValues = data.detalle
     .filter(y => y.eliminado === 0)
     .map(x => x.valor);
-
-  console.log(data);
 
   var ctx = elements[0];
   var myChart = new Chart(ctx, {
@@ -357,7 +351,6 @@ function addLegend($idElement, $seccion) {
 }
 
 function removeLegend($seccionId) {
-  console.log($seccionId);
   const $map_legend = $("#map-legend");
   var $seccionItem = $map_legend.find(
     '[seccion-id="SECCION-' + $seccionId + '"]'
@@ -387,8 +380,6 @@ function onceMapIsLoaded() {
   const $whenMenuItemIsChecked = function() {
     const $isChecked = $(this).prop("checked");
     const $id = parseInt($(this).prop("id"));
-
-    console.log($(this));
 
     const $seccion = {};
     $seccion.id = $(this).attr("data-id");
@@ -439,11 +430,17 @@ function onceMapIsLoaded() {
               const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
 
               if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
-                console.log("load panel");
                 loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, function(
                   data
                 ) {
-                  console.log(data);
+                  let $titulo = data.nombre || $detalleCodigoGIS;
+
+                  data.permiteEditar = false;
+                  let authenticate = authenticatedUser();
+                  if (authenticate != null) {
+                    data.permiteEditar = true;
+                  }
+
                   const $template = renderHandlebarsTemplate(
                     "#panel-popupcontent-template",
                     null,
@@ -457,7 +454,7 @@ function onceMapIsLoaded() {
                   $("#dialog-panel").dialog({
                     autoOpen: false,
                     closeText: "",
-                    title: $detalleCodigoGIS,
+                    title: $titulo,
                     position: { my: "right", at: "right", of: window },
                     width: 400
                   });
@@ -469,7 +466,6 @@ function onceMapIsLoaded() {
                         cultivo.proyecciones.length > 0
                       ) {
                         cultivo.proyecciones.forEach(function(x) {
-                          console.log(x);
                           const $idElement = "proyeccion-tabs-" + x.id;
                           generarGrafico($idElement, x);
                         });
@@ -486,7 +482,6 @@ function onceMapIsLoaded() {
                 loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function(
                   data
                 ) {
-                  console.log(data);
                   if (data == undefined || data.length == 0) {
                     const propiedades = [];
                     propiedades.push({
@@ -527,6 +522,11 @@ function onceMapIsLoaded() {
                   if (data.detalle != null && data.detalle.nombre != null) {
                     data.titulo = data.detalle.nombre;
                   }
+                  data.permiteEditar = false;
+                  let authenticate = authenticatedUser();
+                  if (authenticate != null) {
+                    data.permiteEditar = true;
+                  }
 
                   const $template = renderHandlebarsTemplate(
                     "#punto-popupcontent-template",
@@ -549,7 +549,7 @@ function onceMapIsLoaded() {
                   $("#dialog-panel").dialog({
                     autoOpen: false,
                     closeText: "",
-                    title: $detalleCodigoGIS,
+                    title: data.titulo,
                     position: { my: "right", at: "right", of: window }
                   });
 
@@ -625,8 +625,6 @@ function onceMapIsLoaded() {
       }
     };
 
-    console.log($seccion);
-
     loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
   };
   $items.on("change", $whenMenuItemIsChecked);
@@ -649,7 +647,6 @@ function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer) {
       smiMensaje.$refs.message.mensaje.text =
         "Ha ocurrido un error no controlado. Consulte al administrador.";
       smiMensaje.$refs.message.onMostrarMensaje();
-      console.log(smiMensaje);
     },
     complete: function(xhr, status) {}
   });
@@ -713,12 +710,8 @@ function buildSecciones($secciones, $afterBuildSecciones) {
 
   Environment.global.secciones = $cabecera;
 
-  console.log(smiSeccion);
-  console.log(smiSeccion.$refs.param);
   smiSeccion.$refs.param.secciones = $cabecera;
   smiSeccion.$refs.param.language = getLanguage();
-
-  console.log($afterBuildSecciones);
 
   setTimeout($afterBuildSecciones, 1000);
 }
@@ -834,8 +827,6 @@ function saveSeccionDetalleClick() {
   });
 
   $seccionDetalle.atributos = $atributos;
-
-  console.log($seccionDetalle);
 
   saveSeccionDetalleRequest($seccionDetalle.idSeccion, $seccionDetalle);
 }

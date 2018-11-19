@@ -236,10 +236,11 @@
             {{/each}}
 
         </table>
-
+        {{#if permiteEditar}}
         <div>            
             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Editar</button>
         </div>
+        {{/if}}
         {{/with}}
     </script>
     <script id="panel-popupcontent-template" type="text/x-handlebars-template">
