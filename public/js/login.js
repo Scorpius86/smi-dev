@@ -55,7 +55,9 @@ function validarAcceso($paginaActual) {
         $mensaje.val("");
         if ($response.status) {
           if ($response.showLogin) {
-            window.location.replace("/login");
+            if ($paginaActual != "login") {
+              window.location.replace("/login");
+            }
           } else {
             //Registar credenciales default
             const $credentialesDefault = {};
