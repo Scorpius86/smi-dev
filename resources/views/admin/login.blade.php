@@ -139,9 +139,6 @@
     <script src="{{ asset('js/shared/constantes.js') }}"></script>
     <script src="{{ asset('js/app/app.js') }}"></script>
     <script src="{{ asset('js/shared/lang.js') }}"></script>
-    <script src="{{ asset('js/shared/services.js') }}"></script>
-    <script src="{{ asset('js/login.js') }}"></script>
-    
 
     <<script>
 
@@ -169,6 +166,30 @@
             },
             i18n
         });
+        
+        jQuery(function ($) {
+            init();            
+        });
+
+        function init() {
+            $("button#btnLogin").on("click", onLoginButtonClick);
+            $("form#login").on("submit", onFormSubmit);
+        }
+
+        function onLoginButtonClick() {
+
+            console.log(URL.HOME_ADMIN);
+            const $redirectUrl = URL.HOME_ADMIN;
+            window.location = $redirectUrl;
+
+            // const $form = $("form#login");
+            // $form.submit();
+        }
+
+        function onFormSubmit($e) {
+                    
+            
+        }
 
     </script>
 </body>

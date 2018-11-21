@@ -28,6 +28,7 @@
         <script src="{{ asset('js/utils/environment.js') }}"></script>
         <script src="{{ asset('js/shared/constantes.js') }}"></script>
         <script src="{{ asset('js/app/app.js') }}"></script>
+        <script src="{{ asset('js/shared/services.js') }}"></script>
         <script src="{{ asset('js/login.js') }}"></script>  
 
         <script>

@@ -1,5 +1,6 @@
 var URL = {};
 URL.AUTH_VALIDATE = "auth/validate";
+URL.HOME_ADMIN = "admin";
 
 var CONSTANTES = {};
 CONSTANTES.PARAMETRO = {};

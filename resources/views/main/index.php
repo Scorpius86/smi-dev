@@ -213,6 +213,7 @@
     <script src="js/utils/environment.js"></script>
     <script src="js/shared/constantes.js"></script>
     <script src="js/shared/lang.js"></script>
+    <script src="js/shared/services.js"></script>
     <script src="js/app/app.js"></script>
 
     <script src="js/main.js"></script>
@@ -449,6 +450,8 @@
             },
             i18n
         });
+
+        
 
         var smiSeccion=new Vue({ el: '#menu-sidebar' });
 

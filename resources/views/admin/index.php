@@ -27,8 +27,6 @@
     <link href="css/admin.css" rel="stylesheet">
     <title>Peru Cacao</title>
 
-
-
 </head>
 
 <body>
@@ -99,55 +97,13 @@
     <div class="main-form container-fluid px-0">
         <div class="page-wrapper chiller-theme toggled d-flex">
             <nav id="sidebar" class="sidebar-wrapper">
-                <div class="sidebar-content">
+                <div id="home-menu" class="sidebar-content">
                     <!-- sidebar-header  -->
-                    <div id="menu-sidebar" class="sidebar-menu mt-4">
-                        <ul class="bg-light">
-                            <li class="sidebar-dropdown">
-                                <a href="./admin#/seccion" class="border-2 border-left border-menu-item d-block">
-                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                                        <span>Secciones</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-dropdown">
-                                <a href="./admin#/categoria" class="border-2 border-left border-menu-item d-block">
-                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                                        <span>Categor&iacute;as</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-dropdown">
-                                <a href="./admin#/usuario" class="border-2 border-left border-menu-item d-block">
-                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                                        <span>Usuarios</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-dropdown">
-                                <a href="./admin#/parametro" class="border-2 border-left border-menu-item d-block">
-                                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                                        <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                                        <span>Parámetros</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                           
-                            
-                        </ul>
-                    </div>
+                    <vue-home-menu ref="param"></vue-home-menu>
                     <!-- sidebar-menu  -->
                 </div>
             </nav>
-            <main class="page-content">
-                
+            <main class="page-content">                
                 <div class="container-fluid" id="map-container">
                     <div id="dialog-panel" title="Dialog Title">
                         <div class="dialog-content">
@@ -219,12 +175,14 @@
     <script src="js/utils/environment.js"></script>
     <script src="js/shared/constantes.js"></script>
     <script src="js/pages/home/home.vue.js"></script>
+    <script src="js/pages/home/home-menu.vue.js"></script>
     <script src="js/pages/seccion/seccion.vue.js"></script>
     <script src="js/pages/categoria/categoria.vue.js"></script>
     <script src="js/pages/parametro/parametro.vue.js"></script>
     <script src="js/pages/usuario/usuario.vue.js"></script>
 
     <script>
+        
 
         //Ocultar menu
         $('#btnShowMenu').on('click', function () {
@@ -278,6 +236,12 @@
             methods: {},
             router
         })
+      
+      var smiHomeMenu=new Vue({ el: '#home-menu' });
+
+      console.log(smiHomeMenu);
+      smiHomeMenu.$refs.param.show();
+
     </script>   
     
 </body>
