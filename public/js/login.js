@@ -1,5 +1,7 @@
 jQuery(function($) {
   init();
+
+  validarAcceso("login");
 });
 
 function init() {
@@ -40,7 +42,7 @@ function authenticateObject() {
   };
 }
 
-function validarAcceso() {
+function validarAcceso($paginaActual) {
   const $mensaje = $("#lblMensaje");
 
   $.ajax({
@@ -55,6 +57,13 @@ function validarAcceso() {
           if ($response.showLogin) {
             window.location.replace("/login");
           } else {
+            //Registar credenciales default
+            const $credentialesDefault = {};
+            $credentialesDefault.id = -1;
+            $credentialesDefault.nombre = "publico";
+            $credentialesDefault.login = "publico";
+            saveUserCredentials($credentialesDefault);
+
             window.location.replace("/main");
           }
         } else {

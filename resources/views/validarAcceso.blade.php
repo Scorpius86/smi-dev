@@ -25,9 +25,10 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
 
-        <script src="{{ asset('js/utils/environment.js') }}"></script>            
+        <script src="{{ asset('js/utils/environment.js') }}"></script>
+        <script src="{{ asset('js/shared/constantes.js') }}"></script>
         <script src="{{ asset('js/app/app.js') }}"></script>
-        <script src="{{ asset('js/login.js') }}"></script>
+        <script src="{{ asset('js/login.js') }}"></script>  
 
         <script>
             jQuery(function ($) {

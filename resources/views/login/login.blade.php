@@ -136,6 +136,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/8.3.0/vue-i18n.min.js"></script>
 
     <script src="{{ asset('js/utils/environment.js') }}"></script>
+    <script src="{{ asset('js/shared/constantes.js') }}"></script>
     <script src="{{ asset('js/app/app.js') }}"></script>
     <script src="{{ asset('js/login.js') }}"></script>
     <script src="{{ asset('js/shared/lang.js') }}"></script>

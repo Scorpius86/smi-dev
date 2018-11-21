@@ -14,8 +14,10 @@ jQuery(function($) {
 
   if (!validateAuthentication()) {
     clearCredentials();
-    window.location = URL_LOGIN;
+    window.location = URL.AUTH_VALIDATE;
+    return;
   }
+
   loadUserInformation();
   const $afterLoadSecciones = settings;
   loadSecciones($afterLoadSecciones);

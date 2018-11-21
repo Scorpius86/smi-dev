@@ -214,6 +214,7 @@
     <script src="js/shared/constantes.js"></script>
     <script src="js/shared/lang.js"></script>
     <script src="js/app/app.js"></script>
+
     <script src="js/main.js"></script>
 
     <script src="js/pages/ui/message.vue.js"></script>
