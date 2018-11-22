@@ -174,6 +174,7 @@
 <!-- Vue Pages and Components here -->
     <script src="js/utils/environment.js"></script>
     <script src="js/shared/constantes.js"></script>
+    <script src="js/app/app.js"></script>
     <script src="js/pages/home/home.vue.js"></script>
     <script src="js/pages/home/home-menu.vue.js"></script>
     <script src="js/pages/seccion/seccion.vue.js"></script>
@@ -241,6 +242,46 @@
 
       console.log(smiHomeMenu);
       smiHomeMenu.$refs.param.show();
+
+      jQuery(function($) {
+            init();
+        });
+
+        function init() {
+
+            $(".logout-button").off("click");
+            $(".logout-button").on("click", onLogoutButtonClick);
+
+            const $credentials= authenticatedUser();
+            if($credentials==null){
+                const $redirectUrl = URL.ADMIN_LOGIN;               
+                window.location = $redirectUrl;
+            }
+
+        }
+
+        function onLogoutButtonClick() {
+            clearCredentials();
+            const $redirectUrl = URL.ADMIN_LOGIN;
+            window.location = $redirectUrl;
+        }
+
+        function logout($afterLogout) {
+            $.ajax({
+                url: UrlAPI.base + "/authenticate",
+                type: "GET",
+                dataType: "json",
+                success: function($response) {
+                    if (typeof ($response !== "undefined") && $response !== null) {
+                        if ($response.status) {
+                            $afterLogout($response.data);
+                        }
+                    }
+                },
+                error: function(xhr, status) {},
+                complete: function(xhr, status) {}
+            });
+        }
 
     </script>   
     

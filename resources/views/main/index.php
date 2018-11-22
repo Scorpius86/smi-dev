@@ -451,10 +451,7 @@
             i18n
         });
 
-        
-
         var smiSeccion=new Vue({ el: '#menu-sidebar' });
-
         var smiMensaje=new Vue({ el: '#vue-modal' });
     </script>
 

@@ -1,21 +1,3 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <h2>Prueba de Html</h2>
-    <h3>Bievenidos</h3>
-
-    <a href="/main">Ir a principal</a>
-</body>
-</html> --}}
-
-
 <!doctype html>
 <html lang="en">
 
@@ -167,8 +149,8 @@
             i18n
         });
         
-        jQuery(function ($) {
-            init();            
+        jQuery(function($) {
+            init();
         });
 
         function init() {
@@ -176,20 +158,67 @@
             $("form#login").on("submit", onFormSubmit);
         }
 
-        function onLoginButtonClick() {
-
-            console.log(URL.HOME_ADMIN);
-            const $redirectUrl = URL.HOME_ADMIN;
-            window.location = $redirectUrl;
-
-            // const $form = $("form#login");
-            // $form.submit();
-        }
-
         function onFormSubmit($e) {
-                    
-            
+            const $authData = authenticateObject();
+            login($authData, function($response) {
+                const $redirectUrl = URL.HOME_ADMIN;
+                if (typeof window.localStorage !== "undefined") {
+                    saveUserCredentials($response);
+                }
+                window.location = $redirectUrl;
+            });
+            $e.preventDefault();
         }
+
+        function onLoginButtonClick() {
+            const $form = $("form#login");
+            $form.submit();
+        }
+
+        function authenticateObject() {
+            const $form = $("form#login");
+            const $usernameCtrl = $form.find("input#username");
+            const $passwordCtrl = $form.find("input[type='password']#password");
+
+            const $username = $usernameCtrl.val();
+            const $password = $passwordCtrl.val();            
+
+            return {
+                username: $username,
+                password: $password,
+                language: "es"
+            };
+        }
+
+        function login($authData, $afterLogin) {
+            const $mensaje = $("#lblMensaje");
+
+            $.ajax({
+                url: UrlAPI.base + "/authenticate",
+                type: "POST",
+                data: $authData,
+                dataType: "json",
+                success: function($response) {
+                    if (typeof ($response !== "undefined") && $response !== null) {
+                        $mensaje.val("");
+                        if ($response.status) {
+                            let dataLogin = {};
+                            dataLogin.id = $response.data.id;
+                            dataLogin.login = $response.data.login;
+                            dataLogin.nombre = $response.data.nombre;
+                            dataLogin.language = $authData.language;
+                            $afterLogin(dataLogin);
+                            console.log("autenticado");
+                        } else {
+                            $mensaje.text($response.error);
+                        }
+                    }
+                },
+                error: function(xhr, status) {},
+                complete: function(xhr, status) {}
+            });
+        }
+
 
     </script>
 </body>

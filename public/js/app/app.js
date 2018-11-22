@@ -33,7 +33,6 @@ function authenticatedUser() {
 }
 
 function saveUserCredentials($credentials) {
-  console.log($credentials);
   localStorage.setItem(KEY_AUTHENTICATED_USER, JSON.stringify($credentials));
 }
 
