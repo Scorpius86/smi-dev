@@ -443,6 +443,12 @@ function onceMapIsLoaded() {
                     data.permiteEditar = true;
                   }
 
+                  let language = getLanguage();
+                  if (language == null || language.length == 0) {
+                    language = "es";
+                  }
+
+                  data.label = messages[language].label;
                   const $template = renderHandlebarsTemplate(
                     "#panel-popupcontent-template",
                     null,
@@ -529,6 +535,13 @@ function onceMapIsLoaded() {
                   if (authenticate != null) {
                     data.permiteEditar = true;
                   }
+
+                  let language = getLanguage();
+                  if (language == null || language.length == 0) {
+                    language = "es";
+                  }
+
+                  data.label = messages[language].label;
 
                   const $template = renderHandlebarsTemplate(
                     "#punto-popupcontent-template",

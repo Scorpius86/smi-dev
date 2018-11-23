@@ -222,11 +222,11 @@
     <script src="js/pages/seccion/seccion.component.vue.js"></script>
     
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
-       {{#with data}}
+       {{#with data as |panelData|}}
         <table class="table table-sm">
             {{#with detalle}}
             <tr>
-                <th>Nombre</th>
+                <th>{{panelData.label.panel_label_name}}</th>
                 <td>{{nombre}}{{abreviatura}}</td>
             </tr>
             {{/with}}
@@ -240,16 +240,16 @@
         </table>
         {{#if permiteEditar}}
         <div>            
-            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Editar</button>
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
+                data-whatever="@mdo">{{panelData.label.button_edit}}
+            </button>
         </div>
         {{/if}}
         {{/with}}
     </script>
     <script id="panel-popupcontent-template" type="text/x-handlebars-template">
         
-        {{#with detalle}}
-
-        <!-- <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"> -->
+        {{#with detalle as |panelDetalle|}}
 
         <ul class="nav nav-pills mb-3" role="tablist">
 
@@ -267,8 +267,8 @@
             {{#each cultivos}}            
             <div class="tab-pane fade show" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
                 <div>
-                    <span style="font-weight:bold;">Tasa&nbsp;&nbsp;:</span>{{tasa}}
-                    <span style="font-weight:bold;">Precio:</span>{{precio}}
+                    <span style="font-weight:bold;">{{panelDetalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{tasa}}
+                    <span style="font-weight:bold;">{{panelDetalle.label.panel_label_price}}:</span>{{precio}}
                 </div>
                 <div class="panel-tabs">
                     <ul>
@@ -340,7 +340,7 @@
     </script>
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
-        {{#with data}}
+        {{#with data as |panelData|}}
         <div class="modal-header">
             <h3 class="modal-title"> {{titulo}} </h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -351,10 +351,16 @@
             <form>
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#seccion-informacion" role="tab" aria-controls="seccion-informacion" aria-selected="true">Informaci&oacute;n</a>
+                        <a class="nav-link active" data-toggle="tab" 
+                            href="#seccion-informacion" role="tab" aria-controls="seccion-informacion" aria-selected="true">
+                            {{panelData.label.panel_title_information}}
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#seccion-atributos" role="tab" aria-controls="seccion-informacion" aria-selected="false">Atributos</a>
+                        <a class="nav-link" data-toggle="tab" href="#seccion-atributos" role="tab" aria-controls="seccion-informacion" 
+                            aria-selected="false">
+                            {{panelData.label.panel_title_attributes}}
+                        </a>
                     </li>           
                 </ul>
                 <div class="tab-content">
@@ -365,29 +371,29 @@
                         <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{id}}">
                         <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{codigoGIS}}">
                         <div class="form-group">
-                            <label for="formGroupExampleInput">Nombre</label>
-                            <input type="text" class="form-control" data-validate="true" data-field="nombre" placeholder="Nombre" value="{{nombre}}">
+                            <label for="formGroupExampleInput">{{panelData.label.panel_label_name}}</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="nombre" placeholder="{{panelData.label.panel_label_name}}" value="{{nombre}}">
                         </div>
                         <div class="form-group">
-                            <label for="formGroupExampleInput2">Abreviatura</label>
-                            <input type="text" class="form-control" data-validate="true" data-field="abreviatura" placeholder="Abreviatura" value="{{abreviatura}}">
+                            <label for="formGroupExampleInput2">{{panelData.label.panel_label_short_name}}</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="abreviatura" placeholder="{{panelData.label.panel_label_short_name}}" value="{{abreviatura}}">
                         </div>
                         <div class="form-group">
-                            <label for="formGroupExampleInput2">Descripci&oacute;n</label>
-                            <input type="text" class="form-control" data-validate="true" data-field="descripcion" placeholder="Descripcion"  value="{{descripcion}}">
+                            <label for="formGroupExampleInput2">{{panelData.label.panel_label_description}}</label>
+                            <input type="text" class="form-control" data-validate="true" data-field="descripcion" placeholder="{{panelData.label.panel_label_description}}"  value="{{descripcion}}">
                         </div>
                         {{/with}}
                     </div>
                     <div class="tab-pane fade" id="seccion-atributos" role="tabpanel" aria-labelledby="seccion-informacion-tab">
                         <br>
                         <div>
-                            <button type="button" class="btn btn-primary" onClick="agregarAtributo()">Agregar</button>
+                            <button type="button" class="btn btn-primary" onClick="agregarAtributo()">{{panelData.label.button_add}}</button>
                         </div>
                         <table id ="table-atributo" class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Atributo</th>
-                                    <th>Valor</th>
+                                    <th>{{panelData.label.panel_attribute_title_attribute}}</th>
+                                    <th>{{panelData.label.panel_attribute_title_value}}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -415,8 +421,8 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onClick="saveSeccionDetalleClick()">Aceptar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{panelData.label.button_cancel}}</button>
+            <button type="button" class="btn btn-primary" onClick="saveSeccionDetalleClick()">{{panelData.label.button_ok}}</button>
         </div>
         {{/with}}
     </script>
