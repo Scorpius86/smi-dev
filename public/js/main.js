@@ -607,24 +607,31 @@ function onceMapIsLoaded() {
             html: `<span style="${$markerHtmlStyles}" />`
           });
 
-          var iconMarkerPoint = L.icon({
-            iconUrl: $seccion.fullMarkerUrl,
-            iconSize: [32, 37],
-            iconAnchor: [16, 37],
-            popupAnchor: [0, -28]
-          });
+          var markers = L.markerClusterGroup();
 
-          const $currentSectionPoints = L.geoJSON($points, {
+          var $geoJsonLayer = L.geoJson($points, {
             style: $styleColor($seccion),
             onEachFeature: $onEachFeature,
             pointToLayer: function(feature, latlng) {
               return L.marker(latlng, { icon: icon });
             }
-          }).addTo(map);
+          });
 
-          $cacheLayer($id, $currentSectionPoints);
+          markers.addLayer($geoJsonLayer);
+          map.addLayer(markers);
+
+          // const $currentSectionPoints = L.geoJSON($points, {
+          //   style: $styleColor($seccion),
+          //   onEachFeature: $onEachFeature,
+          //   pointToLayer: function(feature, latlng) {
+          //     return L.marker(latlng, { icon: icon });
+          //   }s
+          // }).addTo(map);
+
+          $cacheLayer($id, $geoJsonLayer);
           hideLoading();
         } catch (error) {
+          console.log(error);
           removeMarker($id, $seccion.seccion.id);
           hideLoading();
           smiMensaje.$refs.message.mensaje.text =
