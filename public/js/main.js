@@ -617,16 +617,20 @@ function onceMapIsLoaded() {
             }
           });
 
-          markers.addLayer($geoJsonLayer);
-          map.addLayer(markers);
+          if ($points.features.length > CONSTANTES.MAXIMO_PUNTO_CLUSTER) {
+            $geoJsonLayer = L.geoJson($points, {
+              style: $styleColor($seccion),
+              onEachFeature: $onEachFeature,
+              pointToLayer: function(feature, latlng) {
+                return L.marker(latlng, { icon: icon });
+              }
+            });
 
-          // const $currentSectionPoints = L.geoJSON($points, {
-          //   style: $styleColor($seccion),
-          //   onEachFeature: $onEachFeature,
-          //   pointToLayer: function(feature, latlng) {
-          //     return L.marker(latlng, { icon: icon });
-          //   }s
-          // }).addTo(map);
+            markers.addLayer($geoJsonLayer);
+            map.addLayer(markers);
+          } else {
+            $geoJsonLayer.addTo(map);
+          }
 
           $cacheLayer($id, $geoJsonLayer);
           hideLoading();
