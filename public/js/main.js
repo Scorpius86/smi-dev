@@ -441,10 +441,10 @@ function onceMapIsLoaded() {
 
                   data.permiteEditar = false;
                   let authenticate = authenticatedUser();
-                  if (authenticate != null) {
+                  console.log(authenticate);
+                  if (authenticate != null && authenticate.id > 0) {
                     data.permiteEditar = true;
                   }
-
                   let language = getLanguage();
                   if (language == null || language.length == 0) {
                     language = "es";
@@ -534,9 +534,10 @@ function onceMapIsLoaded() {
                   }
                   data.permiteEditar = false;
                   let authenticate = authenticatedUser();
-                  if (authenticate != null) {
+                  console.log(authenticate);
+                  if (authenticate != null && authenticate.id > 0) {
                     data.permiteEditar = true;
-                  }
+                  }                 
 
                   let language = getLanguage();
                   if (language == null || language.length == 0) {
