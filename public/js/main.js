@@ -361,11 +361,13 @@ function removeLegend($seccionId) {
 }
 
 function removeMarker($id, $seccionId) {
+
   const $checkedLayer = layers.find(function($item, $index) {
     if ($item.id === $id) return $item;
   });
 
   if ($checkedLayer) {
+    
     map.removeLayer($checkedLayer.layer);
     _.remove(layers, function($item) {
       return $item.id === $checkedLayer.id;
@@ -617,6 +619,7 @@ function onceMapIsLoaded() {
             }
           });
 
+          let layerMap=null;
           if ($points.features.length > CONSTANTES.MAXIMO_PUNTO_CLUSTER) {
             $geoJsonLayer = L.geoJson($points, {
               style: $styleColor($seccion),
@@ -628,11 +631,13 @@ function onceMapIsLoaded() {
 
             markers.addLayer($geoJsonLayer);
             map.addLayer(markers);
+            layerMap= markers;
           } else {
             $geoJsonLayer.addTo(map);
+            layerMap=$geoJsonLayer;
           }
 
-          $cacheLayer($id, $geoJsonLayer);
+          $cacheLayer($id, layerMap);
           hideLoading();
         } catch (error) {
           console.log(error);
