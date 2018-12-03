@@ -366,7 +366,11 @@ function removeMarker($id, $seccionId) {
   });
 
   if ($checkedLayer) {
+    console.log($checkedLayer);
+    console.log(layers);
+    console.log(map);
     map.removeLayer($checkedLayer.layer);
+
     _.remove(layers, function($item) {
       return $item.id === $checkedLayer.id;
     });
@@ -587,29 +591,24 @@ function onceMapIsLoaded() {
           let $points = JSON.parse($seccion.geoJsonFile);
           const $myCustomColour = $seccion.seccion.color;
 
-          const $markerHtmlStyles = `
-                    background-color: ${$myCustomColour};
-                    width: 2rem;
-                    height: 2rem;
-                    display: block;
-                    left: -1.5rem;
-                    top: -1.5rem;
-                    position: relative;
-                    border-radius: 3rem 3rem 0;
-                    transform: rotate(45deg);
-                    border: 1px solid #FFFFFF`;
+          const icon = getIconMarkerPoint($myCustomColour);
 
-          const icon = L.divIcon({
-            className: "my-custom-pin",
-            iconAnchor: [0, 24],
-            labelAnchor: [-6, 0],
-            popupAnchor: [0, -36],
-            html: `<span style="${$markerHtmlStyles}" />`
+          //let markers = L.markerClusterGroup();
+
+          let markers = L.markerClusterGroup({
+            maxClusterRadius: 120,
+            iconCreateFunction: function(cluster) {
+              let childMarkers = cluster.getAllChildMarkers();
+              let n = cluster.getChildCount();
+
+              return getIconMarkerCluster(n, $myCustomColour);
+            },
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: false
           });
 
-          var markers = L.markerClusterGroup();
-
-          var $geoJsonLayer = L.geoJson($points, {
+          let $geoJsonLayer = L.geoJson($points, {
             style: $styleColor($seccion),
             onEachFeature: $onEachFeature,
             pointToLayer: function(feature, latlng) {
@@ -618,11 +617,20 @@ function onceMapIsLoaded() {
           });
 
           if ($points.features.length > CONSTANTES.MAXIMO_PUNTO_CLUSTER) {
+            let contador = 0;
             $geoJsonLayer = L.geoJson($points, {
               style: $styleColor($seccion),
               onEachFeature: $onEachFeature,
               pointToLayer: function(feature, latlng) {
-                return L.marker(latlng, { icon: icon });
+                let pointMarker = L.marker(latlng, {
+                  icon: icon
+                });
+
+                contador += 1;
+
+                pointMarker.number = contador;
+
+                return pointMarker;
               }
             });
 
@@ -654,6 +662,54 @@ function onceMapIsLoaded() {
     loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
   };
   $items.on("change", $whenMenuItemIsChecked);
+}
+
+function getIconMarkerPoint($myCustomColour) {
+  const $markerHtmlStyles = `
+                    background-color: ${$myCustomColour};
+                    width: 2rem;
+                    height: 2rem;
+                    display: block;
+                    left: -1.5rem;
+                    top: -1.5rem;
+                    position: relative;
+                    border-radius: 3rem 3rem 0;
+                    transform: rotate(45deg);
+                    border: 1px solid #FFFFFF`;
+
+  const icon = L.divIcon({
+    className: "my-custom-pin",
+    iconAnchor: [0, 24],
+    labelAnchor: [-6, 0],
+    popupAnchor: [0, -36],
+    html: `<span style="${$markerHtmlStyles}" />`
+  });
+
+  return icon;
+}
+
+function getIconMarkerCluster($n, $myCustomColour) {
+  const $markerHtmlStyles = `
+                    background-color: ${$myCustomColour};
+                    width: 3rem;
+                    height: 3rem;
+                    display: block;
+                    left: 0;
+                    top: 0;
+                    padding : 0.5rem 0.5rem 0.5rem 0.5rem;
+                    position: relative;
+                    border-radius: 50%;
+                    border: 1px solid #FFFFFF`;
+
+  const icon = L.divIcon({
+    className: "my-custom-pin",
+    iconAnchor: [0, 24],
+    labelAnchor: [-6, 0],
+    popupAnchor: [0, -36],
+    html: `<span style="${$markerHtmlStyles}" >${$n}</span>`
+  });
+
+  return icon;
 }
 
 function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer) {

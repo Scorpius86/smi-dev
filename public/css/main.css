@@ -390,3 +390,11 @@ div.custom-tab div.custom-tab-content:not(.active) {
 .button-link-smi:hover {
   cursor: pointer;
 }
+
+.cluster-points {
+  width: 40px;
+  height: 40px;
+  background-color: greenyellow;
+  text-align: center;
+  font-size: 24px;
+}

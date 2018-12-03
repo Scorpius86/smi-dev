@@ -77,15 +77,20 @@
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
                     <div class="nav-item">
-                        <a class="border-right px-3 nav-link" href="#" @click="onChangeLanguage('es')">
-                            <img src="img/app/spain-flag-icon-128.png" width="24" />
-                        </a>                      
-                    </div>                   
-                    <div class="nav-item">
-                        <a class="border-right px-3 nav-link" href="#" @click="onChangeLanguage('en')">
-                            <img src="img/app/usa-flag-icon-128.png" width="28" />
-                        </a>
-                    </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ selectedLanguage }}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('es')">
+                                    <img src="img/app/spain-flag-icon-128.png" width="24" /> Español
+                                </a>
+                                <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('en')">
+                                    <img src="img/app/usa-flag-icon-128.png" width="28" /> Inglés
+                                </a>                                
+                            </div>
+                        </div>
+                    </div>                  
                     <div class="nav-item">
                         <a class="border-right pr-3 nav-link d-inline-flex" href="#">
                             <span class="mr-2 fa-stack fa-1x">
@@ -442,13 +447,18 @@
             },
             data: {
                 msg: 'Hello',
-                email: ''
+                email: '',
+                selectedLanguage: messages.es.label.main_language_spanish
             },
             methods: {
                 onChangeLanguage: function(language){
                     i18n.locale= language;
                     setLanguage(language)
                     smiSeccion.$refs.param.language = language;
+                    this.selectedLanguage= messages.es.label.main_language_spanish;
+                    if(language=='en'){
+                        this.selectedLanguage= messages.es.label.main_language_english;
+                    }
                 }
             },
             i18n
