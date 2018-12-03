@@ -339,6 +339,18 @@ function loadRegiones($afterLoadRegiones) {
 function addLegend($idElement, $seccion) {
   const $map_legend = $("#map-legend");
 
+  //`background-color: ${$myCustomColour};`;
+
+  let seccionHtmlIcon = `<i class="mr-2 fas fa-map-marker-alt" />`;
+
+  console.log($seccion);
+
+  if ($seccion.logo && $seccion.logo != null && $seccion.logo != "") {
+    seccionHtmlIcon = `<i class="mr-2 fas"><img v-bind: src="${
+      $seccion.logo
+    }" alt="" width="24px"></i> `;
+  }
+
   $map_legend.append(
     '&nbsp;<button type="button" class="btn btn-sm btn-light" onClick="removeMarker(' +
       $idElement +
@@ -347,6 +359,7 @@ function addLegend($idElement, $seccion) {
       ');" seccion-id="SECCION-' +
       $seccion.id +
       '"> ' +
+      seccionHtmlIcon +
       $seccion.nombre +
       ' <span class="badge badge-light"> X </span></button>'
   );
@@ -361,19 +374,14 @@ function removeLegend($seccionId) {
 }
 
 function removeMarker($id, $seccionId) {
-
   const $checkedLayer = layers.find(function($item, $index) {
     if ($item.id === $id) return $item;
   });
 
   if ($checkedLayer) {
-<<<<<<< HEAD
     console.log($checkedLayer);
     console.log(layers);
     console.log(map);
-=======
-    
->>>>>>> 13fd165b568e06db9ad758c19a83138b45d6511c
     map.removeLayer($checkedLayer.layer);
 
     _.remove(layers, function($item) {
@@ -396,6 +404,7 @@ function onceMapIsLoaded() {
     $seccion.id = $(this).attr("data-id");
     $seccion.nombre = $(this).attr("data-nombre");
     $seccion.color = $(this).attr("data-color");
+    $seccion.logo = $(this).attr("data-logo");
     //const $parent = $(this).data("parent");
 
     if (!$isChecked) {
@@ -544,7 +553,7 @@ function onceMapIsLoaded() {
                   console.log(authenticate);
                   if (authenticate != null && authenticate.id > 0) {
                     data.permiteEditar = true;
-                  }                 
+                  }
 
                   let language = getLanguage();
                   if (language == null || language.length == 0) {
@@ -622,7 +631,7 @@ function onceMapIsLoaded() {
             }
           });
 
-          let layerMap=null;
+          let layerMap = null;
           if ($points.features.length > CONSTANTES.MAXIMO_PUNTO_CLUSTER) {
             let contador = 0;
             $geoJsonLayer = L.geoJson($points, {
@@ -643,10 +652,10 @@ function onceMapIsLoaded() {
 
             markers.addLayer($geoJsonLayer);
             map.addLayer(markers);
-            layerMap= markers;
+            layerMap = markers;
           } else {
             $geoJsonLayer.addTo(map);
-            layerMap=$geoJsonLayer;
+            layerMap = $geoJsonLayer;
           }
 
           $cacheLayer($id, layerMap);

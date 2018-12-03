@@ -83,10 +83,10 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('es')">
-                                    <img src="img/app/spain-flag-icon-128.png" width="24" /> Español
+                                    <img src="img/app/spain-flag-icon-128.png" width="24" /> {{ $t("label.main_language_spanish") }}
                                 </a>
                                 <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('en')">
-                                    <img src="img/app/usa-flag-icon-128.png" width="28" /> Inglés
+                                    <img src="img/app/usa-flag-icon-128.png" width="28" /> {{ $t("label.main_language_english") }}
                                 </a>                                
                             </div>
                         </div>
@@ -450,14 +450,24 @@
                 email: '',
                 selectedLanguage: messages.es.label.main_language_spanish
             },
+            created: function() {
+                let language=getLanguage();
+                this.selectedLanguage= messages.es.label.main_language_spanish;
+                if(language=='en'){
+                    this.selectedLanguage= messages.en.label.main_language_english;
+                }
+            },
             methods: {
                 onChangeLanguage: function(language){
                     i18n.locale= language;
-                    setLanguage(language)
+                    setLanguage(language);
                     smiSeccion.$refs.param.language = language;
+                    this.setSelectedLanguage(language);
+                },
+                setSelectedLanguage: function(language){
                     this.selectedLanguage= messages.es.label.main_language_spanish;
                     if(language=='en'){
-                        this.selectedLanguage= messages.es.label.main_language_english;
+                        this.selectedLanguage= messages.en.label.main_language_english;
                     }
                 }
             },

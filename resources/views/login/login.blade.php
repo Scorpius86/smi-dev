@@ -176,10 +176,20 @@
                 email: '',
                 selectedLanguage: messages.es.label.main_language_spanish
             },
+            created: function() {
+                let language=getLanguage();
+                this.selectedLanguage= messages.es.label.main_language_spanish;
+                if(language=='en'){
+                    this.selectedLanguage= messages.es.label.main_language_english;
+                }
+            },
             methods: {
                 onChangeLanguage: function(language){
                     i18n.locale= language;
-                    setLanguage(language);
+                    setLanguage(language)
+                    this.setSelectedLanguage(language);
+                },
+                setSelectedLanguage: function(language){
                     this.selectedLanguage= messages.es.label.main_language_spanish;
                     if(language=='en'){
                         this.selectedLanguage= messages.es.label.main_language_english;

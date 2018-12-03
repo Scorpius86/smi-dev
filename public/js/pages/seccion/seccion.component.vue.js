@@ -39,11 +39,11 @@ Vue.component("vue-seccion-component", {
                                         
                                         
                                         <template v-if="language=='es'">
-                                            <input type="checkbox" class="d-none menu-item" :data-id="child.id" :data-nombre="child.nombre" :data-color="child.color" v-bind:id="child.id">
+                                            <input type="checkbox" class="d-none menu-item" :data-id="child.id" :data-nombre="child.nombre" :data-color="child.color" :data-logo="child.logo" v-bind:id="child.id">
                                             <label class="mb-0" v-bind:for="child.id">{{child.nombre}}</label>
                                         </template>
                                         <template v-else>
-                                            <input type="checkbox" class="d-none menu-item" :data-id="child.id" :data-nombre="child.nombreIdioma" :data-color="child.color" v-bind:id="child.id">
+                                            <input type="checkbox" class="d-none menu-item" :data-id="child.id" :data-nombre="child.nombreIdioma" :data-color="child.color" :data-logo="child.logo" v-bind:id="child.id">
                                             <label class="mb-0" v-bind:for="child.id">{{child.nombreIdioma}}</label>
                                         </template> 
                                     </div>
