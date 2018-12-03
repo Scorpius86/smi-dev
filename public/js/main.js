@@ -361,14 +361,19 @@ function removeLegend($seccionId) {
 }
 
 function removeMarker($id, $seccionId) {
+
   const $checkedLayer = layers.find(function($item, $index) {
     if ($item.id === $id) return $item;
   });
 
   if ($checkedLayer) {
+<<<<<<< HEAD
     console.log($checkedLayer);
     console.log(layers);
     console.log(map);
+=======
+    
+>>>>>>> 13fd165b568e06db9ad758c19a83138b45d6511c
     map.removeLayer($checkedLayer.layer);
 
     _.remove(layers, function($item) {
@@ -443,10 +448,10 @@ function onceMapIsLoaded() {
 
                   data.permiteEditar = false;
                   let authenticate = authenticatedUser();
-                  if (authenticate != null) {
+                  console.log(authenticate);
+                  if (authenticate != null && authenticate.id > 0) {
                     data.permiteEditar = true;
                   }
-
                   let language = getLanguage();
                   if (language == null || language.length == 0) {
                     language = "es";
@@ -536,9 +541,10 @@ function onceMapIsLoaded() {
                   }
                   data.permiteEditar = false;
                   let authenticate = authenticatedUser();
-                  if (authenticate != null) {
+                  console.log(authenticate);
+                  if (authenticate != null && authenticate.id > 0) {
                     data.permiteEditar = true;
-                  }
+                  }                 
 
                   let language = getLanguage();
                   if (language == null || language.length == 0) {
@@ -616,6 +622,7 @@ function onceMapIsLoaded() {
             }
           });
 
+          let layerMap=null;
           if ($points.features.length > CONSTANTES.MAXIMO_PUNTO_CLUSTER) {
             let contador = 0;
             $geoJsonLayer = L.geoJson($points, {
@@ -636,11 +643,13 @@ function onceMapIsLoaded() {
 
             markers.addLayer($geoJsonLayer);
             map.addLayer(markers);
+            layerMap= markers;
           } else {
             $geoJsonLayer.addTo(map);
+            layerMap=$geoJsonLayer;
           }
 
-          $cacheLayer($id, $geoJsonLayer);
+          $cacheLayer($id, layerMap);
           hideLoading();
         } catch (error) {
           console.log(error);
