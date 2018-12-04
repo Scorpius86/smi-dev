@@ -28,9 +28,9 @@ Vue.component("vue-seccion-component", {
                             <li v-for="child in seccion.children" class="bg-light">
                                 <a class="d-block" href="#">
                                     <div class="d-inline-flex align-items-center">
-                                        <template v-if="seccion.logo != null">
+                                        <template v-if="child.logo != null">
                                             <i class="mr-2 fas">
-                                                <img v-bind:src="seccion.logo" alt="" width="24px">
+                                                <img v-bind:src="child.logo" alt="" width="24px">
                                             </i>
                                         </template>                        
                                         <template v-else>

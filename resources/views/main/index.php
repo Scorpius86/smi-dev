@@ -83,10 +83,10 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('es')">
-                                    <img src="img/app/spain-flag-icon-128.png" width="24" /> {{ $t("label.main_language_spanish") }}
+                                    {{ $t("label.main_language_spanish") }}
                                 </a>
                                 <a class="dropdown-item border-right px-3 nav-link" href="#" @click="onChangeLanguage('en')">
-                                    <img src="img/app/usa-flag-icon-128.png" width="28" /> {{ $t("label.main_language_english") }}
+                                    {{ $t("label.main_language_english") }}
                                 </a>                                
                             </div>
                         </div>

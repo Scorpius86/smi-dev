@@ -1,9 +1,9 @@
 const messages = {
   es: {
     label: {
-      main_language: "Idioma",
-      main_language_spanish: "Español",
-      main_language_english: "Inglés",
+      main_language: "IDIOMA",
+      main_language_spanish: "ESPAÑOL",
+      main_language_english: "INGLES",
       organization: "Peru Cacao",
       main_title: "PORTAL DE INVERSIONES",
       login_title: "Ingresar al Sistema",
@@ -28,9 +28,9 @@ const messages = {
   },
   en: {
     label: {
-      main_language: "Language",
-      main_language_spanish: "Spanish",
-      main_language_english: "English",
+      main_language: "LANGUAGE",
+      main_language_spanish: "SPANISH",
+      main_language_english: "ENGLISH",
       organization: "Peru Cacao",
       main_title: "INVESTMENT PORTAL",
       login_title: "Login Access",

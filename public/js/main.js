@@ -444,8 +444,22 @@ function onceMapIsLoaded() {
 
           layer.on({
             click: function(e) {
-              const $detalleCodigoGIS = feature.properties["ID_SEC"];
+              console.log(e);
+              console.log(feature);
+
+              let $detalleCodigoGIS = feature.properties["ID_SEC"];
+              if ($detalleCodigoGIS == undefined) {
+                $detalleCodigoGIS = feature.properties["ID__SEC"];
+              }
+
               const $idCultivo = 0;
+
+              if ($detalleCodigoGIS == undefined) {
+                smiMensaje.$refs.message.mensaje.text =
+                  "No se puede leer el atributo ID_SEC, ID__SEC del archivo geojson.";
+                smiMensaje.$refs.message.onMostrarMensaje();
+                return;
+              }
 
               const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
 
