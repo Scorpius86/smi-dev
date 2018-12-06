@@ -73,9 +73,26 @@
                 <!-- <span class="font-weight-light custom-text-title text-capitalize">PORTAL DE INVERSIONES</span> -->
                 <span class="font-weight-light custom-text-title text-capitalize"> {{ $t("label.main_title") }} </span>
 
+                
             </div>
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
+                    <div class="nav-item">
+                        <a class="border-right pr-3 nav-link d-inline-flex" href="#">
+                            <span class="mt-1 font-weight-light">Selección</span>
+                        </a>                        
+                    </div>
+                    <div class="nav-item">
+                        <input id="simple" type="checkbox" name="options" @change="onChangeSelection($event)"> Múltiple
+                    </div>
+                    <div class="nav-item">
+                        <a class="border-right px-3 nav-link">
+                        </a>                       
+                    </div>
+                    <div class="nav-item">
+                        <a class="border-right px-3 nav-link">
+                        </a>                       
+                    </div>                    
                     <div class="nav-item">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -219,6 +236,7 @@
     <script src="js/app/app.js"></script>
 
     <script src="js/main.js"></script>
+    <script src="js/map-features.js"></script>
 
     <script src="js/pages/ui/message.vue.js"></script>
     <script src="js/pages/seccion/seccion.component.vue.js"></script>
@@ -252,6 +270,10 @@
     <script id="panel-popupcontent-template" type="text/x-handlebars-template">
         
         {{#with detalle as |panelDetalle|}}
+
+        {{#if multipleSelection}}
+        <b>Seleccion multiple</b>
+        {{/if}}
 
         <ul class="nav nav-pills mb-3" role="tablist">
 
@@ -459,6 +481,7 @@
             },
             methods: {
                 onChangeLanguage: function(language){
+                    console.log('aqui');
                     i18n.locale= language;
                     setLanguage(language);
                     smiSeccion.$refs.param.language = language;
@@ -468,6 +491,17 @@
                     this.selectedLanguage= messages.es.label.main_language_spanish;
                     if(language=='en'){
                         this.selectedLanguage= messages.en.label.main_language_english;
+                    }
+                },
+                onChangeSelection: function(event){
+                    if(mapFeature){
+                        mapFeature.multipleSelection = false;
+                        if(event.target.checked){
+                            mapFeature.multipleSelection = true;
+                        }else{
+                            console.log(event);
+                            mapFeature.removeAllSelection();
+                        }
                     }
                 }
             },
