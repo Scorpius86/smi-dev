@@ -412,7 +412,7 @@ function onceMapIsLoaded() {
 
     const $afterLoadPuntos = function($seccion, $cacheLayer) {
       mapFeature.styleColorDefault = $styleColor($seccion);
-      console.log(mapFeature);
+
       const $idSeccion = $seccion.seccion.id;
       const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
@@ -435,174 +435,6 @@ function onceMapIsLoaded() {
             }
             //dblclick : selectFeature
           });
-
-          // layer.on({
-          //   click: function(e) {
-          //     if (model.multipleSelection) {
-          //       console.log(e);
-          //       return;
-          //     }
-
-          //     let $detalleCodigoGIS = feature.properties["ID_SEC"];
-          //     if ($detalleCodigoGIS == undefined) {
-          //       $detalleCodigoGIS = feature.properties["ID__SEC"];
-          //     }
-
-          //     const $idCultivo = 0;
-
-          //     if ($detalleCodigoGIS == undefined) {
-          //       smiMensaje.$refs.message.mensaje.text =
-          //         "No se puede leer el atributo ID_SEC, ID__SEC del archivo geojson.";
-          //       smiMensaje.$refs.message.onMostrarMensaje();
-          //       return;
-          //     }
-
-          //     const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
-
-          //     if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
-          //       loadPanel($idSeccion, $detalleCodigoGIS, $idCultivo, function(
-          //         data
-          //       ) {
-          //         let $titulo = data.nombre || $detalleCodigoGIS;
-
-          //         data.permiteEditar = false;
-          //         let authenticate = authenticatedUser();
-          //         console.log(authenticate);
-          //         if (authenticate != null && authenticate.id > 0) {
-          //           data.permiteEditar = true;
-          //         }
-          //         let language = getLanguage();
-          //         if (language == null || language.length == 0) {
-          //           language = "es";
-          //         }
-
-          //         data.label = messages[language].label;
-          //         const $template = renderHandlebarsTemplate(
-          //           "#panel-popupcontent-template",
-          //           null,
-          //           { detalle: data },
-          //           null,
-          //           true
-          //         );
-
-          //         $("#dialog-panel .dialog-content").html($template);
-
-          //         $("#dialog-panel").dialog({
-          //           autoOpen: false,
-          //           closeText: "",
-          //           title: $titulo,
-          //           position: { my: "right", at: "right", of: window },
-          //           width: 400
-          //         });
-
-          //         if (data.cultivos && data.cultivos.length > 0) {
-          //           data.cultivos.forEach(function(cultivo) {
-          //             if (
-          //               cultivo.proyecciones &&
-          //               cultivo.proyecciones.length > 0
-          //             ) {
-          //               cultivo.proyecciones.forEach(function(x) {
-          //                 const $idElement = "proyeccion-tabs-" + x.id;
-          //                 generarGrafico($idElement, x);
-          //               });
-          //             }
-          //           });
-          //         }
-
-          //         $(".panel-tabs").tabs();
-
-          //         $("#dialog-panel").dialog("open");
-          //       });
-          //     } else {
-          //       loadAtributosSeccionDetalle($id, $detalleCodigoGIS, function(
-          //         data
-          //       ) {
-          //         if (data == undefined || data.length == 0) {
-          //           const propiedades = [];
-          //           propiedades.push({
-          //             id: "1",
-          //             nombre: "Población",
-          //             valor: "1 500 000"
-          //           });
-          //           propiedades.push({
-          //             id: "2",
-          //             nombre: "Ubigeo",
-          //             valor: "130101"
-          //           });
-          //           propiedades.push({
-          //             id: "3",
-          //             nombre: "N° Familias Cacao",
-          //             valor: "54"
-          //           });
-          //           propiedades.push({
-          //             id: "4",
-          //             nombre: "N° hectáreas Prod",
-          //             valor: "92,200"
-          //           });
-          //           propiedades.push({
-          //             id: "5",
-          //             nombre: "Productividad Promedio",
-          //             valor: "9500 toneladas"
-          //           });
-          //           propiedades.push({
-          //             id: "6",
-          //             nombre: "Edad promedio",
-          //             valor: "5 años"
-          //           });
-
-          //           data = propiedades;
-          //         }
-
-          //         data.titulo = $detalleCodigoGIS;
-          //         if (data.detalle != null && data.detalle.nombre != null) {
-          //           data.titulo = data.detalle.nombre;
-          //         }
-          //         data.permiteEditar = false;
-          //         let authenticate = authenticatedUser();
-          //         console.log(authenticate);
-          //         if (authenticate != null && authenticate.id > 0) {
-          //           data.permiteEditar = true;
-          //         }
-
-          //         let language = getLanguage();
-          //         if (language == null || language.length == 0) {
-          //           language = "es";
-          //         }
-
-          //         data.label = messages[language].label;
-
-          //         const $template = renderHandlebarsTemplate(
-          //           "#punto-popupcontent-template",
-          //           null,
-          //           { data: data },
-          //           null,
-          //           true
-          //         );
-
-          //         const $templateAtributos = renderHandlebarsTemplate(
-          //           "#secciones-editar-atributos",
-          //           null,
-          //           { data: data },
-          //           null,
-          //           true
-          //         );
-
-          //         $("#dialog-panel .dialog-content").html($template);
-
-          //         $("#dialog-panel").dialog({
-          //           autoOpen: false,
-          //           closeText: "",
-          //           title: data.titulo,
-          //           position: { my: "right", at: "right", of: window }
-          //         });
-
-          //         $("#dialog-panel").dialog("open");
-
-          //         $("#modal-content-atributos").html($templateAtributos);
-          //       });
-          //     }
-          //   }
-          // });
         };
 
         const divIcon = L.divIcon({
@@ -616,8 +448,6 @@ function onceMapIsLoaded() {
           const $myCustomColour = $seccion.seccion.color;
 
           const icon = getIconMarkerPoint($myCustomColour);
-
-          //let markers = L.markerClusterGroup();
 
           let markers = L.markerClusterGroup({
             maxClusterRadius: 120,
@@ -890,6 +720,10 @@ function guid() {
     s4() +
     s4()
   );
+}
+
+function onSeleccionarPanelFeature(value) {
+  console.log(value);
 }
 
 function agregarAtributo() {

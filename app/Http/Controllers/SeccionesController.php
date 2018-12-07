@@ -23,7 +23,7 @@ class SeccionesController extends Controller
         $baseLogoUrl='/img/seccion/logo/';
         $baseMarkerUrl='/img/seccion/marker/';
 
-        $seccion = Seccion::find($idSeccion);
+        $seccion = Seccion::where([['id','=',$idSeccion]])->with('seccionDetalle')->first();
 
         $dataGeoJson=null;
 
@@ -31,9 +31,6 @@ class SeccionesController extends Controller
             $fileName= $seccion->geoJsonFile;
             $baseSrc='/storage/app/public/json//';
             $file= base_path().$baseSrc.($fileName);
-
-            error_log($file);
-
             $geoFile = @file_get_contents($file);
 
             if ($geoFile != false) {

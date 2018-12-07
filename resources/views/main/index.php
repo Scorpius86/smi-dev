@@ -272,7 +272,14 @@
         {{#with detalle as |panelDetalle|}}
 
         {{#if multipleSelection}}
-        <b>Seleccion multiple</b>
+        <b>Seleccion</b>
+        <select name="ddlPanelFeature" id="ddlPanelFeature" onChange="onSeleccionarPanelFeature(this.value)">
+            {{#each selectedFeatures}}
+            <option value="{{key}}">{{nombre}}</option>
+            {{/each}}            
+        </select>
+        <br>            
+
         {{/if}}
 
         <ul class="nav nav-pills mb-3" role="tablist">
@@ -280,7 +287,7 @@
             {{#each cultivos}}
 
             <li class="nav-item">
-                <a class="nav-link" id="cultivo-{{id}}-tab" data-toggle="pill" href="#cultivo-{{id}}" role="tab" aria-controls="cultivo-{{id}}" aria-selected="true">
+                <a class="nav-link active" id="cultivo-{{id}}-tab" data-toggle="pill" href="#cultivo-{{id}}" role="tab" aria-controls="cultivo-{{id}}" aria-selected="true">
                     {{nombre}}
                 </a>
             </li>
@@ -289,7 +296,7 @@
         </ul>
         <div class="tab-content">
             {{#each cultivos}}            
-            <div class="tab-pane fade show" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
+            <div class="tab-pane fade show active" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
                 <div>
                     <span style="font-weight:bold;">{{panelDetalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{tasa}}
                     <span style="font-weight:bold;">{{panelDetalle.label.panel_label_price}}:</span>{{precio}}

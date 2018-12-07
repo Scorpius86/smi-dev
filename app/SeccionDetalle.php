@@ -9,11 +9,11 @@ class SeccionDetalle extends Model
 {
     protected $table="seccion_detalle";
     protected $primaryKey="id";
-    protected $fillable=array('codigoGIS','codigo','descripcion'.'abreviatura','nombre','activo','ubigeo',
+    protected $fillable=array('codigoGIS','codigo','descripcion'.'abreviatura','nombre','activo','ubigeo','idSeccion',
     'geoJsonData',
     'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');
 
     public function seccion(){
-        $this->belongTo('Seccion');
+        return $this->belongTo('smi/Seccion','idSeccion');
     }
 }

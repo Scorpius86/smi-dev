@@ -15,11 +15,11 @@ class Seccion extends Model
     'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');
 
     public function seccionPadre(){
-        $this->belongTo('Seccion');
+        return $this->belongTo('Seccion');
     }
 
     public function seccionDetalle(){
-        $this->hasMany('SeccionDetalle');
+        return $this->hasMany(SeccionDetalle::class, 'idSeccion');
     }
 
     public function setDetalleAttribute($value)

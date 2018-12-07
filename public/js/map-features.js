@@ -50,6 +50,13 @@ function SMIMapFeature(map) {
     var layer = event.target;
     var feature = event.target.feature;
 
+    let $detalleCodigoGIS = feature.properties["ID_SEC"];
+    if ($detalleCodigoGIS == undefined) {
+      $detalleCodigoGIS = feature.properties["ID__SEC"];
+    }
+
+    console.log(feature);
+
     if (this.multipleSelection) {
       let keyFeature = feature.properties["ID_SEC"];
       if (keyFeature == undefined) {
@@ -65,13 +72,13 @@ function SMIMapFeature(map) {
         // addBounds(layer);
         this.addSelectedLayer(keyFeature, layer);
 
-        me.showInfoMultiple(feature, $seccion);
+        me.showInfoMultiple($detalleCodigoGIS, $seccion);
       }
       //   map.fitBounds(arrayBounds);
       //   detailsselected.update(featuresSelected);
     } else {
       //Marcar como seleccionado
-      me.showInfo(feature, $seccion);
+      me.showInfo($detalleCodigoGIS, $seccion);
     }
 
     console.log(this.selectedLayers);
@@ -105,6 +112,27 @@ function SMIMapFeature(map) {
     });
     layer.setStyle(this.styleLayer.default());
   };
+
+  function loadSeccionDetalle($idSeccion, $afterLoadSeccionDetalle) {
+    const $url = UrlAPI.base + "/secciones/" + $idSeccion;
+    showLoading();
+    $.ajax({
+      url: $url,
+      type: "GET",
+      dataType: "json",
+      success: function($response) {
+        if (typeof ($response !== "undefined") && $response !== null) {
+          if ($response.status) {
+            $afterLoadSeccionDetalle($response.data);
+          }
+        }
+      },
+      error: function(xhr, status) {},
+      complete: function(xhr, status) {
+        hideLoading();
+      }
+    });
+  }
 
   function loadAtributosSeccionDetalle(
     $idSeccion,
@@ -206,15 +234,10 @@ function SMIMapFeature(map) {
     return propiedades;
   }
 
-  this.showInfo = function(feature, $seccion) {
-    console.log(feature);
+  this.showInfo = function($detalleCodigoGIS, $seccion) {
     const $idSeccion = $seccion.seccion.id;
     const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
-    let $detalleCodigoGIS = feature.properties["ID_SEC"];
-    if ($detalleCodigoGIS == undefined) {
-      $detalleCodigoGIS = feature.properties["ID__SEC"];
-    }
     const $idCultivo = 0;
     if ($detalleCodigoGIS == undefined) {
       smiMensaje.$refs.message.mensaje.text =
@@ -236,7 +259,28 @@ function SMIMapFeature(map) {
           language = "es";
         }
         data.label = messages[language].label;
-        data.multipleSelection = mapFeature.multipleSelection;
+        data.multipleSelection = false;
+
+        let selectedElements = [];
+        me.selectedLayers.forEach(l => {
+          let filtro = $seccion.seccion.seccion_detalle.filter(x => {
+            return x.codigoGIS == l.key;
+          });
+
+          if (filtro.length > 0) {
+            selectedElements.push({
+              key: filtro[0].codigoGIS,
+              nombre: filtro[0].nombre
+            });
+          }
+        });
+
+        data.selectedFeatures = [];
+        if (selectedElements.length > 1) {
+          data.selectedFeatures = selectedElements;
+          data.multipleSelection = true;
+        }
+
         const $template = renderHandlebarsTemplate(
           "#panel-popupcontent-template",
           null,
@@ -312,8 +356,8 @@ function SMIMapFeature(map) {
     }
   };
 
-  this.showInfoMultiple = function(feature, $seccion) {
-    this.showInfo(feature, $seccion);
+  this.showInfoMultiple = function($detalleCodigoGIS, $seccion) {
+    this.showInfo($detalleCodigoGIS, $seccion);
     console.log(this.selectedLayers);
   };
 }
