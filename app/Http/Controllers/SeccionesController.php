@@ -185,22 +185,23 @@ class SeccionesController extends Controller
         return $data;
     }
 
-    public function getSeccionDetalleInformacionPanel($id, $codigoGIS, $idCultivo){
-        //$path = storage_path() . "/json/${filename}.json";
+    public function getSeccionDetalleInformacionPanel($id, Request $request){
+        $listCodigoGIS=$request->input('listCodigoGIS');
+
         $path=base_path() . '/storage/app/public/json/data-panel.json';
 
-        error_log($codigoGIS);
-
         $jsonData = json_decode(file_get_contents($path), true);
+        
+        if( count($listCodigoGIS)>0){
+            $forecast=Forecast::where([['eliminado','=','0'] ]);
 
-        if($codigoGIS != null){
-            $forecast=Forecast::where([['codigoGIS','=',$codigoGIS]])->with('cultivos.proyecciones.detalle')->first();
-
-            error_log($forecast);
-            
-            foreach ($forecast->cultivos as $cultivo) {
-                error_log($cultivo);
+            foreach ($listCodigoGIS as $codigoGIS) {
+                error_log($codigoGIS);            
             }
+
+            $forecast=$forecast -> whereIn('codigoGIS',$listCodigoGIS);
+
+            $forecast=$forecast -> with('cultivos.proyecciones.detalle')->first();
 
             $jsonData=$forecast;
 

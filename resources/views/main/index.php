@@ -22,6 +22,7 @@
 
     <link href="css/floating-labels.css" rel="stylesheet">
     <link href="css/sidebar.css" rel="stylesheet">
+    <link href="css/sidebar-right.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <title>Peru Cacao</title>
 
@@ -161,6 +162,11 @@
                     </div>
                 </div>
             </main>
+            <nav id="nav-panel" class="sidebar-right-wrapper" style="display:none;">
+                <div id="vue-panel" class="sidebar-right-content">
+                   <vue-panel-edicion ref="param"></vue-panel-edicion>
+                </div>
+            </nav>
         </div>
     </div>
 
@@ -240,6 +246,7 @@
 
     <script src="js/pages/ui/message.vue.js"></script>
     <script src="js/pages/seccion/seccion.component.vue.js"></script>
+    <script src="js/pages/panel/panel-edicion.vue.js"></script>
     
     <script id="punto-popupcontent-template" type="text/x-handlebars-template">
        {{#with data as |panelData|}}
@@ -517,6 +524,7 @@
 
         var smiSeccion=new Vue({ el: '#menu-sidebar' });
         var smiMensaje=new Vue({ el: '#vue-modal' });
+        var smiPanel=new Vue({ el: '#vue-panel' });
     </script>
 
 </body>

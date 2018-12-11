@@ -17,6 +17,8 @@ jQuery(function($) {
   $(".logout-button").off("click");
   $(".logout-button").on("click", onLogoutButtonClick);
 
+  $("#nav-panel").hide(); //ocultar panel derecha
+
   if (!validateAuthentication()) {
     clearCredentials();
     window.location = URL.AUTH_VALIDATE;
