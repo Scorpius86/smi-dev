@@ -46,7 +46,6 @@ function SMIMapFeature(map) {
     // }
   };
   this.selectLayer = function(event, $seccion, $cacheLayer) {
-
     console.log($seccion);
     const me = this;
     var layer = event.target;
@@ -59,10 +58,9 @@ function SMIMapFeature(map) {
     let keyFeature = feature.properties["ID_SEC"];
     if (keyFeature == undefined) {
       keyFeature = feature.properties["ID__SEC"];
-    }    
+    }
 
-    if (this.multipleSelection && $seccion.seccion.idTipoGeoData != '1' ) {
-
+    if (this.multipleSelection && $seccion.seccion.idTipoGeoData != "1") {
       if (this.checkSelectedLayers(keyFeature)) {
         // removerlayers(feature, setStyleLayer, layer, stylelayer.default);
         // removeBounds(layer);
@@ -83,8 +81,6 @@ function SMIMapFeature(map) {
       //this.addSelectedLayer(keyFeature, layer);
       me.showInfo($detalleCodigoGIS, $seccion);
     }
-
-
   };
 
   this.checkSelectedLayers = function(key) {
@@ -166,23 +162,19 @@ function SMIMapFeature(map) {
     });
   }
 
-  this.loadPanel= function(
+  this.loadPanel = function(
     $idSeccion,
     $listCodigoGIS,
     $idCultivo,
     $afterLoadPanel
   ) {
-    const $url =
-      UrlAPI.base +
-      "/secciones/" +
-      $idSeccion +
-      "/detalle/panel/";
+    const $url = UrlAPI.base + "/secciones/" + $idSeccion + "/detalle/panel/";
 
     showLoading();
-
-    let paramPanel={};
-    paramPanel.idSeccion=$idSeccion;
-    paramPanel.listCodigoGIS=$listCodigoGIS;
+    s;
+    let paramPanel = {};
+    paramPanel.idSeccion = $idSeccion;
+    paramPanel.listCodigoGIS = $listCodigoGIS;
 
     $.ajax({
       url: $url,
@@ -201,7 +193,7 @@ function SMIMapFeature(map) {
         hideLoading();
       }
     });
-  }
+  };
 
   function loadDefaultProperties() {
     var propiedades = [];
@@ -252,28 +244,22 @@ function SMIMapFeature(map) {
     }
     const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
     if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
-
-      let paramLista=[];
+      let paramLista = [];
       paramLista.push($detalleCodigoGIS);
 
-      this.loadPanel($idSeccion, paramLista, $idCultivo, function(data) {        
-
+      this.loadPanel($idSeccion, paramLista, $idCultivo, function(data) {
         $("#nav-panel").show();
 
-        smiPanel.$refs.param.input={};
-        smiPanel.$refs.param.input.seccion= $seccion.seccion;
+        smiPanel.$refs.param.input = {};
+        smiPanel.$refs.param.input.seccion = $seccion.seccion;
         smiPanel.$refs.param.tipo = "grafico";
         smiPanel.$refs.param.detalle = data;
         smiPanel.$refs.param.show();
-
       });
     } else {
       loadAtributosSeccionDetalle($idSeccion, $detalleCodigoGIS, function(
         data
       ) {
-
-        
-
         if (data == undefined || data.length == 0) {
           const propiedades = loadDefaultProperties();
           data = propiedades;
@@ -308,12 +294,11 @@ function SMIMapFeature(map) {
         );
 
         console.log(data);
-        
+
         $("#nav-panel").show();
         smiPanel.$refs.param.tipo = "edicion";
         smiPanel.$refs.param.detalle = data;
         smiPanel.$refs.param.show();
-
 
         // $("#dialog-panel .dialog-content").html($template);
         // $("#dialog-panel").dialog({
