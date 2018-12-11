@@ -185,7 +185,7 @@ class SeccionesController extends Controller
         return $data;
     }
 
-    public function getSeccionDetalleInformacionPanel($id, Request $request){
+    public function getSeccionDetalleInformacionPanel(Request $request){
         $listCodigoGIS=$request->input('listCodigoGIS');
 
         $path=base_path() . '/storage/app/public/json/data-panel.json';
@@ -194,10 +194,6 @@ class SeccionesController extends Controller
         
         if( count($listCodigoGIS)>0){
             $forecast=Forecast::where([['eliminado','=','0'] ]);
-
-            foreach ($listCodigoGIS as $codigoGIS) {
-                error_log($codigoGIS);            
-            }
 
             $forecast=$forecast -> whereIn('codigoGIS',$listCodigoGIS);
 

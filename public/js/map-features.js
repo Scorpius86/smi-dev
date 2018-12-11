@@ -168,10 +168,9 @@ function SMIMapFeature(map) {
     $idCultivo,
     $afterLoadPanel
   ) {
-    const $url = UrlAPI.base + "/secciones/" + $idSeccion + "/detalle/panel/";
+    const $url = UrlAPI.base + "/secciones/detalle/panel/";
 
     showLoading();
-    s;
     let paramPanel = {};
     paramPanel.idSeccion = $idSeccion;
     paramPanel.listCodigoGIS = $listCodigoGIS;

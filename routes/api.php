@@ -33,7 +33,7 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/secciones/{id}/detalle/{codigoGIS}/atributos','AtributosController@getSeccionDetalleAtributoByIdSeccion');
     // Route::get('/secciones/{id}/detalle/panel','SeccionesController@getSeccionDetalleInformacionPanel');
 
-    Route::post('/secciones/{id}/detalle/panel','SeccionesController@getSeccionDetalleInformacionPanel');
+    Route::post('/secciones/detalle/panel','SeccionesController@getSeccionDetalleInformacionPanel');
 
     Route::get('/secciones/{id}/atributos/','SeccionesController@getSeccionAtributoByIdSeccion');
     Route::post('/secciones','SeccionesController@save');
