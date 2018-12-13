@@ -46,7 +46,6 @@ function SMIMapFeature(map) {
     // }
   };
   this.selectLayer = function(event, $seccion, $cacheLayer) {
-    console.log($seccion);
     const me = this;
     var layer = event.target;
     var feature = event.target.feature;
@@ -77,7 +76,7 @@ function SMIMapFeature(map) {
       //   detailsselected.update(featuresSelected);
     } else {
       //Marcar como seleccionado
-      //this.removeAllSelection();
+      this.removeAllSelection();
       //this.addSelectedLayer(keyFeature, layer);
       me.showInfo($detalleCodigoGIS, $seccion);
     }
@@ -96,7 +95,7 @@ function SMIMapFeature(map) {
 
   this.removeAllSelection = function() {
     this.selectedLayers.forEach(x => {
-      x.layer.setStyle(me.styleLayer.default);
+      x.layer.setStyle(me.styleLayer.default());
     });
     _.remove(this.selectedLayers, function(x) {
       return x.key != null;

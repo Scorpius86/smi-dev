@@ -415,6 +415,9 @@ function onceMapIsLoaded() {
     const $afterLoadPuntos = function($seccion, $cacheLayer) {
       mapFeature.styleColorDefault = $styleColor($seccion);
 
+      $("#multiple").prop("disabled", false);
+      $("#multiple").prop("checked", false);
+
       const $idSeccion = $seccion.seccion.id;
       const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 

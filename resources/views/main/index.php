@@ -78,23 +78,23 @@
             </div>
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
+                    
+                    <div class="nav-item">
+                        <a class="border-right px-3 nav-link">
+                        </a>                       
+                    </div>
+
                     <div class="nav-item">
                         <a class="border-right pr-3 nav-link d-inline-flex" href="#">
-                            <span class="mt-1 font-weight-light">Selección</span>
-                        </a>                        
+                            <span class="mr-2 fa-stack fa-1x">
+                                <i class="fas fa-square fa-stack-2x"></i>
+                                <i class="fas fa-user-circle fa-stack-1x fa-inverse"></i>                                
+                            </span>                            
+                            <span id="username" class="mt-1 font-weight-light"></span>
+                        </a>
                     </div>
-                    <div class="nav-item">
-                        <input id="simple" type="checkbox" name="options" @change="onChangeSelection($event)"> Múltiple
-                    </div>
-                    <div class="nav-item">
-                        <a class="border-right px-3 nav-link">
-                        </a>                       
-                    </div>
-                    <div class="nav-item">
-                        <a class="border-right px-3 nav-link">
-                        </a>                       
-                    </div>                    
-                    <div class="nav-item">
+                    
+                    <div class="nav-item p-1">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ selectedLanguage }}
@@ -109,37 +109,29 @@
                             </div>
                         </div>
                     </div>                  
+                    
+                    <div class="nav-item p-2">
+                        <a class="border-right px-3 nav-link">
+                            <div class="custom-control custom-checkbox mr-sm-2">
+                                <input type="checkbox" disabled class="custom-control-input" id="multiple" @change="onChangeSelection($event)">
+                                <label class="custom-control-label" for="multiple">{{ $t("label.main_selection_multiple")}}</label>
+                            </div>
+                        </a>                        
+                    </div>
                     <div class="nav-item">
-                        <a class="border-right pr-3 nav-link d-inline-flex" href="#">
-                            <span class="mr-2 fa-stack fa-1x">
-                                <i class="fas fa-square fa-stack-2x"></i>
-                                <i class="fas fa-user-circle fa-stack-1x fa-inverse"></i>                                
-                            </span>                            
-                            <span id="username" class="mt-1 font-weight-light"></span>
+                        <a class="border-right px-3 nav-link closePanel-button" href="#">
+                            <i class="fas fa-2x fa-calendar"></i>
                         </a>
                     </div>
                     <div class="nav-item">
-                        <a class="border-right px-3 nav-link logout-button">
+                        <a class="border-right px-3 nav-link logout-button" href="#">
                             <i class="fas fa-2x fa-sign-out-alt"></i>
                         </a>
                     </div>
                 </div>
-                <!-- <div class="d-flex justify-content-between">
-                    <div class="nav-item active">
-                        <a class="nav-link" href="#">Portal de Inversiones
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </div>
-                </div> -->
+             
             </div>
             
-            <!-- <form class="form-inline mt-2 mt-md-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form> -->
         </div>
     </nav>
 
@@ -247,135 +239,7 @@
     <script src="js/pages/ui/message.vue.js"></script>
     <script src="js/pages/seccion/seccion.component.vue.js"></script>
     <script src="js/pages/panel/panel-edicion.vue.js"></script>
-    
-    <script id="punto-popupcontent-template" type="text/x-handlebars-template">
-       {{#with data as |panelData|}}
-        <table class="table table-sm">
-            {{#with detalle}}
-            <tr>
-                <th>{{panelData.label.panel_label_name}}</th>
-                <td>{{nombre}}{{abreviatura}}</td>
-            </tr>
-            {{/with}}
-            {{#each atributos as |item|}}
-            <tr>
-                <td>{{item.nombre}}</td>
-                <td>{{item.valor}}</td>
-            </tr>
-            {{/each}}
-
-        </table>
-        {{#if permiteEditar}}
-        <div>            
-            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
-                data-whatever="@mdo">{{panelData.label.button_edit}}
-            </button>
-        </div>
-        {{/if}}
-        {{/with}}
-    </script>
-    <script id="panel-popupcontent-template" type="text/x-handlebars-template">
         
-        {{#with detalle as |panelDetalle|}}
-
-        {{#if multipleSelection}}
-        <b>Seleccion</b>
-        <select name="ddlPanelFeature" id="ddlPanelFeature" onChange="onSeleccionarPanelFeature(this.value)">
-            {{#each selectedFeatures}}
-            <option value="{{key}}">{{nombre}}</option>
-            {{/each}}            
-        </select>
-        <br>            
-
-        {{/if}}
-
-        <ul class="nav nav-pills mb-3" role="tablist">
-
-            {{#each cultivos}}
-
-            <li class="nav-item">
-                <a class="nav-link active" id="cultivo-{{id}}-tab" data-toggle="pill" href="#cultivo-{{id}}" role="tab" aria-controls="cultivo-{{id}}" aria-selected="true">
-                    {{nombre}}
-                </a>
-            </li>
-          
-            {{/each}}
-        </ul>
-        <div class="tab-content">
-            {{#each cultivos}}            
-            <div class="tab-pane fade show active" id="cultivo-{{id}}" role="tabpanel" aria-labelledby="cultivo-{{id}}-tab">
-                <div>
-                    <span style="font-weight:bold;">{{panelDetalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{tasa}}
-                    <span style="font-weight:bold;">{{panelDetalle.label.panel_label_price}}:</span>{{precio}}
-                </div>
-                <div class="panel-tabs">
-                    <ul>
-                        {{#each proyecciones}}
-                            <li><a href="#proyeccion-tabs-{{id}}">{{variable}}</a></li>
-                        {{/each}}                        
-                    </ul>
-
-                    {{#each proyecciones}}
-                    <div id="proyeccion-tabs-{{id}}">                        
-                        <div style="height:300px;">
-                            <canvas class="chart" width="350" height="200"></canvas>
-                        </div>  
-                    </div>
-                    {{/each}}
-                </div>            
-            </div>
-           
-            {{/each}}
-        </div>
-
-        {{/with}}
-    </script>
-
-    <script id="secciones-template" type="text/x-handlebars-template">
-        <ul class="bg-light">
-            {{#each secciones}}
-            <li class="sidebar-dropdown">
-                <a href="#" class="border-2 border-left border-menu-item d-block">
-                    <div class="d-inline-flex align-items-center pl-2 bg-white">
-                        {{#if logo}}
-                            <i class="mr-2 fas fa-2x">
-                                <img src="{{logo}}" alt="" width="24px">
-                            </i>
-                        {{else}}
-                            <i class="mr-2 fas fa-2x fa-map-marker-alt"></i>
-                        {{/if}}                        
-                        <span>{{nombre}}</span>
-                    </div>
-                </a>
-                {{#if hasChildren}}
-                <div class="sidebar-submenu">
-                    <ul class="py-0">
-                        {{#each children}}
-                        <li class="bg-light">
-                            <a class="d-block" href="#">
-                                <div class="d-inline-flex align-items-center">
-                                    {{#if logo}}
-                                        <i class="mr-2 fas">
-                                            <img src="{{logo}}" alt="" width="24px">
-                                        </i>
-                                    {{else}}
-                                        <i class="mr-2 fas fa-map-marker-alt"></i>
-                                    {{/if}}
-                                    <!-- custom-control-input-->
-                                    <input type="checkbox" class="d-none menu-item" data-value="{{json this}}" data-parent="{{json ../this}}" id="{{id}}">
-                                    <label class="mb-0" for="{{id}}">{{nombre}}</label>
-                                </div>
-                            </a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                {{/if}}
-            </li>
-            {{/each}}
-            
-        </ul>
-    </script>
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
         {{#with data as |panelData|}}
@@ -513,8 +377,9 @@
                         if(event.target.checked){
                             mapFeature.multipleSelection = true;
                         }else{
-                            console.log(event);
                             mapFeature.removeAllSelection();
+                            smiPanel.$refs.param.hide();
+                            smiPanel.$refs.param.detalle={};
                         }
                     }
                 }
