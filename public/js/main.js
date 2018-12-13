@@ -14,20 +14,26 @@ model.multipleSelection = true;
 model.selectedLayers = [];
 
 jQuery(function($) {
-  $(".logout-button").off("click");
-  $(".logout-button").on("click", onLogoutButtonClick);
+  showLoading();
 
-  $("#nav-panel").hide(); //ocultar panel derecha
+  setTimeout(function() {
+    $(".logout-button").off("click");
+    $(".logout-button").on("click", onLogoutButtonClick);
 
-  if (!validateAuthentication()) {
-    clearCredentials();
-    window.location = URL.AUTH_VALIDATE;
-    return;
-  }
+    $("#nav-panel").hide(); //ocultar panel derecha
 
-  loadUserInformation();
-  const $afterLoadSecciones = settings;
-  loadSecciones($afterLoadSecciones);
+    if (!validateAuthentication()) {
+      clearCredentials();
+      window.location = URL.AUTH_VALIDATE;
+      return;
+    }
+
+    loadUserInformation();
+    const $afterLoadSecciones = settings;
+    loadSecciones($afterLoadSecciones);
+
+    hideLoading();
+  }, 500);
 });
 
 function onLogoutButtonClick() {

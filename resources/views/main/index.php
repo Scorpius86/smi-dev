@@ -30,10 +30,6 @@
 
 <body >
 
-    <div id="vue-modal">
-        <vue-mensaje-modal ref="message"></vue-mensaje-modal>
-    </div>
-    
     <div id='loading' class="modal bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -45,6 +41,10 @@
         </div>
     </div>
 
+    <div id="vue-modal">
+        <vue-mensaje-modal ref="message"></vue-mensaje-modal>
+    </div>
+    
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div id="modal-content-atributos" class="modal-content">
@@ -334,6 +334,8 @@
         //Vue.use(VueRouter);
         //Vue.use(VeeValidate);
 
+        
+
         // Create VueI18n instance with options
         const i18n = new VueI18n({
             locale: getLanguage(), // set locale
@@ -356,6 +358,7 @@
                 if(language=='en'){
                     this.selectedLanguage= messages.en.label.main_language_english;
                 }
+
             },
             methods: {
                 onChangeLanguage: function(language){
