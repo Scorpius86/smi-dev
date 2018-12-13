@@ -74,14 +74,14 @@ Vue.component("vue-panel-edicion", {
                             </tr>
 
                         </table>
-                        <template v-if="detalle.permiteEditar">
-                            <div>            
-                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
-                                    data-whatever="@mdo">{{detalle.label.button_edit}}
-                                </button>
-                            </div>
-                        </template>
-                        
+                    </template>
+                    <template v-if="detalle.permiteEditar">
+                        <div>
+                            <br>
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
+                                data-whatever="@mdo">{{detalle.label.button_edit}}
+                            </button>
+                        </div>
                     </template>
                 </div>                
             </template>

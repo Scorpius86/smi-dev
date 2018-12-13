@@ -59,7 +59,11 @@ function SMIMapFeature(map) {
       keyFeature = feature.properties["ID__SEC"];
     }
 
-    if (this.multipleSelection && $seccion.seccion.idTipoGeoData != "1") {
+    if (
+      this.multipleSelection &&
+      $seccion.seccion.idTipoGeoData != "1" &&
+      layer.feature.geometry.type == "Polygon"
+    ) {
       if (this.checkSelectedLayers(keyFeature)) {
         // removerlayers(feature, setStyleLayer, layer, stylelayer.default);
         // removeBounds(layer);
@@ -69,15 +73,17 @@ function SMIMapFeature(map) {
         // addLayers(feature, setStyleLayer, layer, stylelayer.highlight);
         // addBounds(layer);
         this.addSelectedLayer(keyFeature, layer);
-
         me.showInfoMultiple($detalleCodigoGIS, $seccion);
       }
       //   map.fitBounds(arrayBounds);
       //   detailsselected.update(featuresSelected);
     } else {
       //Marcar como seleccionado
-      this.removeAllSelection();
-      //this.addSelectedLayer(keyFeature, layer);
+      if (layer.feature.geometry.type == "Polygon") {
+        this.removeAllSelection();
+        console.log(layer);
+        this.addSelectedLayer(keyFeature, layer);
+      }
       me.showInfo($detalleCodigoGIS, $seccion);
     }
   };
@@ -248,11 +254,40 @@ function SMIMapFeature(map) {
       this.loadPanel($idSeccion, paramLista, $idCultivo, function(data) {
         $("#nav-panel").show();
 
+        if (data == undefined || data.length == 0) {
+          const propiedades = loadDefaultProperties();
+          data = propiedades;
+        }
+        data.nombre = $detalleCodigoGIS;
+        if (data.detalle != null && data.detalle.nombre != null) {
+          data.nombre = data.detalle.nombre;
+        }
+        data.permiteEditar = false;
+        let authenticate = authenticatedUser();
+        if (authenticate != null && authenticate.id > 0) {
+          data.permiteEditar = true;
+        }
+        let language = getLanguage();
+        if (language == null || language.length == 0) {
+          language = "es";
+        }
+        data.label = messages[language].label;
+
+        const $templateAtributos = renderHandlebarsTemplate(
+          "#secciones-editar-atributos",
+          null,
+          { data: data },
+          null,
+          true
+        );
+
         smiPanel.$refs.param.input = {};
         smiPanel.$refs.param.input.seccion = $seccion.seccion;
         smiPanel.$refs.param.tipo = "grafico";
         smiPanel.$refs.param.detalle = data;
         smiPanel.$refs.param.show();
+
+        $("#modal-content-atributos").html($templateAtributos);
       });
     } else {
       loadAtributosSeccionDetalle($idSeccion, $detalleCodigoGIS, function(
@@ -276,13 +311,7 @@ function SMIMapFeature(map) {
           language = "es";
         }
         data.label = messages[language].label;
-        // const $template = renderHandlebarsTemplate(
-        //   "#punto-popupcontent-template",
-        //   null,
-        //   { data: data },
-        //   null,
-        //   true
-        // );
+
         const $templateAtributos = renderHandlebarsTemplate(
           "#secciones-editar-atributos",
           null,
@@ -291,21 +320,10 @@ function SMIMapFeature(map) {
           true
         );
 
-        console.log(data);
-
         $("#nav-panel").show();
         smiPanel.$refs.param.tipo = "edicion";
         smiPanel.$refs.param.detalle = data;
         smiPanel.$refs.param.show();
-
-        // $("#dialog-panel .dialog-content").html($template);
-        // $("#dialog-panel").dialog({
-        //   autoOpen: false,
-        //   closeText: "",
-        //   title: data.titulo,
-        //   position: { my: "right", at: "right", of: window }
-        // });
-        // $("#dialog-panel").dialog("open");
 
         $("#modal-content-atributos").html($templateAtributos);
       });
