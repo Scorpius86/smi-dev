@@ -236,6 +236,7 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
 }
 
 function generarGrafico($idElement, data) {
+  console.log(data);
   const elements = $("#" + $idElement).find(".chart");
 
   if (elements.length == 0) {

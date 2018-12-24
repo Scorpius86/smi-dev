@@ -73,8 +73,7 @@
                 </a>
                 <!-- <span class="font-weight-light custom-text-title text-capitalize">PORTAL DE INVERSIONES</span> -->
                 <span class="font-weight-light custom-text-title text-capitalize"> {{ $t("label.main_title") }} </span>
-
-                
+                                   
             </div>
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
@@ -209,6 +208,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="js/library/bootstrap-slide/css/bootstrap-slider.css"/> 
+    <script src="js/library/bootstrap-slide/bootstrap-slider.js"></script>
+
 
     <!-- Se agrega la librería VueJS -->
 
@@ -333,8 +335,6 @@
 
         //Vue.use(VueRouter);
         //Vue.use(VeeValidate);
-
-        
 
         // Create VueI18n instance with options
         const i18n = new VueI18n({

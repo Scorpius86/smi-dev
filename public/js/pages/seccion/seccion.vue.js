@@ -157,7 +157,7 @@ var smiSeccion = Vue.component("Seccion", {
                 <form >
                     <legend>{{title}}</legend>
                     <div class="form-group">
-                       <label for="">Nombre</label>                        
+                       <label for="">Nombre</label>
                        <input type="text" v-on:blur="onBuscar()" v-model="filtro.textoBusqueda" class="form-control" required="required">                        
                     </div>
                     <div class="form-group">

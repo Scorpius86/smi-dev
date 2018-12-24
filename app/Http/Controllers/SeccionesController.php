@@ -197,7 +197,7 @@ class SeccionesController extends Controller
 
             $forecast=$forecast -> whereIn('codigoGIS',$listCodigoGIS);
 
-            $forecast=$forecast -> with('cultivos.proyecciones.detalle')->first();
+            $forecast=$forecast -> with('cultivos.tasas.proyecciones.detalle')->first();
 
             $jsonData=$forecast;
 

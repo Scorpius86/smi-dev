@@ -33,24 +33,46 @@ Vue.component("vue-panel-edicion", {
                         <ul class="nav nav-pills mb-3" role="tablist">
 
                             <li v-for="cultivo in detalle.cultivos" class="nav-item">
-                                <a class="nav-link active" v-bind:id="'cultivo-' + cultivo.id + '-tab'" data-toggle="pill" v-on:click="onSeleccionCultivo(cultivo.id)"
+                                <a class="nav-link active" v-bind:id="'cultivo-' + cultivo.id + '-tab'" data-toggle="pill" v-on:click="onSeleccionCultivo(cultivo)"
                                     v-bind:href="'#cultivo-'+ cultivo.id" role="tab" :aria-controls="'cultivo-' + cultivo.id" aria-selected="true">
                                     {{cultivo.nombre}}
                                 </a>
                             </li>
                         
                         </ul>
-                        <div class="tab-content">
-                            <div v-for="cultivo in detalle.cultivos" class="tab-pane fade show active" v-bind:id="'cultivo-' + cultivo.id" role="tabpanel" :aria-labelledby="'cultivo-' + cultivo.id + '-tab'" >
-                                <div>
-                                    <span style="font-weight:bold;">{{detalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{cultivo.tasa}}
-                                    <span style="font-weight:bold;">{{detalle.label.panel_label_price}}:</span>{{cultivo.precio}}
-                                </div>
+                        <div class="tab-content">                            
+
+                            <div v-for="cultivo in detalle.cultivos" class="tab-pane fade show active" v-bind:id="'cultivo-' + cultivo.id" role="tabpanel"  >
+
+                                <form>
+                                
+                                    <div class="form-group">
+                                        <label for="ddlTasa">Tasa</label>
+                                        <select class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(tasa)" v-model="selTasaId">
+                                            <option v-for="tasa in cultivo.tasas" v-bind:value="tasa.id">{{tasa.tasa }}</option>
+                                        </select>
+                                    </div>
+                                    <!--
+                                    <div>
+                                        <span style="font-weight:bold;">{{detalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{cultivo.tasa}}
+                                        <span style="font-weight:bold;">{{detalle.label.panel_label_price}}:</span>{{cultivo.precio}}
+                                    </div>
+                                    -->
+
+                                    <div class="form-group">
+                                        <label for="ddlTasa">
+                                            <span id="sliderAnioLabel">Año: <span id="sliderAnioVal">2018</span></span>
+                                        </label>
+                                        &nbsp;&nbsp;
+                                        <input id="sliderAnio" type="text" data-slider-min="2005" data-slider-max="2025" data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
+                                        
+                                    </div>
+                                </form>
                                 <div class="panel-tabs">
                                     <ul>
-                                        <li v-for="proyeccion in cultivo.proyecciones"><a v-bind:href="'#proyeccion-tabs-' + proyeccion.id">{{proyeccion.variable}}</a></li>
+                                        <li v-for="proyeccion in selTasa.proyecciones"><a v-bind:href="'#proyeccion-tabs-' + proyeccion.id">{{proyeccion.variable}}</a></li>
                                     </ul>
-                                    <div v-for="proyeccion in cultivo.proyecciones" v-bind:id="'proyeccion-tabs-' + proyeccion.id">                        
+                                    <div v-for="proyeccion in selTasa.proyecciones" v-bind:id="'proyeccion-tabs-' + proyeccion.id">
                                         <div style="height:300px;">
                                             <canvas class="chart" width="350" height="200"></canvas>
                                         </div>  
@@ -95,9 +117,12 @@ Vue.component("vue-panel-edicion", {
       input: {},
       detalle: {},
       selFeature: "0",
-      selCultivo: "",
+      selCultivoId: "",
+      selTasa: null,
+      selTasaId: 0,
       multipleSelection: false,
       permiteEditar: false,
+      selRangoAnio:2018,
       tipo: "edicion" //grafico
     };
   },
@@ -140,7 +165,9 @@ Vue.component("vue-panel-edicion", {
         this.detalle.cultivos = [];
         return false;
       }
-      this.selCultivo = this.detalle.cultivos[0].id;
+      console.log(this.detalle);
+
+      this.onSeleccionCultivo(this.detalle.cultivos[0]);
 
       this.detalle.multipleSelection = false;
 
@@ -166,14 +193,30 @@ Vue.component("vue-panel-edicion", {
       }
 
       setTimeout(function() {
-        if (me.detalle.cultivos && me.detalle.cultivos.length > 0) {
-          me.detalle.cultivos.forEach(function(cultivo) {
-            if (cultivo.proyecciones && cultivo.proyecciones.length > 0) {
-              cultivo.proyecciones.forEach(function(x) {
-                const $idElement = "proyeccion-tabs-" + x.id;
-                generarGrafico($idElement, x);
-              });
-            }
+        // if (me.detalle.cultivos && me.detalle.cultivos.length > 0) {
+        //   me.detalle.cultivos.forEach(function(cultivo) {
+        //     if (cultivo.proyecciones && cultivo.proyecciones.length > 0) {
+        //       cultivo.proyecciones.forEach(function(x) {
+        //         const $idElement = "proyeccion-tabs-" + x.id;
+        //         generarGrafico($idElement, x);
+        //       });
+        //     }
+        //   });
+        // }
+
+        $("#sliderAnio").bootstrapSlider();
+        $("#sliderAnio").on("slide", function(slideEvt) {
+          $("#sliderAnioVal").text(slideEvt.value);
+        });
+
+        if (
+          me.selTasa &&
+          me.selTasa.proyecciones &&
+          me.selTasa.proyecciones.length > 0
+        ) {
+          me.selTasa.proyecciones.forEach(function(x) {
+            const $idElement = "proyeccion-tabs-" + x.id;
+            generarGrafico($idElement, x);
           });
         }
 
@@ -183,8 +226,17 @@ Vue.component("vue-panel-edicion", {
         $("#nav-panel").show();
       }, 100);
     },
-    onSeleccionCultivo: function(idCultivo) {
-      this.selCultivo = idCultivo;
+    onSeleccionCultivo: function(cultivo) {
+      this.selCultivoId = cultivo.id;
+      this.selCultivo = cultivo;
+      if (this.selCultivo.tasas != null && this.selCultivo.tasas.length > 0) {
+        this.onSeleccionarTasa(this.selCultivo.tasas[0]);
+      }
+    },
+    onSeleccionarTasa: function(tasa) {
+      this.selTasaId = tasa.id;
+      this.selTasa = tasa;
+
     },
     onSeleccionarPanelFeature: function() {
       const me = this;
@@ -201,8 +253,9 @@ Vue.component("vue-panel-edicion", {
       mapFeature.loadPanel(
         this.input.seccion.id,
         lista,
-        this.selCultivo,
+        this.selCultivoId,
         function(data) {
+          console.log(data);
           me.detalle = data;
           me.show();
         }

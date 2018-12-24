@@ -39,6 +39,9 @@
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" 
                         aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                 </div>
+
+               
+
             </div>
         </div>
     </div>
@@ -70,6 +73,7 @@
                     <img src="img/logos/alianza-cacao-logo.jpg" />
                 </a>
                 <span class="font-weight-light custom-text-title text-capitalize">PORTAL DE INVERSIONES</span>
+
             </div>
             <div class="navbar-nav">
                 <div class="d-flex justify-content-between">
@@ -257,6 +261,8 @@
                 const $redirectUrl = URL.ADMIN_LOGIN;               
                 window.location = $redirectUrl;
             }
+
+           
 
         }
 
