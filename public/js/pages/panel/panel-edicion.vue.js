@@ -48,7 +48,7 @@ Vue.component("vue-panel-edicion", {
                                 
                                     <div class="form-group">
                                         <label for="ddlTasa">Tasa</label>
-                                        <select class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(tasa)" v-model="selTasaId">
+                                        <select class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(cultivo)" v-model="selTasaId">
                                             <option v-for="tasa in cultivo.tasas" v-bind:value="tasa.id">{{tasa.tasa }}</option>
                                         </select>
                                     </div>
@@ -64,7 +64,9 @@ Vue.component("vue-panel-edicion", {
                                             <span id="sliderAnioLabel">Año: <span id="sliderAnioVal">2018</span></span>
                                         </label>
                                         &nbsp;&nbsp;
-                                        <input id="sliderAnio" type="text" data-slider-min="2005" data-slider-max="2025" data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
+                                        <input id="sliderAnio" data-slider-id='sliderAnioKey' type="text" data-slider-min="2005" data-slider-max="2025"
+                                            data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
+
                                         
                                     </div>
                                 </form>
@@ -119,10 +121,11 @@ Vue.component("vue-panel-edicion", {
       selFeature: "0",
       selCultivoId: "",
       selTasa: null,
+      selTasaBase: null,
       selTasaId: 0,
       multipleSelection: false,
       permiteEditar: false,
-      selRangoAnio:2018,
+      selRangoAnio: 2018,
       tipo: "edicion" //grafico
     };
   },
@@ -141,11 +144,6 @@ Vue.component("vue-panel-edicion", {
       this.display = true;
 
       showLoading();
-      $(".panel-tabs").tabs("destroy");
-      $(".closePanel-button").off("click");
-      $(".closePanel-button").on("click", function() {
-        $("#nav-panel").toggle();
-      });
 
       this.title = "";
       this.title = this.detalle.nombre || this.detalle.codigoGIS;
@@ -165,7 +163,6 @@ Vue.component("vue-panel-edicion", {
         this.detalle.cultivos = [];
         return false;
       }
-      console.log(this.detalle);
 
       this.onSeleccionCultivo(this.detalle.cultivos[0]);
 
@@ -191,24 +188,34 @@ Vue.component("vue-panel-edicion", {
         this.detalle.multipleSelection = true;
         this.title = "Región";
       }
+    },
+    onSeleccionCultivo: function(cultivo) {
+      this.selCultivoId = cultivo.id;
+      this.selCultivo = cultivo;
+      if (this.selCultivo.tasas != null && this.selCultivo.tasas.length > 0) {
+        this.selTasaId = this.selCultivo.tasas[0].id;
+        this.onSeleccionarTasa(this.selCultivo);
+      }
+    },
+    onSeleccionarTasa: function(cultivo) {
+      const me = this;
+
+      $(".panel-tabs").tabs("destroy");
+      $(".closePanel-button").off("click");
+      $(".closePanel-button").on("click", function() {
+        $("#nav-panel").toggle();
+      });
+
+      showLoading();
+
+      let tasaFiltro = cultivo.tasas.filter(t => t.id == me.selTasaId);
+
+      if (tasaFiltro.length > 0) {
+        this.selTasa = _.clone(tasaFiltro[0]);
+        this.selTasaBase = _.clone(tasaFiltro[0]);
+      }
 
       setTimeout(function() {
-        // if (me.detalle.cultivos && me.detalle.cultivos.length > 0) {
-        //   me.detalle.cultivos.forEach(function(cultivo) {
-        //     if (cultivo.proyecciones && cultivo.proyecciones.length > 0) {
-        //       cultivo.proyecciones.forEach(function(x) {
-        //         const $idElement = "proyeccion-tabs-" + x.id;
-        //         generarGrafico($idElement, x);
-        //       });
-        //     }
-        //   });
-        // }
-
-        $("#sliderAnio").bootstrapSlider();
-        $("#sliderAnio").on("slide", function(slideEvt) {
-          $("#sliderAnioVal").text(slideEvt.value);
-        });
-
         if (
           me.selTasa &&
           me.selTasa.proyecciones &&
@@ -220,23 +227,25 @@ Vue.component("vue-panel-edicion", {
           });
         }
 
+        $("#sliderAnio").bootstrapSlider();
+        $("#sliderAnio").on("slide", function(slideEvt) {
+          $("#sliderAnioVal").text(slideEvt.value);
+          me.onCambiarAnio(me, slideEvt.value);
+        });
+
         $(".panel-tabs").tabs();
 
         hideLoading();
         $("#nav-panel").show();
-      }, 100);
+      }, 200);
     },
-    onSeleccionCultivo: function(cultivo) {
-      this.selCultivoId = cultivo.id;
-      this.selCultivo = cultivo;
-      if (this.selCultivo.tasas != null && this.selCultivo.tasas.length > 0) {
-        this.onSeleccionarTasa(this.selCultivo.tasas[0]);
-      }
-    },
-    onSeleccionarTasa: function(tasa) {
-      this.selTasaId = tasa.id;
-      this.selTasa = tasa;
+    onCambiarAnio: function(me, anio) {
+      me.selTasa = _.clone(me.selTasaBase);
+      me.selTasaBase.proyecciones.forEach(x => {
+        x.detalle = x.detalle.filter(y => y.dato <= anio);
+      });
 
+      console.log(me.selTasa);
     },
     onSeleccionarPanelFeature: function() {
       const me = this;

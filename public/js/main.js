@@ -117,6 +117,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     map.on("load", $afterMapIsLoaded);
   }
   map.setView([-12.046374, -77.042793], 6);
+
   L.tileLayer(
     "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
     {
@@ -421,6 +422,9 @@ function onceMapIsLoaded() {
 
     const $afterLoadPuntos = function($seccion, $cacheLayer) {
       mapFeature.styleColorDefault = $styleColor($seccion);
+
+      mapFeature.selectedFeature.removeAllArea();
+      mapFeature.selectedFeature.enable();
 
       $("#multiple").prop("disabled", false);
       $("#multiple").prop("checked", false);

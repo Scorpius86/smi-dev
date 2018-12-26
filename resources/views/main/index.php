@@ -191,6 +191,7 @@
     <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
         crossorigin=""></script>
     <script src="js/library/leaflet/leaflet.markercluster.js"></script>
+    <script src="js/library/leaflet/leaflet.SelectAreaFeature.js"></script>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
 
@@ -210,7 +211,6 @@
 
     <link rel="stylesheet" type="text/css" href="js/library/bootstrap-slide/css/bootstrap-slider.css"/> 
     <script src="js/library/bootstrap-slide/bootstrap-slider.js"></script>
-
 
     <!-- Se agrega la librería VueJS -->
 
