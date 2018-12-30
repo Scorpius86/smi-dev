@@ -423,8 +423,8 @@ function onceMapIsLoaded() {
     const $afterLoadPuntos = function($seccion, $cacheLayer) {
       mapFeature.styleColorDefault = $styleColor($seccion);
 
-      mapFeature.selectedFeature.removeAllArea();
-      mapFeature.selectedFeature.enable();
+      //mapFeature.selectedFeature.removeAllArea();
+      //mapFeature.selectedFeature.enable();
 
       $("#multiple").prop("disabled", false);
       $("#multiple").prop("checked", false);

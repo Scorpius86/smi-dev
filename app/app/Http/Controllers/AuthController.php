@@ -10,7 +10,7 @@ use smi\config\enums;
 class AuthController extends Controller
 {
     public function validarAcceso(){
-        $resultado=false;
+        $resultado=false;       
         try{
 
             $codigoParametro='ACTIVAR_AUTENTICACION_PUBLICA'; //Config::get('enums.parametroEmuns.ActivarAutenticacionPublica');

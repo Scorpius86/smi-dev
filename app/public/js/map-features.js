@@ -1,6 +1,6 @@
 function SMIMapFeature(map) {
   const me = this;
-  this.selectedFeature = map.selectAreaFeature.enable();
+  //this.selectedFeature = map.selectAreaFeature.enable();
   this.styleColorDefault = {
     color: "red",
     opacity: 1,
