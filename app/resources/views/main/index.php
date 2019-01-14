@@ -110,14 +110,14 @@
                         </div>
                     </div>                  
                     
-                    <div class="nav-item p-2">
+                    <!-- <div class="nav-item p-2">
                         <a class="border-right px-3 nav-link">
                             <div class="custom-control custom-checkbox mr-sm-2">
                                 <input type="checkbox" disabled class="custom-control-input" id="multiple" @change="onChangeSelection($event)">
                                 <label class="custom-control-label" for="multiple">{{ $t("label.main_selection_multiple")}}</label>
                             </div>
                         </a>                        
-                    </div>
+                    </div> -->
                     <div class="nav-item">
                         <a class="border-right px-3 nav-link closePanel-button" href="#">
                             <i class="fas fa-2x fa-calendar"></i>
@@ -379,9 +379,7 @@
                 },
                 onChangeSelection: function(event){
                     if(mapFeature){
-                        mapFeature.multipleSelection = false;
                         if(event.target.checked){
-                            mapFeature.multipleSelection = true;
                         }else{
                             mapFeature.removeAllSelection();
                             smiPanel.$refs.param.hide();

@@ -27,7 +27,6 @@ function SMIMapFeature(map) {
   };
 
   this.map = map;
-  this.multipleSelection = false;
   this.selectedLayers = [];
 
   this.highlightFeature = function(event, $seccion, $cacheLayer) {
@@ -61,13 +60,14 @@ function SMIMapFeature(map) {
     }
 
     if (
-      this.multipleSelection &&
+      event.originalEvent.ctrlKey &&
       $seccion.seccion.idTipoGeoData != "1" &&
       layer.feature.geometry.type == "Polygon"
     ) {
       if (this.checkSelectedLayers(keyFeature)) {
         // removerlayers(feature, setStyleLayer, layer, stylelayer.default);
         // removeBounds(layer);
+
         this.removeSelectedLayer(keyFeature, layer);
         me.showInfoMultiple($detalleCodigoGIS, $seccion);
       } else {

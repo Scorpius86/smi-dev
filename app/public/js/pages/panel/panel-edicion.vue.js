@@ -22,7 +22,7 @@ Vue.component("vue-panel-edicion", {
                 </div>
                 <div class="content">
                     <template v-if="tipo=='grafico'">
-                        <template v-if="detalle.multipleSelection">
+                        <template v-if="(mapFeature.selectedLayers.length > 1)">
                             <select class="form-control" name="ddlPanelFeature" v-on:change="onSeleccionarPanelFeature()" v-model="selFeature">
                                 <option value="0">Todos</option>
                                 <option v-for="feature in detalle.selectedFeatures" v-bind:value="feature.key">{{feature.nombre}}</option>
@@ -125,11 +125,11 @@ Vue.component("vue-panel-edicion", {
       input: {},
       detalle: {},
       selFeature: "0",
+      mapFeature:{selectedLayers:[]},
       selCultivoId: "",
       selTasa: null,
       selTasaBase: null,
       selTasaId: 0,
-      multipleSelection: false,
       permiteEditar: false,
       selRangoAnio: 2018,
       selRangoTasa: 85,
@@ -154,6 +154,7 @@ Vue.component("vue-panel-edicion", {
 
       this.title = "";
       this.title = this.detalle.nombre || this.detalle.codigoGIS;
+      this.mapFeature = mapFeature;
 
       this.permiteEditar = false;
       let authenticate = authenticatedUser();
@@ -173,8 +174,6 @@ Vue.component("vue-panel-edicion", {
 
       this.onSeleccionCultivo(this.detalle.cultivos[0]);
 
-      this.detalle.multipleSelection = false;
-
       let selectedElements = [];
       mapFeature.selectedLayers.forEach(l => {
         let filtro = this.input.seccion.seccion_detalle.filter(x => {
@@ -192,19 +191,16 @@ Vue.component("vue-panel-edicion", {
       this.detalle.selectedFeatures = [];
       if (selectedElements.length > 1) {
         this.detalle.selectedFeatures = selectedElements;
-        this.detalle.multipleSelection = true;
         this.title = "Región";
       }
     },
     onSeleccionCultivo: function(cultivo) {
       this.selCultivoId = cultivo.id;
       this.selCultivo = cultivo;
-      if (this.selCultivo.tasas != null && this.selCultivo.tasas.length > 0) {
-        this.selTasaId = this.selCultivo.tasas[0].id;
-        this.onSeleccionarTasa(this.selCultivo);
-      }
+      this.renderCultivo(cultivo);
     },
-    onSeleccionarTasa: function(cultivo) {
+
+    renderCultivo: function(cultivo) {
       const me = this;
 
       $(".panel-tabs").tabs("destroy");
@@ -214,25 +210,8 @@ Vue.component("vue-panel-edicion", {
       });
 
       showLoading();
-
-      let tasaFiltro = cultivo.tasas.filter(t => t.id == me.selTasaId);
-
-      if (tasaFiltro.length > 0) {
-        this.selTasa = _.clone(tasaFiltro[0]);
-        this.selTasaBase = _.clone(tasaFiltro[0]);
-      }
-
-      setTimeout(function() {
-        if (
-          me.selTasa &&
-          me.selTasa.proyecciones &&
-          me.selTasa.proyecciones.length > 0
-        ) {
-        //   me.selTasa.proyecciones.forEach(function(x) {
-        //     const $idElement = "proyeccion-tabs-" + x.id;
-        //     generarGrafico($idElement, x);
-        //   });
-        }
+    
+      setTimeout(function() {    
 
         if (me.detalle && me.detalle.cultivos && me.detalle.cultivos.length > 0) {
             me.detalle.cultivos.forEach(function(cultivo) {
@@ -247,6 +226,7 @@ Vue.component("vue-panel-edicion", {
         $("#nav-panel").show();
       }, 200);
     },
+
     onCambiarAnio: function(me, anio) {
       me.selTasa = _.clone(me.selTasaBase);
       me.selTasaBase.proyecciones.forEach(x => {

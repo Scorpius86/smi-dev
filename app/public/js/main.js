@@ -12,7 +12,6 @@ var layers = [];
 var mapFeature = {};
 
 var model = {};
-model.multipleSelection = true;
 model.selectedLayers = [];
 
 jQuery(function($) {
