@@ -19,6 +19,8 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
-    "leaflet-draw": "^1.0.4"
+    "@turf/turf": "^5.1.6",
+    "leaflet-draw": "^1.0.4",
+    "turf-overlaps": "^1.0.3"
   }
 }

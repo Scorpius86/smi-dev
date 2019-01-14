@@ -47,8 +47,14 @@ Vue.component("vue-panel-edicion", {
                                 <form>
                                 
                                     <div class="form-group">
-                                        <label for="ddlTasa">Tasa</label>
-                                        <select class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(cultivo)" v-model="selTasaId">
+                                        <label for="ddlTasa">
+                                            <span id="sliderTasaLabel">Tasa: <span id="sliderTasaVal">85</span>%</span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input id="sliderTasa" data-slider-id='sliderTasaKey' type="text" data-slider-min="0" data-slider-max="150"
+                                            data-slider-step="5" data-slider-value="85" v-model="selRangoTasa" />
+
+                                        <select style="display:none;" class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(cultivo)" v-model="selTasaId">
                                             <option v-for="tasa in cultivo.tasas" v-bind:value="tasa.id">{{tasa.tasa }}</option>
                                         </select>
                                     </div>
@@ -60,10 +66,10 @@ Vue.component("vue-panel-edicion", {
                                     -->
 
                                     <div class="form-group">
-                                        <label for="ddlTasa">
+                                        <label for="ddlAnio">
                                             <span id="sliderAnioLabel">Año: <span id="sliderAnioVal">2018</span></span>
                                         </label>
-                                        &nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input id="sliderAnio" data-slider-id='sliderAnioKey' type="text" data-slider-min="2005" data-slider-max="2025"
                                             data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
 
@@ -72,9 +78,9 @@ Vue.component("vue-panel-edicion", {
                                 </form>
                                 <div class="panel-tabs">
                                     <ul>
-                                        <li v-for="proyeccion in selTasa.proyecciones"><a v-bind:href="'#proyeccion-tabs-' + proyeccion.id">{{proyeccion.variable}}</a></li>
+                                        <li v-for="cultivo in detalle.cultivos"><a v-bind:href="'#cultivo-tabs-' + cultivo.id">{{cultivo.nombre}}</a></li>
                                     </ul>
-                                    <div v-for="proyeccion in selTasa.proyecciones" v-bind:id="'proyeccion-tabs-' + proyeccion.id">
+                                    <div v-for="cultivo in detalle.cultivos" v-bind:id="'cultivo-tabs-' + cultivo.id">
                                         <div style="height:300px;">
                                             <canvas class="chart" width="350" height="200"></canvas>
                                         </div>  
@@ -126,6 +132,7 @@ Vue.component("vue-panel-edicion", {
       multipleSelection: false,
       permiteEditar: false,
       selRangoAnio: 2018,
+      selRangoTasa: 85,
       tipo: "edicion" //grafico
     };
   },
@@ -221,17 +228,18 @@ Vue.component("vue-panel-edicion", {
           me.selTasa.proyecciones &&
           me.selTasa.proyecciones.length > 0
         ) {
-          me.selTasa.proyecciones.forEach(function(x) {
-            const $idElement = "proyeccion-tabs-" + x.id;
-            generarGrafico($idElement, x);
-          });
+        //   me.selTasa.proyecciones.forEach(function(x) {
+        //     const $idElement = "proyeccion-tabs-" + x.id;
+        //     generarGrafico($idElement, x);
+        //   });
         }
 
-        $("#sliderAnio").bootstrapSlider();
-        $("#sliderAnio").on("slide", function(slideEvt) {
-          $("#sliderAnioVal").text(slideEvt.value);
-          me.onCambiarAnio(me, slideEvt.value);
-        });
+        if (me.detalle && me.detalle.cultivos && me.detalle.cultivos.length > 0) {
+            me.detalle.cultivos.forEach(function(cultivo) {
+              const $idElement = "cultivo-tabs-" + cultivo.id;
+              generarGraficoProduccion($idElement, cultivo);
+            });
+        }      
 
         $(".panel-tabs").tabs();
 

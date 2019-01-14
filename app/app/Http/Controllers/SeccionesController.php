@@ -196,8 +196,18 @@ class SeccionesController extends Controller
             $forecast=Forecast::where([['eliminado','=','0'] ]);
 
             $forecast=$forecast -> whereIn('codigoGIS',$listCodigoGIS);
-            //$forecast=$forecast -> with('cultivos.tasas.proyecciones.detalle')->get();
-            $forecast=$forecast -> with('cultivos.tasas.proyecciones.detalle')->first();
+            // $forecast=$forecast -> with(
+            //     [
+            //         'cultivos.tasas.proyecciones.detalle',
+            //         'cultivos.producciones'
+            //     ]
+            // )->get();
+            $forecast=$forecast -> with(
+                [
+                    'cultivos.tasas.proyecciones.detalle',
+                    'cultivos.producciones'
+                ]
+            )->first();
             $jsonData=$forecast;
 
         }

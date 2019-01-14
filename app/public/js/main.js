@@ -4,6 +4,8 @@ const MAP_MARKER_2 = MARKER_PATH + "if_map-marker_285659.png";
 const MAP_MARKER_3 = MARKER_PATH + "if_map-marker_299087.png";
 const MAP_MARKER_PIN = MARKER_PATH + "if_Pin_728961.png";
 const MAP_MARKER_LOCATION = MARKER_PATH + "if_location_925919.png";
+const ANIOS_PRONOSTICO = 5;
+const TASA_PRODUCCION = 85;
 
 var map = {};
 var layers = [];
@@ -158,6 +160,35 @@ function initMap($regiones, $afterMapIsLoaded) {
     color: "#ff7800",
     opacity: 0.65
   };
+
+  var drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
+  var drawControl = new L.Control.Draw({
+    draw: {
+        polyline:false,
+        polygon: false,
+        circle:false,
+        marker: false,
+        circlemarker:false
+    }
+  });
+  map.addControl(drawControl);
+
+  map.on(L.Draw.Event.CREATED, function (e) {
+    var type = e.layerType,
+        layer = e.layer;
+
+        overlapCheck(layers[0].layer.getLayers()[0],layer);
+ });
+
+ function overlapCheck(baseLayer, drawLayer){
+  var baseJson = baseLayer.toGeoJSON(),
+      drawJson = drawLayer.toGeoJSON();
+     
+   var r = turf.booleanOverlap(baseJson,drawJson);
+   var rr = turf.intersect(baseJson,drawJson);
+   
+ }
 }
 
 function markers() {
@@ -236,6 +267,236 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
   });
 }
 
+function generarGraficoProduccion($idElement, cultivo) {  
+  const elements = $("#" + $idElement).find(".chart");
+
+  if (elements.length == 0) {
+    return;
+  }
+
+  const dataAniosPronostico = [];
+  const dataAnios = cultivo.producciones.map(x => x.anio);
+  const primerAnioPronostico = dataAnios[dataAnios.length-1]+1;
+
+  for (let i = 0; i < ANIOS_PRONOSTICO; i++) {    
+    dataAniosPronostico.push(primerAnioPronostico+i);
+  }
+
+  const dataValues = cultivo.producciones.map(x => x.produccion);
+  const dataRegresion = cultivo.producciones.map(function(d){return {x:d.anio,y:d.produccion};} );
+  const dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresion,dataAniosPronostico);
+  const dataValuesPronosticoProduccion = tranformarDatosPronosticoProduccion(dataValuesPronostico,dataAnios,dataValues);
+  const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion=>(produccion!=null?produccion*(TASA_PRODUCCION/100.000):produccion));
+  let dataLabels = [];
+
+  dataAnios.forEach(d=>dataLabels.push(d));
+  dataAniosPronostico.forEach(d=>dataLabels.push(d));
+
+  var ctx = elements[0];
+  var charProduccion = new Chart(ctx, {
+    responsive: true,
+    type: 'line',
+    data: {
+      labels: dataLabels,
+      datasets: [
+        {
+          label: "Prod.",
+          data: dataValues,
+          backgroundColor: 'rgb(54, 162, 235)',
+          borderColor: 'rgb(54, 162, 235)',
+          fill: false
+        },
+        {
+          label: "Pronóstico",
+          data: dataValuesPronosticoProduccion,
+          backgroundColor: 'rgb(255, 255, 255)',
+          borderColor: 'rgb(54, 162, 235)',
+          fill: false,
+          borderDash: [1,1]
+        },
+        {
+          label: "Tasa",
+          data: dataValuesPronosticoProduccionTasa,
+          backgroundColor: 'rgb(255, 255, 255)',
+          borderColor: 'rgb(255, 99, 132)',
+          fill: false,
+          borderDash: [1,1]
+        }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      title: {
+        display: true,
+        text: 'Producción'
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ],
+        xAxes: [
+          {
+            ticks: {
+              beginAtZero: false
+            }
+          }
+        ]
+      }
+    }
+  });
+
+  generarSliderAnioTasa(cultivo,charProduccion);
+}
+
+function tranformarDatosPronosticoProduccion(dataValuesPronostico,aniosReales,valoresReales){
+  let data = [];
+
+  for (let index = 0; index < aniosReales.length-1; index++) {
+    data.push(null);
+  }
+
+  data.push(valoresReales[valoresReales.length-1]);
+
+  dataValuesPronostico.forEach(function(pronostico){
+    data.push(pronostico.y);
+  });
+
+  return data;
+}
+
+function actualizarGraficoProduccion(cultivo,charProduccion,rangoAnios,tasa){
+  const min = rangoAnios[0];
+  const max = rangoAnios[1];
+  const ultimoAnioReal = cultivo.producciones[cultivo.producciones.length-1].anio;
+  const minProduccionReal = cultivo.producciones.find(produccion=>produccion.anio==min);
+  const minReal = minProduccionReal?minProduccionReal.anio:undefined;
+  const maxProduccionReal = cultivo.producciones.find(produccion=>produccion.anio==max);
+  let maxReal = maxProduccionReal?maxProduccionReal.anio:undefined;
+  const minPronostico = (min - ultimoAnioReal)<=0?(ultimoAnioReal+1):min;
+  const maxPronostico = (max - ultimoAnioReal)<=0?undefined:max;
+
+  maxReal = maxReal||ultimoAnioReal;
+
+  if(minReal){
+    if(maxPronostico){
+      let dataAniosPronostico = [];
+      const aniosPronostico = (maxPronostico-minPronostico)+1;
+      for (let i = 0; i < aniosPronostico; i++) {
+        dataAniosPronostico.push(minPronostico+i);
+      }
+      const dataRegresion =  cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function(d){return {x:d.anio,y:d.produccion};} );
+      const dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresion,dataAniosPronostico);
+      const dataValues = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.produccion:null);
+      const dataAnios = cultivo.producciones.map(x=>x.anio);
+      const dataValuesPronosticoProduccion = tranformarDatosPronosticoProduccion(dataValuesPronostico,dataAnios,dataValues);
+      const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion=>(produccion!=null?produccion*(tasa/100.000):produccion));
+      charProduccion.config.data.datasets[0].data = dataValues;
+      charProduccion.config.data.datasets[1].data = dataValuesPronosticoProduccion;
+      charProduccion.config.data.datasets[2].data = dataValuesPronosticoProduccionTasa;
+    }else{
+      const dataValues = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.produccion:null);
+      charProduccion.config.data.datasets[0].data = dataValues;
+      charProduccion.config.data.datasets[1].data = [];
+      charProduccion.config.data.datasets[2].data = [];
+    }
+  }else{
+    charProduccion.config.data.datasets[0].data =[];
+    charProduccion.config.data.datasets[1].data = [];
+    charProduccion.config.data.datasets[2].data = [];
+  }
+  charProduccion.update();
+}
+
+function generarSliderAnioTasa(cultivo,charProduccion){
+  const sliderAnio = $("#sliderAnio");
+  const sliderAnioTexto = $("#sliderAnioVal");
+  const sliderTasa = $("#sliderTasa");
+  const sliderTasaTexto = $("#sliderTasaVal");
+  const min = Math.min.apply(Math, cultivo.producciones.map(function(produccion){return produccion.anio}));
+  const max = Math.max.apply(Math, cultivo.producciones.map(function(produccion){return produccion.anio}));
+
+  sliderAnio.bootstrapSlider();
+  sliderTasa.bootstrapSlider();
+
+  sliderAnio[0].charProduccion = charProduccion;
+  sliderAnio[0].cultivo = cultivo;
+  sliderAnio.off("change");
+
+  sliderTasa[0].charProduccion = charProduccion;
+  sliderTasa[0].cultivo = cultivo;
+  sliderTasa.off("change");
+
+  sliderAnio.on("change", function(slideEvt) {
+    sliderAnioTexto.text(slideEvt.value.newValue);
+    const sliderTasa = $("#sliderTasa");
+    actualizarGraficoProduccion(cultivo,charProduccion,slideEvt.value.newValue,sliderTasa.bootstrapSlider('getAttribute','value'));
+  });
+  sliderTasa.on("change", function(slideEvt) {
+    sliderTasaTexto.text(slideEvt.value.newValue);
+    const sliderAnio = $("#sliderAnio");
+    actualizarGraficoProduccion(cultivo,charProduccion,sliderAnio.bootstrapSlider('getAttribute','value'),slideEvt.value.newValue);
+  });
+
+  sliderAnio.bootstrapSlider('setAttribute','min', min);
+  sliderAnio.bootstrapSlider('setAttribute', 'max', max +ANIOS_PRONOSTICO);
+  sliderAnio.bootstrapSlider('setAttribute','value', [min,max+ANIOS_PRONOSTICO]);
+  sliderAnioTexto.text(sliderAnio.bootstrapSlider('getAttribute','value'));
+  sliderAnio.bootstrapSlider('refresh');
+
+  sliderTasa.bootstrapSlider('setAttribute','value', TASA_PRODUCCION);
+  sliderTasaTexto.text(sliderTasa.bootstrapSlider('getAttribute','value'));
+  sliderTasa.bootstrapSlider('refresh');
+}
+
+function obtenerPronosticoRegresionLineal(datos,consulta){
+  const data = datos.filter(f=>f.x!= null);
+  const xs = data.map(d => d.x);
+  const ys = data.map(d => d.y);
+  const xys = data.map(d => d.x*d.y);
+  const xxs = data.map(d => d.x*d.x);
+  const yys = data.map(d => d.y*d.y);
+  const n = data.length;
+  let xsum = 0;
+  let ysum = 0;
+  let xprom = 0;
+  let yprom = 0;
+  let xxsum = 0;
+  let yysum = 0;
+  let xysum = 0;
+  let b = 0;
+  let a = 0;
+  let result = [];
+
+  xs.forEach(function(x){xsum = xsum+x;});
+  ys.forEach(function(y){ysum = ysum+parseFloat(y);});
+  xprom = xsum/n;
+  yprom = ysum/n
+  xxs.forEach(function(xx){xxsum = xxsum+xx;});
+  yys.forEach(function(yy){yysum = yysum+yy;});
+  xys.forEach(function(xy){xysum = xysum+xy;});
+  b = (xysum - (n*xprom*yprom))/(xxsum - (n*(xprom*xprom)));
+  a = yprom - (b*xprom);
+
+  consulta.forEach(function(x){
+    const y = a + (b*x);
+    result.push({x:x,y:y});
+  });
+
+  return result;
+}
+
 function generarGrafico($idElement, data) {
   console.log(data);
   const elements = $("#" + $idElement).find(".chart");
@@ -270,22 +531,9 @@ function generarGrafico($idElement, data) {
         {
           label: "# " + data.variable,
           data: dataValues,
-          // backgroundColor: [
-          //     'rgba(255, 99, 132, 0.2)',
-          //     'rgba(54, 162, 235, 0.2)',
-          //     'rgba(255, 206, 86, 0.2)',
-          //     'rgba(75, 192, 192, 0.2)',
-          //     'rgba(153, 102, 255, 0.2)',
-          //     'rgba(255, 159, 64, 0.2)'
-          // ],
-          // borderColor: [
-          //     'rgba(255,99,132,1)',
-          //     'rgba(54, 162, 235, 1)',
-          //     'rgba(255, 206, 86, 1)',
-          //     'rgba(75, 192, 192, 1)',
-          //     'rgba(153, 102, 255, 1)',
-          //     'rgba(255, 159, 64, 1)'
-          // ],
+          backgroundColor: 'rgb(54, 162, 235)',
+          borderColor: 'rgb(54, 162, 235)',
+          fill: false,
           borderWidth: 1
         }
       ]

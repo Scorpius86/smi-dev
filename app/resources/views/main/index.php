@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
         crossorigin="" />
     <link rel="stylesheet" href="js/library/leaflet/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="js/library/leaflet.draw/leaflet.draw-src.css"/>
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
     <link href="css/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
@@ -192,6 +193,8 @@
         crossorigin=""></script>
     <script src="js/library/leaflet/leaflet.markercluster.js"></script>
     <script src="js/library/leaflet/leaflet.SelectAreaFeature.js"></script>
+    <script src="js/library/leaflet.draw/leaflet.draw-src.js"></script>
+    <script src="js/library/turf/turf.min.js" charset="utf-8"></script>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
 

@@ -8,8 +8,7 @@ class Cultivo extends Model
 {
     protected $table="cultivo";
     protected $primaryKey="id";
-    protected $fillable=array('nombre',
-    'abreviatura','tasa','precio','idForecast','eliminado');
+    protected $fillable=array('nombre','abreviatura','tasa','precio','idForecast','eliminado');
 
     public function forecast(){
         return $this->belongsTo('smi/Forecast','idForecast');
@@ -17,5 +16,9 @@ class Cultivo extends Model
 
     public function tasas(){
         return $this->hasMany(Tasa::class,'idCultivo');
+    }
+
+    public function producciones(){
+        return $this->hasMany(Produccion::class, 'idCultivo');
     }
 }
