@@ -441,12 +441,12 @@ function generarSliderAnioTasa(cultivo,charProduccion){
   sliderAnio.on("change", function(slideEvt) {
     sliderAnioTexto.text(slideEvt.value.newValue);
     const sliderTasa = $("#sliderTasa");
-    actualizarGraficoProduccion(cultivo,charProduccion,slideEvt.value.newValue,sliderTasa.bootstrapSlider('getAttribute','value'));
+    actualizarGraficoProduccion(cultivo,charProduccion,slideEvt.value.newValue,sliderTasa.val());
   });
   sliderTasa.on("change", function(slideEvt) {
     sliderTasaTexto.text(slideEvt.value.newValue);
     const sliderAnio = $("#sliderAnio");
-    actualizarGraficoProduccion(cultivo,charProduccion,sliderAnio.bootstrapSlider('getAttribute','value'),slideEvt.value.newValue);
+    actualizarGraficoProduccion(cultivo,charProduccion,sliderAnio.val().split(","),slideEvt.value.newValue);
   });
 
   sliderAnio.bootstrapSlider('setAttribute','min', min);
