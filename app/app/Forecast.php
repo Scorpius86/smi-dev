@@ -8,7 +8,7 @@ class Forecast extends Model
 {
     protected $table="forecast";
     protected $primaryKey="id";
-    protected $fillable=array('nombre','anio','codigoGIS','eliminado');
+    protected $fillable=array('nombre','codigoGIS','eliminado');
 
     public function cultivos(){
         return $this->hasMany(Cultivo::class,'idForecast');

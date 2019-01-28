@@ -25,11 +25,13 @@ Vue.component("vue-panel-edicion", {
                         <template v-if="(mapFeature.selectedLayers.length > 1)">
                             <select class="form-control" name="ddlPanelFeature" v-on:change="onSeleccionarPanelFeature()" v-model="selFeature">
                                 <option value="0">Todos</option>
-                                <option v-for="feature in detalle.selectedFeatures" v-bind:value="feature.key">{{feature.nombre}}</option>
+                                <option v-for="feature in detalle.selectedFeatures" 
+                                    :value="feature.key" 
+                                    :selected="feature.selected === true?'selected':''">{{feature.nombre}}</option>
                             </select>
                             <br> 
                         </template>
-
+                        <!--
                         <ul class="nav nav-pills mb-3" role="tablist">
 
                             <li v-for="cultivo in detalle.cultivos" class="nav-item">
@@ -40,53 +42,62 @@ Vue.component("vue-panel-edicion", {
                             </li>
                         
                         </ul>
+                        -->
                         <div class="tab-content">                            
-
+<!--
                             <div v-for="cultivo in detalle.cultivos" class="tab-pane fade show active" v-bind:id="'cultivo-' + cultivo.id" role="tabpanel"  >
-
-                                <form>
-                                
-                                    <div class="form-group">
-                                        <label for="ddlTasa">
-                                            <span id="sliderTasaLabel">Tasa: <span id="sliderTasaVal">85</span>%</span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input id="sliderTasa" data-slider-id='sliderTasaKey' type="text" data-slider-min="0" data-slider-max="150"
-                                            data-slider-step="5" data-slider-value="85" v-model="selRangoTasa" />
-
-                                        <select style="display:none;" class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(cultivo)" v-model="selTasaId">
-                                            <option v-for="tasa in cultivo.tasas" v-bind:value="tasa.id">{{tasa.tasa }}</option>
-                                        </select>
-                                    </div>
-                                    <!--
-                                    <div>
-                                        <span style="font-weight:bold;">{{detalle.label.panel_label_tasa}}&nbsp;&nbsp;:</span>{{cultivo.tasa}}
-                                        <span style="font-weight:bold;">{{detalle.label.panel_label_price}}:</span>{{cultivo.precio}}
-                                    </div>
-                                    -->
-
-                                    <div class="form-group">
-                                        <label for="ddlAnio">
-                                            <span id="sliderAnioLabel">Año: <span id="sliderAnioVal">2018</span></span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input id="sliderAnio" data-slider-id='sliderAnioKey' type="text" data-slider-min="2005" data-slider-max="2025"
-                                            data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
-
-                                        
-                                    </div>
-                                </form>
+-->                            
                                 <div class="panel-tabs">
                                     <ul>
-                                        <li v-for="cultivo in detalle.cultivos"><a v-bind:href="'#cultivo-tabs-' + cultivo.id">{{cultivo.nombre}}</a></li>
+                                        <li v-for="cultivo in detalle.cultivos">
+                                            <a v-if="cultivo.producciones.length>0" v-bind:href="'#cultivo-tabs-' + cultivo.id">{{cultivo.nombre}}</a>
+                                        </li>
                                     </ul>
                                     <div v-for="cultivo in detalle.cultivos" v-bind:id="'cultivo-tabs-' + cultivo.id">
-                                        <div style="height:300px;">
-                                            <canvas class="chart" width="350" height="200"></canvas>
-                                        </div>  
+                                        <div v-if="cultivo.producciones.length>0" class="row sliderTasaAnio">
+                                            <form class="formSliderTasaAnio">                                
+                                                <div class="form-group">
+                                                    <label for="ddlTasa">
+                                                        <span v-bind:id="'sliderTasaLabel-' + cultivo.tipoCultivo.idTipoCultivo">Tasa: <span v-bind:id="'sliderTasaVal-' + cultivo.tipoCultivo.idTipoCultivo">85</span>%</span>
+                                                    </label>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input class="sliderTasa" v-bind:id="'sliderTasa-' + cultivo.tipoCultivo.idTipoCultivo" data-slider-id='sliderTasaKey' type="text" data-slider-min="0" data-slider-max="150"
+                                                        data-slider-step="5" data-slider-value="85" v-model="selRangoTasa" />
+
+                                                    <select style="display:none;" class="form-control" name="ddlTasa" v-on:change="onSeleccionarTasa(cultivo)" v-model="selTasaId">
+                                                        <option v-for="tasa in cultivo.tasas" v-bind:value="tasa.id">{{tasa.tasa }}</option>
+                                                    </select>
+                                                </div>                                 
+                                                <div class="form-group">
+                                                    <label for="ddlAnio">
+                                                        <span v-bind:id="'sliderAnioLabel-' + cultivo.tipoCultivo.idTipoCultivo">Año: <span v-bind:id="'sliderAnioVal-' + cultivo.tipoCultivo.idTipoCultivo">2018</span></span>
+                                                    </label>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input v-bind:id="'sliderAnio-' + cultivo.tipoCultivo.idTipoCultivo" data-slider-id='sliderAnioKey' type="text" data-slider-min="2005" data-slider-max="2025"
+                                                        data-slider-step="1" data-slider-value="2018" v-model="selRangoAnio" />
+
+                                                    
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div v-if="cultivo.producciones.length>0" class="row">
+                                            <div class="divChartProduccion">
+                                                <canvas class="chartProduccion"></canvas>
+                                            </div>  
+                                        </div>
+                                        <div v-if="cultivo.producciones.length>0" class="row">
+                                            <div class="col-xs-6 divChartProductividad">
+                                                <canvas class="chartProductividad"></canvas>
+                                            </div>  
+                                            <div class="col-xs-6 divChartArea">
+                                                <canvas class="chartArea"></canvas>
+                                            </div>  
+                                        </div>
                                     </div>
-                                </div>            
+                                </div>   
+<!--         
                             </div>                            
+-->
                         </div>
                         
                     </template>
@@ -176,15 +187,17 @@ Vue.component("vue-panel-edicion", {
 
       let selectedElements = [];
       mapFeature.selectedLayers.forEach(l => {
+        let selected = false;
         let filtro = this.input.seccion.seccion_detalle.filter(x => {
-          return x.codigoGIS == l.key;
+            return x.codigoGIS == l.key;
         });
-
         if (filtro.length > 0) {
-          selectedElements.push({
-            key: filtro[0].codigoGIS,
-            nombre: filtro[0].nombre
-          });
+            selected = (this.detalle.codigoGIS == filtro[0].codigoGIS);
+            selectedElements.push({
+              key: filtro[0].codigoGIS,
+              nombre: filtro[0].nombre,
+              selected: selected
+            });
         }
       });
 
@@ -202,8 +215,9 @@ Vue.component("vue-panel-edicion", {
 
     renderCultivo: function(cultivo) {
       const me = this;
-
-      $(".panel-tabs").tabs("destroy");
+      if($(".panel-tabs").tabs().length > 0){
+        $(".panel-tabs").tabs("destroy");
+      }
       $(".closePanel-button").off("click");
       $(".closePanel-button").on("click", function() {
         $("#nav-panel").toggle();
@@ -216,7 +230,9 @@ Vue.component("vue-panel-edicion", {
         if (me.detalle && me.detalle.cultivos && me.detalle.cultivos.length > 0) {
             me.detalle.cultivos.forEach(function(cultivo) {
               const $idElement = "cultivo-tabs-" + cultivo.id;
-              generarGraficoProduccion($idElement, cultivo);
+              if(cultivo.producciones.length>0){
+                generarGraficasLimites($idElement, cultivo);
+              }
             });
         }      
 
@@ -253,8 +269,10 @@ Vue.component("vue-panel-edicion", {
         this.selCultivoId,
         function(data) {
           console.log(data);
-          me.detalle = data;
-          me.show();
+          if(data){
+            me.detalle = data;
+            me.show();
+          }
         }
       );
     }

@@ -8,6 +8,10 @@ use smi\Seccion;
 use smi\SeccionDetalle;
 use smi\SeccionAtributo;
 use smi\Forecast;
+use smi\Dto\ForecastDto;
+use smi\Dto\CultivoDto;
+use smi\Dto\TipoCultivoDto;
+use smi\Dto\ProduccionDto;
 use Carbon\Carbon;
 
 class SeccionesController extends Controller
@@ -186,31 +190,106 @@ class SeccionesController extends Controller
     }
 
     public function getSeccionDetalleInformacionPanel(Request $request){
+        $forecastDto = new ForecastDto();
+
         $listCodigoGIS=$request->input('listCodigoGIS');
 
         $path=base_path() . '/storage/app/public/json/data-panel.json';
 
-        $jsonData = json_decode(file_get_contents($path), true);
+        $jsonData = json_decode(file_get_contents($path), true);       
         
-        if( count($listCodigoGIS)>0){
-            $forecast=Forecast::where([['eliminado','=','0'] ]);
+        if( count($listCodigoGIS)>1){            
+            $tipoCultivos=Forecast::where([['forecast.eliminado','=','0'] ])
+                ->join('cultivo','cultivo.idForecast','forecast.id')
+                ->join('tipo_cultivo','tipo_cultivo.idTipoCultivo','cultivo.idTipoCultivo')
+                ->select('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre')
+                ->whereIn('forecast.codigoGIS',$listCodigoGIS)
+                ->groupBy('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre')
+                ->get();
 
-            $forecast=$forecast -> whereIn('codigoGIS',$listCodigoGIS);
-            // $forecast=$forecast -> with(
-            //     [
-            //         'cultivos.tasas.proyecciones.detalle',
-            //         'cultivos.producciones'
-            //     ]
-            // )->get();
+            $producciones=Forecast::where([['forecast.eliminado','=','0'] ])
+                ->join('cultivo','cultivo.idForecast','forecast.id')
+                ->join('tipo_cultivo','tipo_cultivo.idTipoCultivo','cultivo.idTipoCultivo')
+                ->join('produccion','produccion.idCultivo','cultivo.id')
+                ->select('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre','produccion.anio')
+                ->selectRaw('sum(produccion.produccion) as produccion,sum(produccion.productividad) as productividad,sum(produccion.area) area')
+                ->whereIn('forecast.codigoGIS',$listCodigoGIS)
+                ->groupBy('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre','produccion.anio')
+                ->get();
+            
+            $forecastDto->cultivos = $tipoCultivos->map(function($tipoCultivo) use($producciones){
+                $tipoCultivoDto = new TipoCultivoDto();
+                $tipoCultivoDto->idTipoCultivo = $tipoCultivo->idTipoCultivo;
+                $tipoCultivoDto->nombre = $tipoCultivo->nombre;
+
+                $cultivoDto = new CultivoDto();
+                $cultivoDto->nombre = $tipoCultivo->nombre;
+                $cultivoDto->abreviatura = $tipoCultivo->nombre;
+                $cultivoDto->idTipoCultivo = $tipoCultivo->idTipoCultivo;
+                $cultivoDto->tipoCultivo = $tipoCultivoDto;
+
+                $cultivoDto->producciones = $producciones->filter(function ($produccion) use($tipoCultivo) {
+                    return $produccion->idTipoCultivo == $tipoCultivo->idTipoCultivo;
+                })->map(function($produccion){
+                    $produccionDto = new ProduccionDto();
+                    $produccionDto->anio = $produccion->anio;
+                    $produccionDto->produccion = $produccion->produccion;
+                    $produccionDto->productividad = $produccion->productividad;
+                    $produccionDto->area = $produccion->area;
+                    return $produccionDto;
+                });
+                return $cultivoDto;
+            });
+
+            $forecast = $forecastDto;
+        }else{
+            $forecast=Forecast::where([['forecast.eliminado','=','0'] ]);
+            $forecast=$forecast -> whereIn('forecast.codigoGIS',$listCodigoGIS);
             $forecast=$forecast -> with(
                 [
-                    'cultivos.tasas.proyecciones.detalle',
+                    'cultivos.tipoCultivo',
                     'cultivos.producciones'
                 ]
             )->first();
-            $jsonData=$forecast;
 
+            if($forecast){
+                $forecastDto->id = $forecast->id;
+                $forecastDto->nombre = $forecast->nombre;
+                $forecastDto->codigoGIS = $forecast->codigoGIS;
+                $forecastDto->eliminado = $forecast->eliminado;
+
+                $forecastDto->cultivos = $forecast->cultivos->map(function($cultivo){
+                    $tipoCultivoDto = new TipoCultivoDto();
+                    $tipoCultivoDto->idTipoCultivo = $cultivo->tipoCultivo->idTipoCultivo;
+                    $tipoCultivoDto->nombre = $cultivo->tipoCultivo->nombre;
+
+                    $cultivoDto = new CultivoDto();
+                    $cultivoDto->id = $cultivo->id;
+                    $cultivoDto->nombre = $cultivo->nombre;
+                    $cultivoDto->abreviatura = $cultivo->abreviatura;
+                    $cultivoDto->idForecast = $cultivo->idForecast;
+                    $cultivoDto->eliminado = $cultivo->eliminado;
+                    $cultivoDto->idTipoCultivo = $cultivo->idTipoCultivo;
+                    $cultivoDto->tipoCultivo = $tipoCultivoDto;
+
+                    $cultivoDto->producciones = $cultivo->producciones->map(function($produccion){
+                        $produccionDto = new ProduccionDto();
+                        $produccionDto->idProduccion = $produccion->idProduccion;
+                        $produccionDto->idCultivo = $produccion->idCultivo;
+                        $produccionDto->anio = $produccion->anio;
+                        $produccionDto->produccion = $produccion->produccion;
+                        $produccionDto->productividad = $produccion->productividad;
+                        $produccionDto->area = $produccion->area;
+                        return $produccionDto;
+                    });
+                    return $cultivoDto;
+                });
+
+                $forecast = $forecastDto;
+            }
         }
+
+        $jsonData=$forecast;
         
         $data= array(
             'status'=> true, 

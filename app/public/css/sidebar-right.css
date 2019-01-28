@@ -131,7 +131,7 @@
 /*----------------sidebar-wrapper----------------*/
 
 .sidebar-right-wrapper {
-  width: 380px;
+  width: 680px;
   height: 100%;
   max-height: 100%;
   /* position: fixed; */
@@ -713,4 +713,46 @@
 
 .chiller-theme .mCSB_scrollTools .mCSB_draggerRail {
   background-color: transparent;
+}
+
+.divChartProduccion{
+  height: 200px;
+  width: 100%;
+}
+
+.divChartProductividad{
+  height: 200px;
+  float: left;
+  width: 50%;
+}
+
+.divChartArea{
+  height: 200px;
+  width: 50%;
+}
+
+.chartProduccion{
+  height: 100px;
+}
+
+.chartProductividad{
+  height: 100px;
+  float: left;
+}
+
+.chartArea{
+  height: 100px;
+}
+
+.sliderTasaAnio{
+  padding-left:20px;
+  padding-right: 20px; 
+}
+
+.formSliderTasaAnio{
+  width: 100%
+}
+
+div.slider.slider-horizontal{
+  width: 100%
 }
