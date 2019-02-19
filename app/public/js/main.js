@@ -164,32 +164,21 @@ function initMap($regiones, $afterMapIsLoaded) {
 
   var drawnItems = new L.FeatureGroup();
   map.addLayer(drawnItems);
-  var drawControl = new L.Control.Draw({
+
+  window.drawControl = new L.Control.Draw({
     draw: {
         polyline:false,
-        polygon: false,
+        polygon: true,
         circle:false,
         marker: false,
+        rectangle:false,
         circlemarker:false
     }
   });
-  map.addControl(drawControl);
 
   map.on(L.Draw.Event.CREATED, function (e) {
-    var type = e.layerType,
-        layer = e.layer;
-
-        overlapCheck(layers[0].layer.getLayers()[0],layer);
- });
-
- function overlapCheck(baseLayer, drawLayer){
-  var baseJson = baseLayer.toGeoJSON(),
-      drawJson = drawLayer.toGeoJSON();
-     
-   var r = turf.booleanOverlap(baseJson,drawJson);
-   var rr = turf.intersect(baseJson,drawJson);
-   
- }
+    smiPanel.$refs.param.DrawEventCREATED(e);
+  });
 }
 
 function markers() {
@@ -819,11 +808,7 @@ function removeMarker($id, $seccionId) {
   });
 
   if ($checkedLayer) {
-    console.log($checkedLayer);
-    console.log(layers);
-    console.log(map);
     map.removeLayer($checkedLayer.layer);
-
     _.remove(layers, function($item) {
       return $item.id === $checkedLayer.id;
     });
@@ -831,6 +816,19 @@ function removeMarker($id, $seccionId) {
 
   $("#" + $id).prop("checked", false);
   removeLegend($seccionId);
+}
+
+function removeMarkerAll() {
+  const sidebar = $("#menu-sidebar");
+  var menus = sidebar.find("input[type='checkbox'].menu-item");
+
+  for (let i = 0; i < menus.length; i++) {
+    const menuItem = menus[i]; 
+    const menuId = parseInt($(menuItem).prop("id"));
+    const seccionId = $(menuItem).attr("data-id");
+
+    removeMarker(menuId,seccionId);
+  }
 }
 
 function onceMapIsLoaded() {
@@ -847,7 +845,21 @@ function onceMapIsLoaded() {
     $seccion.nombre = $(this).attr("data-nombre");
     $seccion.color = $(this).attr("data-color");
     $seccion.logo = $(this).attr("data-logo");
-    //const $parent = $(this).data("parent");
+    $seccion.codigoSeccion = $(this).attr("data-codigoseccion");
+
+
+    map.removeControl(window.drawControl);
+    if($seccion.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){
+      removeMarkerAll();
+      $("#nav-panel").hide();
+      
+      smiPanel.$refs.param.tipo = '';
+      smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
+      smiPanel.$refs.param.input = {};
+      smiPanel.$refs.param.show();
+      $("#nav-panel").show();
+      return;
+    }
 
     if (!$isChecked) {
       removeMarker($id, $seccion.id);
@@ -882,16 +894,9 @@ function onceMapIsLoaded() {
       $("#multiple").prop("disabled", false);
       $("#multiple").prop("checked", false);
 
-      const $idSeccion = $seccion.seccion.id;
-      const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
-
+      
       if ($seccion.geoJsonFile && $seccion.geoJsonFile != null) {
         const $onEachFeature = function(feature, layer) {
-          var popupContent =
-            "<p>I started out as a GeoJSON " +
-            feature.geometry.type +
-            ", but now I'm a Leaflet vector!</p>";
-
           layer.on({
             mouseover: function(e) {
               mapFeature.highlightFeature(e, $seccion, $cacheLayer);
@@ -905,12 +910,6 @@ function onceMapIsLoaded() {
             //dblclick : selectFeature
           });
         };
-
-        const divIcon = L.divIcon({
-          className: "custom-marker",
-          html: '<div><i class="fas 3x fa-map-marker-alt"></i></div>',
-          iconSize: [128, 128]
-        });
 
         try {
           let $points = JSON.parse($seccion.geoJsonFile);
@@ -979,9 +978,9 @@ function onceMapIsLoaded() {
       } else {
         removeMarker($id, $seccion.seccion.id);
         hideLoading();
-        smiMensaje.$refs.message.mensaje.text =
-          "No se encontró representación para esta opción.";
-        smiMensaje.$refs.message.onMostrarMensaje();
+        //smiMensaje.$refs.message.mensaje.text =
+        //  "No se encontró representación para esta opción.";
+        //smiMensaje.$refs.message.onMostrarMensaje();
       }
     };
 

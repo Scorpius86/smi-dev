@@ -16,4 +16,8 @@ class SeccionDetalle extends Model
     public function seccion(){
         return $this->belongTo('smi/Seccion','idSeccion');
     }
+
+    public function seccionAtributo(){
+        return $this->hasMany(SeccionAtributo::class, 'idSeccionDetalle');
+    }
 }

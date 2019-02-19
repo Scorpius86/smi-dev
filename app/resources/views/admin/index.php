@@ -187,8 +187,6 @@
     <script src="js/pages/usuario/usuario.vue.js"></script>
 
     <script>
-        
-
         //Ocultar menu
         $('#btnShowMenu').on('click', function () {
             $('#sidebar').toggle();

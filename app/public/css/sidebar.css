@@ -289,10 +289,14 @@
     top: 14px;
     color: #61c6ed;
   }
-  
-  .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu ul {
-    padding: 5px 0;
-  }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-dropdown.siderbar-no-menu > a div:after {
+        content: ""
+    }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu ul {
+        padding: 5px 0;
+    }
   
   .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li {
     padding-left: 25px;

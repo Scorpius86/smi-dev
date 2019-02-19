@@ -1,0 +1,20 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\Http",
+    "\\app\\Http\\Controllers",
+    "\\public",
+    "\\public\\js",
+    "\\public\\js\\pages",
+    "\\public\\js\\pages\\categoria",
+    "\\public\\js\\pages\\home",
+    "\\public\\js\\pages\\panel",
+    "\\public\\js\\pages\\seccion",
+    "\\resources",
+    "\\resources\\views",
+    "\\resources\\views\\main"
+  ],
+  "SelectedNode": "\\app\\Http\\Controllers\\SeccionesController.php",
+  "PreviewInSolutionExplorer": false
+}
