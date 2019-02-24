@@ -195,7 +195,6 @@ export default {
           $(".panel-tabs").tabs();
   
           hideLoading();
-          $("#nav-panel").show();
         }, 200);
       },
   

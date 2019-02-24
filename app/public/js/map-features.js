@@ -254,7 +254,6 @@ function SMIMapFeature(map) {
 
       this.loadPanel($idSeccion, paramLista, $idCultivo, function(data) {
         const seccionDetalle = data.detalles.find(d=>d.codigoGIS == $detalleCodigoGIS);
-        $("#nav-panel").show();
 
         if (data == undefined || data.length == 0) {
           const propiedades = loadDefaultProperties();

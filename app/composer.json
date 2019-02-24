@@ -9,7 +9,8 @@
         "barryvdh/laravel-cors": "^0.11.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "nesbot/carbon": "^1.33"
+        "nesbot/carbon": "^1.33",
+        "phpoffice/phpspreadsheet": "^1.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

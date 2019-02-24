@@ -39,12 +39,34 @@ class SeccionesController extends Controller
         $data = array();
 
         $query = Seccion::where([
-            ['eliminado','=','0'],
-            ['geoJsonFile','!=','NULL']
+            ['seccion.eliminado','=','0'],
+            ['seccion.geoJsonFile','!=','NULL']
         ])
-        ->whereNotNull('geoJsonFile');
+        ->leftJoin('seccion as seccionPadre', 'seccion.idSeccionPadre', '=', 'seccionPadre.id')
+        ->whereNotNull('seccion.geoJsonFile')
+        ->select(
+            "seccion.id",
+            "seccion.codigoGIS",
+            "seccion.nombre",
+            "seccion.nombreIdioma",
+            "seccion.idTipoGeoData",
+            "seccion.menuCategoria",
+            "seccion.menuAccion",
+            "seccion.idTipoAccion",
+            "seccion.idSeccionPadre",
+            "seccionPadre.nombre as nombrePadre",
+            "seccionPadre.nombreIdioma as nombreIdiomaPadre",
+            "seccionPadre.color as colorPadre",
+            "seccion.geoJsonData",
+            "seccion.geoJsonFile",
+            "seccion.logo",
+            "seccion.marker",
+            "seccion.color",
+            "seccion.codigoSeccion"
+        );
         
         $secciones = $query->get();
+        //$secciones = $query->paginate(20);
         $pointLocation = new PointLocation();
 
         foreach ($secciones as $seccion) {

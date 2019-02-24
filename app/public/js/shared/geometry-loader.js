@@ -192,4 +192,32 @@ export default class GeometryLoader {
         this.removeMarker(seccion.id);
       }
     }
+
+    addCustomLayer(customLayer){
+        if(customLayer && customLayer.layer){
+            this.removeCustomLayer();
+            map.addLayer(customLayer.layer);
+            this.addNewLayer(CONSTANTES.ID_CUSTOM_LAYER,customLayer.layer);
+        }
+    }
+
+    removeCustomLayer(){
+        const customLayer = this.getCustomLayer();
+        
+        if(customLayer && customLayer.layer){
+            map.removeLayer(customLayer.layer);
+            _.remove(layers, function(layer) {
+            return layer.id === CONSTANTES.ID_CUSTOM_LAYER;
+            });
+        }
+    }
+
+    getCustomLayer(){
+        const customLayer = layers.find(function(layer, index) {
+            if (layer.id === CONSTANTES.ID_CUSTOM_LAYER) return layer;
+        });
+
+        return customLayer;
+    }
+    
 }

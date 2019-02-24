@@ -1,6 +1,7 @@
 import PanelConteoMarcadores from './panel-conteo-marcadores.vue.js';
 import PanelTipoGrafico from './panel-tipo-grafico.vue.js';
 import PanelTipoEdicion from './panel-tipo-edicion.vue.js';
+import GeometryLoader  from '../../shared/geometry-loader.js';
 
 export default {
     name: "vue-panel-edicion",
@@ -29,7 +30,7 @@ export default {
                     <vue-panel-tipo-grafico :id="idChildrenComponents.panelTipoGrafico"></vue-panel-tipo-grafico>
                     <vue-panel-tipo-edicion :id="idChildrenComponents.panelTipoEdicion"></vue-panel-tipo-edicion>
                     <vue-panel-conteo-marcadores :id="idChildrenComponents.panelConteoMarcadores"></vue-panel-conteo-marcadores>
-                    <template v-if="detalle.permiteEditar">
+                    <template v-if="detalle.permiteEditar && tipoId != 'panelConteoMarcadores'">
                         <div>
                             <br>
                             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
@@ -47,6 +48,7 @@ export default {
       title: "",
       codigoSeccion:'',
       input: {},
+      labels:{},
       detalle: {},
       selFeature: "0",
       mapFeature:{selectedLayers:[]},
@@ -58,6 +60,8 @@ export default {
       selRangoAnio: 2018,
       selRangoTasa: 85,
       tipo: "edicion", //grafico,
+      tipoId:"",
+      geometryLoader:GeometryLoader,
       idChildrenComponents:{
           panelTipoGrafico: "panelTipoGrafico",
           panelTipoEdicion: "panelTipoEdicion",
@@ -69,6 +73,12 @@ export default {
   created() {
     this.detalle.detalle = {};
     this.detalle.label = {};
+    this.geometryLoader = new GeometryLoader();
+    let language = getLanguage();
+    if (language == null || language.length == 0) {
+        language = "es";
+    }
+    this.labels = messages[language].label;
   },
   methods: {
     DrawEventCREATED:function(e){
@@ -80,6 +90,7 @@ export default {
         if(this.tipo == 'grafico'){tipoId = 'panelTipoGrafico';}
         if(this.tipo == 'edicion'){tipoId = 'panelTipoEdicion';}
         if(this.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){tipoId = 'panelConteoMarcadores';}
+        this.tipoId = tipoId;
         const panel = this.$children.find(c=>c.id == tipoId);
         this.setDataChild(panel)
         return panel;
@@ -96,6 +107,16 @@ export default {
         
         let panel =this. assignPanel();
         panel.show();
+        $("#nav-panel").show();
+    },
+    clearAllSections: function(){
+        const customLayer = this.geometryLoader.getCustomLayer();
+
+        this.geometryLoader.removeMarkerAll();
+
+        if(customLayer && customLayer.layer){            
+            this.geometryLoader.removeCustomLayer();
+        }        
     },
     setDataChild(child){
         for(var key in this.$data){
@@ -105,6 +126,7 @@ export default {
                 }
             }
         }
+        child.parentPanel = this; 
     },
     hideChildComponents(){
         this.$children.forEach(child => {

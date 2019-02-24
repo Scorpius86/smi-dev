@@ -5,7 +5,54 @@ export default {
     template: `
       <div v-if="display">
         <template>                            
-          <div></div>
+          <div class = "panel-conteo-marcadores">
+            <div class="row ">
+              <div class="col title">
+                Custom Area 1
+              </div>               
+            </div>
+            <div class="row">
+              <div class="col infoTitle">
+                Area {{ area.toLocaleString('en', {useGrouping:true}) }} Km<sup>2</sup>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col subTitle">
+                Infraestructura
+              </div>
+            </div>
+            <div v-if="(sections.length > 0)">
+              <div class="statisticTable" v-for="parentSection in sections" >
+                <div class="row">
+                  <div class="col-9 headerTable">
+                    {{parentSection.name}}
+                  </div>
+                  <div class="col-3 headerTable">
+                    Cantidad
+                  </div>
+                </div>
+                <div class="bodyTable">
+                  <div v-for="section in parentSection.sections">
+                    <div class="row">
+                      <div class="col-9 cellTextTable">
+                        <div class="iconLegend" v-bind:style="{ backgroundColor: section.color}"></div>
+                        <div class="padLeft15">
+                          {{section.name}}
+                        </div>
+                      </div>
+                      <div class="col-3 cellNumberTable">
+                        {{section.count}}
+                      </div>
+                    </div>
+                  </div>
+                </div>   
+              </div>  
+            </div>    
+            
+            <button type="button" class="btn btn-sm btn-primary" v-on:click="btnExportClick">
+              {{labels.button_export}}
+            </button>
+          </div>
         </template>
       </div>
         `,
@@ -13,12 +60,15 @@ export default {
       return {
         title: "",
         display: true,
+        sections:[],
+        labels:{},
+        area:0,
         geometryLoader:GeometryLoader
       };
     },
     props:["id"],
     created() {
-      this.geometryLoader = new GeometryLoader();
+      
     },
     methods: {
       hide: function() {
@@ -31,6 +81,9 @@ export default {
         showLoading();
 
         this.geometryLoader.removeMarkerAll();
+        this.geometryLoader.addCustomLayer(e);
+
+        this.area = Math.round((L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0])/1000000) * 100)/100;
 
         $.ajax({
           url: url,
@@ -41,6 +94,8 @@ export default {
             if (typeof (res !== "undefined") && res !== null) {
               if (res.status) {
                 me.getIntersectionPoints(res.data);
+                me.buildStatistics(res.data);
+                me.parentPanel.show();       
               }
             }
           },
@@ -49,10 +104,44 @@ export default {
             hideLoading();
           }
         });
-      },
+      },      
       getIntersectionPoints: function(data){
-        debugger;
         this.geometryLoader.loadGeometrys(data);
+      },
+      buildStatistics: function(data){
+        this.sections = [];
+        if(Array.isArray(data)){
+            for (let i = 0; i < data.length; i++) {
+              const section = this.sections.find(item=>item.id == data[i].seccion.idSeccionPadre);
+              if(!section){
+                this.sections.push({
+                  name: data[i].seccion.nombrePadre,
+                  id: data[i].seccion.idSeccionPadre,
+                  colorPadre: data[i].seccion.colorPadre,
+                  sections:[
+                    {
+                      name: data[i].seccion.nombre,
+                      id: data[i].seccion.id,
+                      count: data[i].geoJsonFile.length,
+                      color: data[i].seccion.color,
+                      parentSectionId: data[i].seccion.idSeccionPadre,
+                      sections:[]
+                    }
+                  ]
+                });
+
+              } else {
+                section.sections.push({
+                  name: data[i].seccion.nombre,
+                  id: data[i].seccion.id,
+                  count: data[i].geoJsonFile.length,
+                  color: data[i].seccion.color,
+                  parentSectionId: data[i].seccion.idSeccionPadre,
+                  sections:[]
+                });
+              }
+            }
+        }
       },
       getCoordinates:function(geometry){
         const coordinates = geometry.coordinates[0];
@@ -66,13 +155,30 @@ export default {
         return resultCoordinates;
       },
       show: function() {
-        this.display = true;  
-        showLoading();
-  
+        this.display = true;
         this.title = "";
-        map.addControl(window.drawControl);
+      },
+      btnExportClick:function(e){
+        const url = UrlAPI.base + "/export/IntersectionPoints";
 
-        hideLoading();
-      }   
+        showLoading();
+        $.ajax({
+          url: url,
+          type: "POST",
+          data: { "sections": this.sections, "area": this.area },
+          success: function(fileId, textStatus, request) {
+            var link = document.createElement("a");
+            document.body.appendChild(link);
+            link.download = "report.xlsx";
+            link.href = UrlAPI.base + "/export/"+fileId;
+            link.click();
+            document.body.removeChild(link);            
+          },
+          error: function(xhr, status) {},
+          complete: function(xhr, status) {
+            hideLoading();
+          }
+        });
+      }
     }
   }

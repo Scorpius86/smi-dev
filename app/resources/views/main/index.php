@@ -25,6 +25,8 @@
     <link href="css/sidebar.css" rel="stylesheet">
     <link href="css/sidebar-right.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
+
+    <link href="css/panel/panel-conteo-marcadores.css" rel="stylesheet"/>
     <title>Peru Cacao</title>
 
 </head>

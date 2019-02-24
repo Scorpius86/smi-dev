@@ -168,7 +168,13 @@ function initMap($regiones, $afterMapIsLoaded) {
   window.drawControl = new L.Control.Draw({
     draw: {
         polyline:false,
-        polygon: true,
+        polygon: {
+					shapeOptions: {
+            color: 'orange',
+            weight: 1,
+            fillColor: 'green'
+          }
+        },
         circle:false,
         marker: false,
         rectangle:false,
@@ -846,19 +852,21 @@ function onceMapIsLoaded() {
     $seccion.color = $(this).attr("data-color");
     $seccion.logo = $(this).attr("data-logo");
     $seccion.codigoSeccion = $(this).attr("data-codigoseccion");
-
-
+    
     map.removeControl(window.drawControl);
+    smiPanel.$refs.param.codigoSeccion = $seccion.codigoSeccion;
+    smiPanel.$refs.param.tipo = '';
+    smiPanel.$refs.param.input = {};
+    
     if($seccion.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){
-      removeMarkerAll();
-      $("#nav-panel").hide();
-      
-      smiPanel.$refs.param.tipo = '';
-      smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
-      smiPanel.$refs.param.input = {};
-      smiPanel.$refs.param.show();
-      $("#nav-panel").show();
+      smiPanel.$refs.param.hide();      
+      smiPanel.$refs.param.clearAllSections();
+      map.addControl(window.drawControl);
       return;
+    }else{
+      if(smiPanel.$refs.param.geometryLoader.getCustomLayer()){
+        smiPanel.$refs.param.clearAllSections();
+      }
     }
 
     if (!$isChecked) {
