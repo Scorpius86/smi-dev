@@ -27,8 +27,12 @@ Route::group(['middleware' => 'cors'], function() {
  });
 
  Route::group(['middleware' => 'cors'], function() {
+    Route::post('/export/IntersectionPoints','ExportController@exportIntersectionPoints');
+    Route::get('/export/{fileId}','ExportController@export');
+
     Route::get('/secciones','SeccionesController@get');
     Route::get('/secciones/{id}','SeccionesController@getById');
+    Route::post('/secciones/intersectionPoints/','SeccionesController@getIntersectionPoints');    
     Route::get('/secciones/{id}/detalle/','SeccionesController@getSeccionDetalleByIdSeccion');
     Route::get('/secciones/{id}/detalle/{codigoGIS}/atributos','AtributosController@getSeccionDetalleAtributoByIdSeccion');
     // Route::get('/secciones/{id}/detalle/panel','SeccionesController@getSeccionDetalleInformacionPanel');

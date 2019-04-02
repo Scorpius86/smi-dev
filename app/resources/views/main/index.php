@@ -25,6 +25,8 @@
     <link href="css/sidebar.css" rel="stylesheet">
     <link href="css/sidebar-right.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
+
+    <link href="css/panel/panel-conteo-marcadores.css" rel="stylesheet"/>
     <title>Peru Cacao</title>
 
 </head>
@@ -243,13 +245,14 @@
 
     <script src="js/pages/ui/message.vue.js"></script>
     <script src="js/pages/seccion/seccion.component.vue.js"></script>
-    <script src="js/pages/panel/panel-edicion.vue.js"></script>
+    <!-- <script type="module" src="js/pages/panel/panel-conteo-marcadores.vue.js"></script> -->
+    <!-- <script type="module" src="js/pages/panel/panel-edicion.vue.js"></script> -->
         
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
         {{#with data as |panelData|}}
         <div class="modal-header">
-            <h3 class="modal-title"> {{titulo}} </h3>
+            <h3 class="modal-title"> {{panelData.nombre}} </h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -273,10 +276,10 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="seccion-informacion" role="tabpanel" aria-labelledby="seccion-informacion-tab">
                         <br>
-                        {{#with detalle}}
-                        <input type="hidden" data-validate="true" data-field="idSeccion" value="{{idSeccion}}">
-                        <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{id}}">
-                        <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{codigoGIS}}">
+                        {{#with detallePrincipal}}
+                        <input type="hidden" data-validate="true" data-field="idSeccion" value="{{panelData.idSeccion}}">
+                        <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{idSeccionDetalle}}">
+                        <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{panelData.codigoGISPrincipal}}">
                         <div class="form-group">
                             <label for="formGroupExampleInput">{{panelData.label.panel_label_name}}</label>
                             <input type="text" class="form-control" data-validate="true" data-field="nombre" placeholder="{{panelData.label.panel_label_name}}" value="{{nombre}}">
@@ -305,8 +308,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each atributos}}
-                                <tr  data-id="{{id}}">
+                                {{#each detallePrincipal.atributos}}
+                                <tr  data-id="{{idSeccionAtributo}}">
                                     <td>
                                         <input type="text" class="atributo-nombre" value="{{nombre}}" data-field-id="{{id}}">
                                     </td>
@@ -314,7 +317,7 @@
                                         <input type="text" class="atributo-valor" value="{{valor}}" data-field-id="{{id}}">
                                     </td>
                                     <td>
-                                        <a class="nav-link" style="cursor: pointer;" onClick="quitarAtributo('{{id}}')">
+                                        <a class="nav-link" style="cursor: pointer;" onClick="quitarAtributo('{{idSeccionAtributo}}')">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
@@ -333,8 +336,8 @@
         </div>
         {{/with}}
     </script>
-
-    <<script>
+    
+    <script type="module">
 
         //Vue.use(VueRouter);
         //Vue.use(VeeValidate);
@@ -345,7 +348,7 @@
             messages, // set locale messages
         });
         
-        var app = new Vue({
+        window.app = new Vue({
             el: '#app',
             watch: {},
             mounted() {
@@ -391,9 +394,16 @@
             i18n
         });
 
-        var smiSeccion=new Vue({ el: '#menu-sidebar' });
-        var smiMensaje=new Vue({ el: '#vue-modal' });
-        var smiPanel=new Vue({ el: '#vue-panel' });
+        
+        import PanelEdicion from './js/pages/panel/panel-edicion.vue.js';
+
+        window.smiSeccion=new Vue({ el: '#menu-sidebar' });
+        window.smiMensaje=new Vue({ el: '#vue-modal' });
+        window.smiPanel=new Vue({ el: '#vue-panel',
+            components: {
+                'vue-panel-edicion': PanelEdicion
+            }
+        });
     </script>
 
 </body>

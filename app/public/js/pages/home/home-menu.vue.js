@@ -51,7 +51,7 @@ Vue.component("vue-home-menu", {
     //this.onMostrarMensaje();
   },
   methods: {
-    show: function() {
+      show: function () {
       this.mostrarMenu = true;
     }
   },
