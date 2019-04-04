@@ -52,7 +52,7 @@ DELETE FROM smi_dev.seccion where nombre = 'Conteo de marcadores';
 
 ##------------------------------------------- Crear tabla Tipo de Infraestructura -----------------------------------------
 CREATE TABLE `tipo_infraestructura` (
-  `idTipoInfra` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `descripcion` varchar(100) NOT NULL,
   PRIMARY KEY (`idTipoInfra`)
 );
