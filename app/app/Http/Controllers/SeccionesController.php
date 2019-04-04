@@ -33,6 +33,13 @@ class SeccionesController extends Controller
         $baseLogoUrl='/img/seccion/logo/';
         $baseMarkerUrl='/img/seccion/marker/';
         $polygon =  $request['polygon'];
+        $listaSecciones = $request['listaSecciones'];
+
+        /*error_log('error aaaaa');
+        foreach ($listaSecciones as $v) {
+            error_log("$v.\n");
+        }*/
+
         //$polygon = array("-77.82141 -9.215983","-76.413292 -11.922895","-73.245027 -10.34194","-75.122518 -8.724029","-77.82141 -9.215983");
         //$polygon = array("-74.975722 0.162964","-73.889519 -1.799631","-72.27605 -0.364377","-74.975722 0.162964");
         $geoComponents = array();
@@ -43,6 +50,7 @@ class SeccionesController extends Controller
             ['seccion.geoJsonFile','!=','NULL']
         ])
         ->leftJoin('seccion as seccionPadre', 'seccion.idSeccionPadre', '=', 'seccionPadre.id')
+        ->whereIn('seccion.id', $listaSecciones)
         ->whereNotNull('seccion.geoJsonFile')
         ->select(
             "seccion.id",

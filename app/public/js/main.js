@@ -183,8 +183,10 @@ function initMap($regiones, $afterMapIsLoaded) {
   });
 
   map.on(L.Draw.Event.CREATED, function (e) {
+    smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
     smiPanel.$refs.param.DrawEventCREATED(e);
   });
+    
 }
 
 function markers() {
@@ -822,6 +824,11 @@ function removeMarker($id, $seccionId) {
 
   $("#" + $id).prop("checked", false);
   removeLegend($seccionId);
+
+  const $map_legend = $("#map-legend");
+  if ($map_legend[0].childElementCount == 0){
+    map.removeControl(window.drawControl);
+  }
 }
 
 function removeMarkerAll() {
@@ -858,15 +865,9 @@ function onceMapIsLoaded() {
     smiPanel.$refs.param.tipo = '';
     smiPanel.$refs.param.input = {};
     
-    if($seccion.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){
-      smiPanel.$refs.param.hide();      
+    map.addControl(window.drawControl);
+    if(smiPanel.$refs.param.geometryLoader.getCustomLayer()){
       smiPanel.$refs.param.clearAllSections();
-      map.addControl(window.drawControl);
-      return;
-    }else{
-      if(smiPanel.$refs.param.geometryLoader.getCustomLayer()){
-        smiPanel.$refs.param.clearAllSections();
-      }
     }
 
     if (!$isChecked) {

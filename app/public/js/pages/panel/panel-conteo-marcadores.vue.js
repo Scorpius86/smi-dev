@@ -80,20 +80,27 @@ export default {
         const url = UrlAPI.base + "/secciones/intersectionPoints";
         showLoading();
 
-        this.geometryLoader.removeMarkerAll();
+        //this.geometryLoader.removeMarkerAll();
         this.geometryLoader.addCustomLayer(e);
 
         this.area = Math.round((L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0])/1000000) * 100)/100;
+
+        let listaSecciones = [];
+        layers.forEach(obj => {
+          if (obj.id !== 'customLayer'){
+            listaSecciones.push(obj.id);
+          }
+        });
 
         $.ajax({
           url: url,
           type: "POST",
           dataType: "json",
-          data: { "polygon": polygon },
+          data: { "polygon": polygon, "listaSecciones": listaSecciones},
           success: function(res) {
             if (typeof (res !== "undefined") && res !== null) {
               if (res.status) {
-                me.getIntersectionPoints(res.data);
+                //me.getIntersectionPoints(res.data);
                 me.buildStatistics(res.data);
                 me.parentPanel.show();       
               }

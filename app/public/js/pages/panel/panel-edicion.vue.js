@@ -82,14 +82,16 @@ export default {
   },
   methods: {
     DrawEventCREATED:function(e){
-        let panel =this. assignPanel();
+        let panel =this.assignPanel();
         panel.DrawEventCREATED(e);
     },
     assignPanel: function () {
         let tipoId;
         if(this.tipo == 'grafico'){tipoId = 'panelTipoGrafico';}
         if(this.tipo == 'edicion'){tipoId = 'panelTipoEdicion';}
-        if(this.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){tipoId = 'panelConteoMarcadores';}
+        if(this.codigoSeccion == CONSTANTES.SECCIONES.CONTEO_MARCADORES){
+            tipoId = 'panelConteoMarcadores';
+        }
         this.tipoId = tipoId;
         const panel = this.$children.find(c=>c.id == tipoId);
         this.setDataChild(panel)
