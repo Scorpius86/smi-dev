@@ -48,7 +48,7 @@ VALUES ('ConteoMarcadores','Conteo de marcadores', 'Marker Count', '0', '1', '0'
 ALTER TABLE smi_dev.seccion ADD COLUMN idTipoInfra INT(11) NULL;
 
 ##------------------------------------------- Eliminar la seccion ConteoMarcadores ---------------------------------------- 
-DELETE FROM smi_dev.seccion where nombre = 'Conteo de marcadores';
+update smi_dev.seccion set activo=0 where id=69; 
 
 ##------------------------------------------- Crear tabla Tipo de Infraestructura -----------------------------------------
 CREATE TABLE `tipo_infraestructura` (
