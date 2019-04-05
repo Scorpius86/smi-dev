@@ -1,8 +1,8 @@
-import GeometryLoader  from '../../shared/geometry-loader.js';
+import GeometryLoader from '../../shared/geometry-loader.js';
 
 export default {
-    name: "vue-panel-conteo-marcadores",
-    template: `
+  name: "vue-panel-conteo-marcadores",
+  template: `
       <div v-if="display">
         <template>                            
           <div class = "panel-conteo-marcadores">
@@ -56,136 +56,148 @@ export default {
         </template>
       </div>
         `,
-    data() {
-      return {
-        title: "",
-        display: true,
-        sections:[],
-        labels:{},
-        area:0,
-        geometryLoader:GeometryLoader
-      };
+  data() {
+    return {
+      title: "",
+      display: true,
+      sections: [],
+      labels: {},
+      area: 0,
+      geometryLoader: GeometryLoader
+    };
+  },
+  props: ["id"],
+  created() {
+
+  },
+  methods: {
+    hide: function () {
+
     },
-    props:["id"],
-    created() {
-      
-    },
-    methods: {
-      hide: function() {
-        
-      },
-      DrawEventCREATED:function(e){
-        const me = this;
-        const polygon = this.getCoordinates(e.layer.toGeoJSON().geometry);        
-        const url = UrlAPI.base + "/secciones/intersectionPoints";
-        showLoading();
+    DrawEventCREATED: function (e) {
+      let radius = null;
+      let isPolygon = -1;
+      const me = this;
+      let polygon = this.getCoordinates(e.layer.toGeoJSON().geometry);
+      const url = UrlAPI.base + "/secciones/intersectionPoints";
+      showLoading();
 
-        //this.geometryLoader.removeMarkerAll();
-        this.geometryLoader.addCustomLayer(e);
+      //this.geometryLoader.removeMarkerAll();
+      this.geometryLoader.addCustomLayer(e);
 
-        this.area = Math.round((L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0])/1000000) * 100)/100;
+      if (e.layerType === 'polygon') {
+        isPolygon = 1;
+        this.area = Math.round((L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0]) / 1000000) * 100) / 100;
+      } else if (e.layerType === 'circle') {
+        isPolygon = 0;
+        radius = e.layer.getRadius();
+        polygon = e.layer.toGeoJSON().geometry;
+        let radioKm = Number(e.layer.getRadius()) / 1000; // km
+        this.area = Math.round(radioKm * radioKm * Math.PI);
 
-        let listaSecciones = [];
-        layers.forEach(obj => {
-          if (obj.id !== 'customLayer'){
-            listaSecciones.push(obj.id);
-          }
-        });
+      }
 
-        $.ajax({
-          url: url,
-          type: "POST",
-          dataType: "json",
-          data: { "polygon": polygon, "listaSecciones": listaSecciones},
-          success: function(res) {
-            if (typeof (res !== "undefined") && res !== null) {
-              if (res.status) {
-                //me.getIntersectionPoints(res.data);
-                me.buildStatistics(res.data);
-                me.parentPanel.show();       
-              }
+      let listaSecciones = [];
+      layers.forEach(obj => {
+        if (obj.id !== 'customLayer') {
+          listaSecciones.push(obj.id);
+        }
+      });
+
+      $.ajax({
+        url: url,
+        type: "POST",
+        dataType: "json",
+        data: { "polygon": polygon, "listaSecciones": listaSecciones, "isPolygon": isPolygon, "radius": radius },
+        success: function (res) {
+          if (typeof (res !== "undefined") && res !== null) {
+            if (res.status) {
+              //me.getIntersectionPoints(res.data);
+              me.buildStatistics(res.data);
+              me.parentPanel.show();
             }
-          },
-          error: function(xhr, status) {},
-          complete: function(xhr, status) {
-            hideLoading();
           }
-        });
-      },      
-      getIntersectionPoints: function(data){
-        this.geometryLoader.loadGeometrys(data);
-      },
-      buildStatistics: function(data){
-        this.sections = [];
-        if(Array.isArray(data)){
-            for (let i = 0; i < data.length; i++) {
-              const section = this.sections.find(item=>item.id == data[i].seccion.idSeccionPadre);
-              if(!section){
-                this.sections.push({
-                  name: data[i].seccion.nombrePadre,
-                  id: data[i].seccion.idSeccionPadre,
-                  colorPadre: data[i].seccion.colorPadre,
-                  sections:[
-                    {
-                      name: data[i].seccion.nombre,
-                      id: data[i].seccion.id,
-                      count: data[i].geoJsonFile.length,
-                      color: data[i].seccion.color,
-                      parentSectionId: data[i].seccion.idSeccionPadre,
-                      sections:[]
-                    }
-                  ]
-                });
-
-              } else {
-                section.sections.push({
+        },
+        error: function (xhr, status) { },
+        complete: function (xhr, status) {
+          hideLoading();
+        }
+      });
+    },
+    getIntersectionPoints: function (data) {
+      this.geometryLoader.loadGeometrys(data);
+    },
+    buildStatistics: function (data) {
+      this.sections = [];
+      if (Array.isArray(data)) {
+        for (let i = 0; i < data.length; i++) {
+          const section = this.sections.find(item => item.id == data[i].seccion.idSeccionPadre);
+          if (!section) {
+            this.sections.push({
+              name: data[i].seccion.nombrePadre,
+              id: data[i].seccion.idSeccionPadre,
+              colorPadre: data[i].seccion.colorPadre,
+              sections: [
+                {
                   name: data[i].seccion.nombre,
                   id: data[i].seccion.id,
                   count: data[i].geoJsonFile.length,
                   color: data[i].seccion.color,
                   parentSectionId: data[i].seccion.idSeccionPadre,
-                  sections:[]
-                });
-              }
-            }
-        }
-      },
-      getCoordinates:function(geometry){
-        const coordinates = geometry.coordinates[0];
-        const resultCoordinates = new Array();
-        for (let i = 0; i < coordinates.length; i++) {
-          const coordinate = coordinates[i];
-          const x = coordinate[0];
-          const y = coordinate[1];
-          resultCoordinates.push(x + ' ' + y);
-        }
-        return resultCoordinates;
-      },
-      show: function() {
-        this.display = true;
-        this.title = "";
-      },
-      btnExportClick:function(e){
-        const url = UrlAPI.base + "/export/IntersectionPoints";
+                  sections: []
+                }
+              ]
+            });
 
-        showLoading();
-        $.ajax({
-          url: url,
-          type: "POST",
-          data: { "sections": this.sections, "area": this.area },
-          success: function(fileId, textStatus, request) {
-            var link = document.createElement("a");
-            document.body.appendChild(link);
-            link.download = "report.xlsx";
-            link.href = UrlAPI.base + "/export/"+fileId;
-            link.click();
-            document.body.removeChild(link);            
-          },
-          error: function(xhr, status) {},
-          complete: function(xhr, status) {
-            hideLoading();
+          } else {
+            section.sections.push({
+              name: data[i].seccion.nombre,
+              id: data[i].seccion.id,
+              count: data[i].geoJsonFile.length,
+              color: data[i].seccion.color,
+              parentSectionId: data[i].seccion.idSeccionPadre,
+              sections: []
+            });
           }
-        });
+        }
       }
+    },
+    getCoordinates: function (geometry) {
+      const coordinates = geometry.coordinates[0];
+      const resultCoordinates = new Array();
+      for (let i = 0; i < coordinates.length; i++) {
+        const coordinate = coordinates[i];
+        const x = coordinate[0];
+        const y = coordinate[1];
+        resultCoordinates.push(x + ' ' + y);
+      }
+      return resultCoordinates;
+    },
+    show: function () {
+      this.display = true;
+      this.title = "";
+    },
+    btnExportClick: function (e) {
+      const url = UrlAPI.base + "/export/IntersectionPoints";
+
+      showLoading();
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: { "sections": this.sections, "area": this.area },
+        success: function (fileId, textStatus, request) {
+          var link = document.createElement("a");
+          document.body.appendChild(link);
+          link.download = "report.xlsx";
+          link.href = UrlAPI.base + "/export/" + fileId;
+          link.click();
+          document.body.removeChild(link);
+        },
+        error: function (xhr, status) { },
+        complete: function (xhr, status) {
+          hideLoading();
+        }
+      });
     }
   }
+}

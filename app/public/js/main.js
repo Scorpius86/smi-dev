@@ -175,7 +175,13 @@ function initMap($regiones, $afterMapIsLoaded) {
             fillColor: 'green'
           }
         },
-        circle:false,
+        circle:{
+					shapeOptions: {
+            color: 'orange',
+            weight: 1,
+            fillColor: 'green'
+          }
+        },
         marker: false,
         rectangle:false,
         circlemarker:false

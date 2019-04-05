@@ -1,6 +1,7 @@
 <?php
 namespace smi\Http\Controllers;
-include_once(app_path().'\geoPHP\geoPHP.inc');
+
+include_once(app_path() . '\geoPHP\geoPHP.inc');
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -18,27 +19,41 @@ use smi\Dto\ProduccionDto;
 use Carbon\Carbon;
 use geoPHP;
 use smi\geoPHP\PointLocation;
+use smi\TipoInfraestructura;
+use smi\Dto\TipoInfraDto;
 
 
 class SeccionesController extends Controller
 {
-    public function get(){
-        $secciones=Seccion::where([['eliminado','=','0']])->get();
+    public function get()
+    {
+        $secciones = Seccion::where([['eliminado', '=', '0']])->get();
 
-        $data= array('status'=> true, 'data'=> $secciones);
+        $data = array('status' => true, 'data' => $secciones);
         return $data;
     }
-    public function getIntersectionPoints(Request $request){
+    public function getIntersectionPoints(Request $request)
+    {
+        $myhashmap = array();
         ini_set('memory_limit', '-1');
-        $baseLogoUrl='/img/seccion/logo/';
-        $baseMarkerUrl='/img/seccion/marker/';
+        $baseLogoUrl = '/img/seccion/logo/';
+        $baseMarkerUrl = '/img/seccion/marker/';
         $polygon =  $request['polygon'];
         $listaSecciones = $request['listaSecciones'];
+        $isPolygon =  $request['isPolygon'];
+        $radius =  $request['radius'];
 
-        /*error_log('error aaaaa');
-        foreach ($listaSecciones as $v) {
-            error_log("$v.\n");
-        }*/
+        $pointCircle = null;
+        if ($radius != null) {
+            $pointCircle =  $polygon['coordinates'][0] . ' ' . $polygon['coordinates'][1];
+        }
+
+        $queryTipo = TipoInfraestructura::select("id", "descripcion");
+        $tipos = $queryTipo->get();
+
+        foreach ($tipos as $tipo) {
+            $myhashmap[$tipo['id']] = new TipoInfraDto();
+        }
 
         //$polygon = array("-77.82141 -9.215983","-76.413292 -11.922895","-73.245027 -10.34194","-75.122518 -8.724029","-77.82141 -9.215983");
         //$polygon = array("-74.975722 0.162964","-73.889519 -1.799631","-72.27605 -0.364377","-74.975722 0.162964");
@@ -46,89 +61,111 @@ class SeccionesController extends Controller
         $data = array();
 
         $query = Seccion::where([
-            ['seccion.eliminado','=','0'],
-            ['seccion.geoJsonFile','!=','NULL']
+            ['seccion.eliminado', '=', '0'],
+            ['seccion.geoJsonFile', '!=', 'NULL']
         ])
-        ->leftJoin('seccion as seccionPadre', 'seccion.idSeccionPadre', '=', 'seccionPadre.id')
-        ->whereIn('seccion.id', $listaSecciones)
-        ->whereNotNull('seccion.geoJsonFile')
-        ->select(
-            "seccion.id",
-            "seccion.codigoGIS",
-            "seccion.nombre",
-            "seccion.nombreIdioma",
-            "seccion.idTipoGeoData",
-            "seccion.menuCategoria",
-            "seccion.menuAccion",
-            "seccion.idTipoAccion",
-            "seccion.idSeccionPadre",
-            "seccionPadre.nombre as nombrePadre",
-            "seccionPadre.nombreIdioma as nombreIdiomaPadre",
-            "seccionPadre.color as colorPadre",
-            "seccion.geoJsonData",
-            "seccion.geoJsonFile",
-            "seccion.logo",
-            "seccion.marker",
-            "seccion.color",
-            "seccion.codigoSeccion"
-        );
-        
+            ->leftJoin('seccion as seccionPadre', 'seccion.idSeccionPadre', '=', 'seccionPadre.id')
+            ->whereIn('seccion.id', $listaSecciones)
+            ->whereNotNull('seccion.geoJsonFile')
+            ->orderBy('seccion.idTipoInfra', 'asc')
+            ->select(
+                "seccion.id",
+                "seccion.codigoGIS",
+                "seccion.nombre",
+                "seccion.nombreIdioma",
+                "seccion.idTipoGeoData",
+                "seccion.menuCategoria",
+                "seccion.menuAccion",
+                "seccion.idTipoAccion",
+                "seccion.idSeccionPadre",
+                "seccionPadre.nombre as nombrePadre",
+                "seccionPadre.nombreIdioma as nombreIdiomaPadre",
+                "seccionPadre.color as colorPadre",
+                "seccion.geoJsonData",
+                "seccion.geoJsonFile",
+                "seccion.logo",
+                "seccion.marker",
+                "seccion.color",
+                "seccion.codigoSeccion",
+                'seccion.idTipoInfra'
+            );
+
         $secciones = $query->get();
-        //$secciones = $query->paginate(20);
         $pointLocation = new PointLocation();
 
         foreach ($secciones as $seccion) {
             $dataGeoJson = array();
-            $fileName= $seccion->geoJsonFile;
-            $baseSrc='/storage/app/public/json//';
-            $file= base_path().$baseSrc.($fileName);
-            $geoFile = @file_get_contents($file);   
-            $seccionOK = false;       
+            $fileName = $seccion->geoJsonFile;
+            $baseSrc = '/storage/app/public/json//';
+            $file = base_path() . $baseSrc . ($fileName);
+            $geoFile = @file_get_contents($file);
+            $seccionOK = false;
 
-            if ($geoFile != false) {    
-                $dataGeoJsonFile = file_get_contents($file);   
-                $multiPoints = geoPHP::load($dataGeoJsonFile, 'json');         
+            if ($geoFile != false) {
+                $dataGeoJsonFile = file_get_contents($file);
+                $multiPoints = geoPHP::load($dataGeoJsonFile, 'json');
                 $components  = $multiPoints->getComponents();
                 foreach ($components as $component) {
-                    if($component->geometryType()=='Point'){
-                        $point = $component->getX().' '.$component->getY();
-                        if($pointLocation->pointInPolygon($point, $polygon) != 'outside'){                         
-                            array_push($dataGeoJson,$component->out("json"));
-                            $seccionOK = true;
-                        }                       
+                    if ($component->geometryType() == 'Point') {
+                        $point = $component->getX() . ' ' . $component->getY();
+                        if ($isPolygon == 1) {
+                            if ($pointLocation->pointInPolygon($point, $polygon) != 'outside') {
+                                array_push($dataGeoJson, $component->out("json"));
+                                $seccionOK = true;
+                            }
+                        } else {
+                            if ($pointCircle != null) {
+                                $tipoInfraDto = $myhashmap[$seccion['idTipoInfra']];
+                                $tipoInfraDto->cantidad = $tipoInfraDto->cantidad + 1;
+                                $coordA = explode(" ", $point);
+                                $coordB = explode(" ", $pointCircle);
+                                $dist = $pointLocation->haversineGreatCircleDistance($coordB[1], $coordB[0], $coordA[1], $coordA[0]);
+                                if ($tipoInfraDto->distancia == 0 || $tipoInfraDto->distancia < ($dist / 1000)) {
+                                    $tipoInfraDto->distancia = number_format($dist / 1000, 2);
+                                }
+                                if ((float)$dist <= (float)$radius) {
+                                    array_push($dataGeoJson, $component->out("json"));
+                                    $seccionOK = true;
+                                }
+                                $myhashmap[$seccion['idTipoInfra']] = $tipoInfraDto;
+                            }
+                        }
                     }
                     unset($component);
                 }
 
-                if($seccionOK){
-                    $logoUrl=null;
-                    $fullLogoUrl=null;
-                    if($seccion->logo <> null){
-                        $fullLogoUrl= url('/').$baseLogoUrl.($seccion->logo);
-                        $logoUrl= $baseLogoUrl.($seccion->logo);
-                    }else{
-                        $fullLogoUrl= url('/').$baseLogoUrl.('logo-default.png');
-                        $logoUrl= $baseLogoUrl.('logo-default.png');
+                if ($seccionOK) {
+                    $logoUrl = null;
+                    $fullLogoUrl = null;
+                    if ($seccion->logo <> null) {
+                        $fullLogoUrl = url('/') . $baseLogoUrl . ($seccion->logo);
+                        $logoUrl = $baseLogoUrl . ($seccion->logo);
+                    } else {
+                        $fullLogoUrl = url('/') . $baseLogoUrl . ('logo-default.png');
+                        $logoUrl = $baseLogoUrl . ('logo-default.png');
                     }
 
-                    $markerUrl=null;
-                    $fullMarkerUrl=null;
-                    if($seccion->marker <> null){
-                        $fullMarkerUrl= url('/').$baseMarkerUrl.($seccion->marker);
-                        $markerUrl= $baseMarkerUrl.($seccion->marker);
-                    }else{
-                        $fullMarkerUrl= url('/').$baseMarkerUrl.('marker-default.svg');
-                        $markerUrl= $baseMarkerUrl.('marker-default.svg');
-                    }        
+                    $markerUrl = null;
+                    $fullMarkerUrl = null;
+                    if ($seccion->marker <> null) {
+                        $fullMarkerUrl = url('/') . $baseMarkerUrl . ($seccion->marker);
+                        $markerUrl = $baseMarkerUrl . ($seccion->marker);
+                    } else {
+                        $fullMarkerUrl = url('/') . $baseMarkerUrl . ('marker-default.svg');
+                        $markerUrl = $baseMarkerUrl . ('marker-default.svg');
+                    }
 
-                    array_push($data,array(
+                    array_push(
+                        $data,
+                        array(
+                            'tipo' => $tipos,
                             'seccion' => $seccion,
-                            'geoJsonFile'=> $dataGeoJson,
-                            'fullLogoUrl'=> $fullLogoUrl,
-                            'logoUrl'=> $logoUrl,
-                            'fullMarkerUrl'=> $fullMarkerUrl,
-                            'markerUrl'=> $markerUrl
-                        )            
+                            'geoJsonFile' => $dataGeoJson,
+                            'fullLogoUrl' => $fullLogoUrl,
+                            'logoUrl' => $logoUrl,
+                            'fullMarkerUrl' => $fullMarkerUrl,
+                            'markerUrl' => $markerUrl
+                        )
                     );
                 }
                 unset($components);
@@ -136,28 +173,29 @@ class SeccionesController extends Controller
                 unset($dataGeoJsonFile);
             }
         }
-        
-        $response= array(
-            'status'=> true, 
-            'data'=> $data
+
+        $response = array(
+            'status' => true,
+            'data' => $data
         );
         return $response;
     }
 
-    public function getById($idSeccion){
-        
+    public function getById($idSeccion)
+    {
+
         // Polygon WKT example
-        $baseLogoUrl='/img/seccion/logo/';
-        $baseMarkerUrl='/img/seccion/marker/';
+        $baseLogoUrl = '/img/seccion/logo/';
+        $baseMarkerUrl = '/img/seccion/marker/';
 
-        $seccion = Seccion::where([['id','=',$idSeccion]])->with('seccionDetalle')->first();
+        $seccion = Seccion::where([['id', '=', $idSeccion]])->with('seccionDetalle')->first();
 
-        $dataGeoJson=null;
+        $dataGeoJson = null;
 
-        if($seccion->geoJsonFile <> null ){
-            $fileName= $seccion->geoJsonFile;
-            $baseSrc='/storage/app/public/json//';
-            $file= base_path().$baseSrc.($fileName);
+        if ($seccion->geoJsonFile <> null) {
+            $fileName = $seccion->geoJsonFile;
+            $baseSrc = '/storage/app/public/json//';
+            $file = base_path() . $baseSrc . ($fileName);
             $geoFile = @file_get_contents($file);
 
             if ($geoFile != false) {
@@ -165,169 +203,173 @@ class SeccionesController extends Controller
             }
         }
 
-        $logoUrl=null;
-        $fullLogoUrl=null;
-        if($seccion->logo <> null){
-            $fullLogoUrl= url('/').$baseLogoUrl.($seccion->logo);
-            $logoUrl= $baseLogoUrl.($seccion->logo);
-        }else{
-            $fullLogoUrl= url('/').$baseLogoUrl.('logo-default.png');
-            $logoUrl= $baseLogoUrl.('logo-default.png');
+        $logoUrl = null;
+        $fullLogoUrl = null;
+        if ($seccion->logo <> null) {
+            $fullLogoUrl = url('/') . $baseLogoUrl . ($seccion->logo);
+            $logoUrl = $baseLogoUrl . ($seccion->logo);
+        } else {
+            $fullLogoUrl = url('/') . $baseLogoUrl . ('logo-default.png');
+            $logoUrl = $baseLogoUrl . ('logo-default.png');
         }
 
-        $markerUrl=null;
-        $fullMarkerUrl=null;
-        if($seccion->marker <> null){
-            $fullMarkerUrl= url('/').$baseMarkerUrl.($seccion->marker);
-            $markerUrl= $baseMarkerUrl.($seccion->marker);
-        }else{
-            $fullMarkerUrl= url('/').$baseMarkerUrl.('marker-default.svg');
-            $markerUrl= $baseMarkerUrl.('marker-default.svg');
+        $markerUrl = null;
+        $fullMarkerUrl = null;
+        if ($seccion->marker <> null) {
+            $fullMarkerUrl = url('/') . $baseMarkerUrl . ($seccion->marker);
+            $markerUrl = $baseMarkerUrl . ($seccion->marker);
+        } else {
+            $fullMarkerUrl = url('/') . $baseMarkerUrl . ('marker-default.svg');
+            $markerUrl = $baseMarkerUrl . ('marker-default.svg');
         }
 
-        $data= array(
-            'status'=> true, 
-            'data'=> array(
+        $data = array(
+            'status' => true,
+            'data' => array(
                 'seccion' => $seccion,
-                'geoJsonFile'=> $dataGeoJson,
-                'fullLogoUrl'=> $fullLogoUrl,
-                'logoUrl'=> $logoUrl,
-                'fullMarkerUrl'=> $fullMarkerUrl,
-                'markerUrl'=> $markerUrl
-            )            
+                'geoJsonFile' => $dataGeoJson,
+                'fullLogoUrl' => $fullLogoUrl,
+                'logoUrl' => $logoUrl,
+                'fullMarkerUrl' => $fullMarkerUrl,
+                'markerUrl' => $markerUrl
+            )
         );
         return $data;
     }
 
-    public function getSeccionDetalleByIdSeccion($idSeccion){
-        $detalleSeccion=SeccionDetalle::where([['idSeccion','=',$idSeccion]])->get();
+    public function getSeccionDetalleByIdSeccion($idSeccion)
+    {
+        $detalleSeccion = SeccionDetalle::where([['idSeccion', '=', $idSeccion]])->get();
 
-        $data= array(
-            'status'=> true, 
-            'data'=> $detalleSeccion
+        $data = array(
+            'status' => true,
+            'data' => $detalleSeccion
         );
-        
-        $json = json_encode($data); 
+
+        $json = json_encode($data);
 
         return $data;
     }
 
-    public function save(Request $request){
-        $user='admin';
-        $terminal= $request->getHttpHost();
+    public function save(Request $request)
+    {
+        $user = 'admin';
+        $terminal = $request->getHttpHost();
 
         error_log($request->input('id'));
 
-        $seccion= new Seccion;
+        $seccion = new Seccion;
 
-        if($request->input('id')==0){            
-            $seccion->codigoGIS=$request->input('codigoGIS');
-            $seccion->nombre=$request->input('nombre');
-            $seccion->nombreIdioma=$request->input('nombreIdioma');
-            $seccion->idSeccionPadre=$request->input('idSeccionPadre');
-            $seccion->idTipoGeoData=$request->input('idTipoGeoData');
-            $seccion->menuCategoria=$request->input('menuCategoria');
-            $seccion->menuAccion=$request->input('menuAccion');
-            $seccion->idTipoAccion=$request->input('idTipoAccion');
-            $seccion->color=$request->input('color');
-            $seccion->logo=$request->input('logo');
-            $seccion->marker='';
-            $seccion->activo=$request->input('activo');
-            $seccion->fechaCrea= Carbon::now();
-            $seccion->usuarioCrea=$user;
-            $seccion->terminalCrea=$terminal;
-            $seccion->fechaCambio=null;
-            $seccion->usuarioCambio=null;
-            $seccion->terminalCambio=null;
-            $seccion->eliminado=0; 
+        if ($request->input('id') == 0) {
+            $seccion->codigoGIS = $request->input('codigoGIS');
+            $seccion->nombre = $request->input('nombre');
+            $seccion->nombreIdioma = $request->input('nombreIdioma');
+            $seccion->idSeccionPadre = $request->input('idSeccionPadre');
+            $seccion->idTipoGeoData = $request->input('idTipoGeoData');
+            $seccion->menuCategoria = $request->input('menuCategoria');
+            $seccion->menuAccion = $request->input('menuAccion');
+            $seccion->idTipoAccion = $request->input('idTipoAccion');
+            $seccion->color = $request->input('color');
+            $seccion->logo = $request->input('logo');
+            $seccion->marker = '';
+            $seccion->activo = $request->input('activo');
+            $seccion->fechaCrea = Carbon::now();
+            $seccion->usuarioCrea = $user;
+            $seccion->terminalCrea = $terminal;
+            $seccion->fechaCambio = null;
+            $seccion->usuarioCambio = null;
+            $seccion->terminalCambio = null;
+            $seccion->eliminado = 0;
             $seccion->save();
-        }
-        else{
+        } else {
             $seccion = Seccion::find($request->input('id'));
-            $seccion->codigoGIS=$request->input('codigoGIS');
-            $seccion->nombre=$request->input('nombre');
-            $seccion->nombreIdioma=$request->input('nombreIdioma');
-            $seccion->idSeccionPadre=$request->input('idSeccionPadre');
-            $seccion->idTipoGeoData=$request->input('idTipoGeoData');
-            $seccion->menuCategoria=$request->input('menuCategoria');
-            $seccion->menuAccion=$request->input('menuAccion');
-            $seccion->idTipoAccion=$request->input('idTipoAccion');
-            $seccion->color=$request->input('color');
-            $seccion->logo=$request->input('logo');
-            $seccion->marker='';
-            $seccion->activo=$request->input('activo');
-            $seccion->fechaCambio=Carbon::now();
-            $seccion->usuarioCambio=$user;
-            $seccion->terminalCambio=$terminal;
-            $seccion->eliminado=0; 
+            $seccion->codigoGIS = $request->input('codigoGIS');
+            $seccion->nombre = $request->input('nombre');
+            $seccion->nombreIdioma = $request->input('nombreIdioma');
+            $seccion->idSeccionPadre = $request->input('idSeccionPadre');
+            $seccion->idTipoGeoData = $request->input('idTipoGeoData');
+            $seccion->menuCategoria = $request->input('menuCategoria');
+            $seccion->menuAccion = $request->input('menuAccion');
+            $seccion->idTipoAccion = $request->input('idTipoAccion');
+            $seccion->color = $request->input('color');
+            $seccion->logo = $request->input('logo');
+            $seccion->marker = '';
+            $seccion->activo = $request->input('activo');
+            $seccion->fechaCambio = Carbon::now();
+            $seccion->usuarioCambio = $user;
+            $seccion->terminalCambio = $terminal;
+            $seccion->eliminado = 0;
             $seccion->save();
-
         }
-        
-        $data= array('status'=> true, 'data'=> $seccion);
+
+        $data = array('status' => true, 'data' => $seccion);
         return $data;
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
         $seccion = Seccion::findOrFail($id);
         $seccion->update($request->all());
 
-        $data= array('status'=> true, 'data'=> $seccion);
+        $data = array('status' => true, 'data' => $seccion);
         return $data;
     }
 
-    public function delete(Request $request, $id){
+    public function delete(Request $request, $id)
+    {
         error_log($id);
         $seccion = Seccion::findOrFail($id);
-        $seccion->eliminado=1;
+        $seccion->eliminado = 1;
         $seccion->save();
 
-        $data= array('status'=> true, 'data'=> $seccion);
+        $data = array('status' => true, 'data' => $seccion);
         return $data;
     }
 
-    public function uploadFile(Request $request, $id){
+    public function uploadFile(Request $request, $id)
+    {
 
-        $pathBase= 'public/json/';
+        $pathBase = 'public/json/';
 
         $seccion = Seccion::findOrFail($id);
-        $fileName= "Seccion-".$id."-file.geojson";
+        $fileName = "Seccion-" . $id . "-file.geojson";
 
-        error_log(Storage::exists($pathBase.$fileName));
+        error_log(Storage::exists($pathBase . $fileName));
 
-        if(Storage::exists($pathBase.$fileName)){
-           //Eliminar
-           Storage::delete($pathBase.$fileName); 
+        if (Storage::exists($pathBase . $fileName)) {
+            //Eliminar
+            Storage::delete($pathBase . $fileName);
         }
-        
+
         $path = $request->file('file')->storeAs($pathBase, $fileName);
-        $seccion->activo=0;
-        $seccion->geoJsonFile=$fileName;
+        $seccion->activo = 0;
+        $seccion->geoJsonFile = $fileName;
         $seccion->save();
 
-        $data= array('status'=> true, 'data'=> $seccion);
+        $data = array('status' => true, 'data' => $seccion);
 
         return $data;
     }
 
-    public function getSeccionDetalleInformacionPanel(Request $request){
+    public function getSeccionDetalleInformacionPanel(Request $request)
+    {
         $forecastDto = new ForecastDto();
         $seccionDto = new SeccionDto();
         $seccionDetalleDtos = array();
         $seccionAtributoDtos = array();
 
 
-        $listCodigoGIS=$request->input('listCodigoGIS');
-        $idSeccion = $request-> input('idSeccion');
+        $listCodigoGIS = $request->input('listCodigoGIS');
+        $idSeccion = $request->input('idSeccion');
 
-        $path=base_path() . '/storage/app/public/json/data-panel.json';
+        $path = base_path() . '/storage/app/public/json/data-panel.json';
 
         $jsonData = json_decode(file_get_contents($path), true);
 
         $seccion = Seccion::where([
-            ['seccion.eliminado','=','0'],
-            ['seccion.id','=',$idSeccion]
+            ['seccion.eliminado', '=', '0'],
+            ['seccion.id', '=', $idSeccion]
         ])->first();
 
         $seccionDto->idSeccion = $seccion->id;
@@ -336,15 +378,15 @@ class SeccionesController extends Controller
         $seccionDto->idTipoGeoData = $seccion->idTipoGeoData;
         $seccionDto->idSeccionPadre = $seccion->idSeccionPadre;
         $seccionDto->geoJsonFile = $seccion->geoJsonFile;
-        
-        $seccionDetalleDtos = SeccionDetalle::Where([
-            ['seccion_detalle.idSeccion','=',$seccion->id],
-            ['seccion_detalle.eliminado','=','0']
-        ])
-        ->whereIn('seccion_detalle.CodigoGIS',$listCodigoGIS)
-        ->get();
 
-        $seccionDto->detalles = $seccionDetalleDtos->map(function($seccionDetalle){
+        $seccionDetalleDtos = SeccionDetalle::Where([
+            ['seccion_detalle.idSeccion', '=', $seccion->id],
+            ['seccion_detalle.eliminado', '=', '0']
+        ])
+            ->whereIn('seccion_detalle.CodigoGIS', $listCodigoGIS)
+            ->get();
+
+        $seccionDto->detalles = $seccionDetalleDtos->map(function ($seccionDetalle) {
             $seccionDetalleDto = new SeccionDetalleDto();
             $seccionDetalleDto->idSeccionDetalle = $seccionDetalle->id;
             $seccionDetalleDto->idSeccion = $seccionDetalle->idSeccion;
@@ -355,12 +397,12 @@ class SeccionesController extends Controller
             $seccionDetalleDto->nombre = $seccionDetalle->nombre;
 
             $seccionAtributoDtos = SeccionAtributo::Where([
-                ['seccion_atributo.idSeccionDetalle','=',$seccionDetalle->id],
-                ['seccion_atributo.eliminado','=','0']
+                ['seccion_atributo.idSeccionDetalle', '=', $seccionDetalle->id],
+                ['seccion_atributo.eliminado', '=', '0']
             ])
-            ->get();
+                ->get();
 
-            $seccionDetalleDto->atributos = $seccionAtributoDtos->map(function($seccionAtributo){
+            $seccionDetalleDto->atributos = $seccionAtributoDtos->map(function ($seccionAtributo) {
                 $seccionAtributoDto = new SeccionAtributoDto();
                 $seccionAtributoDto->idSeccionAtributo = $seccionAtributo->id;
                 $seccionAtributoDto->idSeccionDetalle = $seccionAtributo->idSeccionDetalle;
@@ -373,26 +415,26 @@ class SeccionesController extends Controller
             return $seccionDetalleDto;
         });
 
-        if( count($listCodigoGIS)>1){            
-            $tipoCultivos=Forecast::where([['forecast.eliminado','=','0'] ])
-                ->join('cultivo','cultivo.idForecast','forecast.id')
-                ->join('tipo_cultivo','tipo_cultivo.idTipoCultivo','cultivo.idTipoCultivo')
-                ->select('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre')
-                ->whereIn('forecast.codigoGIS',$listCodigoGIS)
-                ->groupBy('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre')
+        if (count($listCodigoGIS) > 1) {
+            $tipoCultivos = Forecast::where([['forecast.eliminado', '=', '0']])
+                ->join('cultivo', 'cultivo.idForecast', 'forecast.id')
+                ->join('tipo_cultivo', 'tipo_cultivo.idTipoCultivo', 'cultivo.idTipoCultivo')
+                ->select('tipo_cultivo.idTipoCultivo', 'tipo_cultivo.nombre')
+                ->whereIn('forecast.codigoGIS', $listCodigoGIS)
+                ->groupBy('tipo_cultivo.idTipoCultivo', 'tipo_cultivo.nombre')
                 ->get();
 
-            $producciones=Forecast::where([['forecast.eliminado','=','0'] ])
-                ->join('cultivo','cultivo.idForecast','forecast.id')
-                ->join('tipo_cultivo','tipo_cultivo.idTipoCultivo','cultivo.idTipoCultivo')
-                ->join('produccion','produccion.idCultivo','cultivo.id')
-                ->select('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre','produccion.anio')
+            $producciones = Forecast::where([['forecast.eliminado', '=', '0']])
+                ->join('cultivo', 'cultivo.idForecast', 'forecast.id')
+                ->join('tipo_cultivo', 'tipo_cultivo.idTipoCultivo', 'cultivo.idTipoCultivo')
+                ->join('produccion', 'produccion.idCultivo', 'cultivo.id')
+                ->select('tipo_cultivo.idTipoCultivo', 'tipo_cultivo.nombre', 'produccion.anio')
                 ->selectRaw('sum(produccion.produccion) as produccion,sum(produccion.productividad) as productividad,sum(produccion.area) area')
-                ->whereIn('forecast.codigoGIS',$listCodigoGIS)
-                ->groupBy('tipo_cultivo.idTipoCultivo','tipo_cultivo.nombre','produccion.anio')
+                ->whereIn('forecast.codigoGIS', $listCodigoGIS)
+                ->groupBy('tipo_cultivo.idTipoCultivo', 'tipo_cultivo.nombre', 'produccion.anio')
                 ->get();
-            
-            $forecastDto->cultivos = $tipoCultivos->map(function($tipoCultivo) use($producciones){
+
+            $forecastDto->cultivos = $tipoCultivos->map(function ($tipoCultivo) use ($producciones) {
                 $tipoCultivoDto = new TipoCultivoDto();
                 $tipoCultivoDto->idTipoCultivo = $tipoCultivo->idTipoCultivo;
                 $tipoCultivoDto->nombre = $tipoCultivo->nombre;
@@ -403,9 +445,9 @@ class SeccionesController extends Controller
                 $cultivoDto->idTipoCultivo = $tipoCultivo->idTipoCultivo;
                 $cultivoDto->tipoCultivo = $tipoCultivoDto;
 
-                $cultivoDto->producciones = $producciones->filter(function ($produccion) use($tipoCultivo) {
+                $cultivoDto->producciones = $producciones->filter(function ($produccion) use ($tipoCultivo) {
                     return $produccion->idTipoCultivo == $tipoCultivo->idTipoCultivo;
-                })->map(function($produccion){
+                })->map(function ($produccion) {
                     $produccionDto = new ProduccionDto();
                     $produccionDto->anio = $produccion->anio;
                     $produccionDto->produccion = $produccion->produccion;
@@ -417,23 +459,23 @@ class SeccionesController extends Controller
             });
 
             $forecast = $forecastDto;
-        }else{
-            $forecast=Forecast::where([['forecast.eliminado','=','0'] ]);
-            $forecast=$forecast -> whereIn('forecast.codigoGIS',$listCodigoGIS);
-            $forecast=$forecast -> with(
+        } else {
+            $forecast = Forecast::where([['forecast.eliminado', '=', '0']]);
+            $forecast = $forecast->whereIn('forecast.codigoGIS', $listCodigoGIS);
+            $forecast = $forecast->with(
                 [
                     'cultivos.tipoCultivo',
                     'cultivos.producciones'
                 ]
             )->first();
 
-            if($forecast){
+            if ($forecast) {
                 $forecastDto->id = $forecast->id;
                 $forecastDto->nombre = $forecast->nombre;
                 $forecastDto->codigoGIS = $forecast->codigoGIS;
                 $forecastDto->eliminado = $forecast->eliminado;
 
-                $forecastDto->cultivos = $forecast->cultivos->map(function($cultivo){
+                $forecastDto->cultivos = $forecast->cultivos->map(function ($cultivo) {
                     $tipoCultivoDto = new TipoCultivoDto();
                     $tipoCultivoDto->idTipoCultivo = $cultivo->tipoCultivo->idTipoCultivo;
                     $tipoCultivoDto->nombre = $cultivo->tipoCultivo->nombre;
@@ -447,7 +489,7 @@ class SeccionesController extends Controller
                     $cultivoDto->idTipoCultivo = $cultivo->idTipoCultivo;
                     $cultivoDto->tipoCultivo = $tipoCultivoDto;
 
-                    $cultivoDto->producciones = $cultivo->producciones->map(function($produccion){
+                    $cultivoDto->producciones = $cultivo->producciones->map(function ($produccion) {
                         $produccionDto = new ProduccionDto();
                         $produccionDto->idProduccion = $produccion->idProduccion;
                         $produccionDto->idCultivo = $produccion->idCultivo;
@@ -465,14 +507,12 @@ class SeccionesController extends Controller
         }
 
         $seccionDto->forecast = $forecast;
-        $jsonData=$seccionDto;
-        
-        $data= array(
-            'status'=> true, 
-            'data'=> $jsonData
+        $jsonData = $seccionDto;
+
+        $data = array(
+            'status' => true,
+            'data' => $jsonData
         );
         return $data;
     }
-
-    
 }

@@ -12,7 +12,7 @@ class Seccion extends Model
     protected $fillable=array('CodigoSeccion','codigoGIS','nombre' ,'nombreIdioma','idTipoGeoData','menuCategoria',
     'menuAccion','idTipoAccion','idSeccionPadre','activo',
     'geoJsonFile', 'geoJsonData', 'logo','marker','color',
-    'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado');
+    'fechaCrea','usuarioCrea','terminalCrea','fechaCambio','usuarioCambio','terminalCambio','eliminado','idTipoInfra');
 
     public function seccionPadre(){
         return $this->belongTo('Seccion');
