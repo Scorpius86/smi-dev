@@ -297,6 +297,7 @@ class SeccionesController extends Controller
             $seccion->usuarioCambio = null;
             $seccion->terminalCambio = null;
             $seccion->eliminado = 0;
+            $seccion->idTipoInfra = $request->input('idTipoInfra');
             $seccion->save();
         } else {
             $seccion = Seccion::find($request->input('id'));
@@ -316,6 +317,7 @@ class SeccionesController extends Controller
             $seccion->usuarioCambio = $user;
             $seccion->terminalCambio = $terminal;
             $seccion->eliminado = 0;
+            $seccion->idTipoInfra = $request->input('idTipoInfra');
             $seccion->save();
         }
 

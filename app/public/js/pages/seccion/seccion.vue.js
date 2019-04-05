@@ -102,6 +102,14 @@ var smiSeccion = Vue.component("Seccion", {
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label for="">Tipo Infraestructura</label>
+                                    <select class="form-control" v-model="seccionEditar.idTipoInfra">
+                                    <option v-for="tipo in tiposInfra" v-bind:value="tipo.id">{{tipo.descripcion}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <div class="col-sm-6">                                    
                                     <label for="">Logo</label>
                                     <div class="custom-file">
@@ -227,6 +235,7 @@ var smiSeccion = Vue.component("Seccion", {
     return {
       title: "Mantenimiento de Secciones",
       categorias: [],
+      tiposInfra: [],
       seccionEditar: null,
       seccionNuevo: null,
       fileUpload: {
@@ -309,6 +318,22 @@ var smiSeccion = Vue.component("Seccion", {
             });
 
             this.secciones = _.orderBy(this.secciones, ["nombre"], ["asc"]);
+          }
+        },
+        response => {
+          this.onMostrarMensajeError();
+        }
+      );
+    },loadTipos: function() {
+      this.$http.get(UrlAPI.base + "/tipoInfraestructura/obtenerTiposInfra").then(
+        response => {
+          if (response.body.status == true) {
+            
+            this.tiposInfra = response.body.data.filter(
+              x => x.idTipoInfra == null
+            );
+            this.tiposInfra = _.orderBy(this.tiposInfra, ["descripcion"], ["asc"]);
+            
           }
         },
         response => {
@@ -428,7 +453,7 @@ var smiSeccion = Vue.component("Seccion", {
         this.$refs.fileLogo.type = "text";
         this.$refs.fileLogo.type = "file";
       }
-
+      this.loadTipos();
       this.logoUpload.valid = false;
       this.logoUpload.file = null;
       this.logoUpload.name = null;
@@ -554,7 +579,7 @@ var smiSeccion = Vue.component("Seccion", {
       this.seccionEditar.idTipoAccion = 1;
       this.seccionEditar.activo = this.seccionEditar.activoBoolean ? 1 : 0;
 
-      console.log(this.seccionEditar);
+
 
       this.$http.post(UrlAPI.base + "/secciones", this.seccionEditar).then(
         response => {

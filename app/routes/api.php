@@ -22,9 +22,9 @@ use Illuminate\Http\Request;
 //  });
 
 Route::group(['middleware' => 'cors'], function() {
-    Route::post('/validateLogin','AuthController@validarAcceso' ); 
-    Route::post('/authenticate','AuthController@autenticar' ); 
- });
+   Route::post('/validateLogin','AuthController@validarAcceso' ); 
+   Route::post('/authenticate','AuthController@autenticar' ); 
+});
 
  Route::group(['middleware' => 'cors'], function() {
     Route::post('/export/IntersectionPoints','ExportController@exportIntersectionPoints');
@@ -57,6 +57,8 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/usuarios/{id}','UsuarioController@getById');
     Route::post('/usuarios','UsuarioController@save');
     Route::delete('/usuarios/{id}','UsuarioController@delete');
+
+    Route::get('/tipoInfraestructura/obtenerTiposInfra','TipoInfraController@get');
 
  });
 
