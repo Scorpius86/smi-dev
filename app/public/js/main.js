@@ -185,12 +185,29 @@ function initMap($regiones, $afterMapIsLoaded) {
         marker: false,
         rectangle:false,
         circlemarker:false
+    },
+    edit: {
+      featureGroup: drawnItems,
+      remove: true,
+      edit:false
     }
   });
 
   map.on(L.Draw.Event.CREATED, function (e) {
     smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
     smiPanel.$refs.param.DrawEventCREATED(e);
+
+    ///
+    var type = e.layerType,
+    layer = e.layer;
+
+    if (type === 'marker') {
+        layer.bindPopup('A popup!');
+    }
+
+    ///
+
+
   });
     
 }
