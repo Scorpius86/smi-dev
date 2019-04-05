@@ -57,3 +57,54 @@ CREATE TABLE `tipo_infraestructura` (
   `eliminado` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+##-------------------------------------------- Insert en la tabla Tipo de Infraestructura ---------------------------------
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('1', 'Áreas protegidas', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('2', 'Concesiones', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('3', 'Ciudades Principales', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('4', 'Capitales', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('5', 'Comunidades Cacao', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('6', 'Agricultores cercanos', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('7', 'Cooperativas', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('8', 'Oficinas Alianza', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('9', 'Socios Alianza', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('10', 'Empresas', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('11', 'Centros Investigación', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('12', 'Agentes Tecnológicos', '0');
+INSERT INTO `smi_dev`.`tipo_infraestructura` (`id`, `descripcion`, `eliminado`) VALUES ('13', 'Vías', '0');
+
+##-------------------------------------------- Se actualizan las secciones con su tipo correspondiente --------------------
+
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '9');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '10');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '11');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '14');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '12' WHERE (`id` = '49');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '6' WHERE (`id` = '67');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '6' WHERE (`id` = '68');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '6' WHERE (`id` = '36');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '16');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '1' WHERE (`id` = '19');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '4' WHERE (`id` = '30');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '4' WHERE (`id` = '31');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '4' WHERE (`id` = '32');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '11' WHERE (`id` = '45');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '3' WHERE (`id` = '29');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '5' WHERE (`id` = '34');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '2' WHERE (`id` = '15');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '2' WHERE (`id` = '17');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '2' WHERE (`id` = '18');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '7' WHERE (`id` = '39');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '10' WHERE (`id` = '44');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '10' WHERE (`id` = '46');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '10' WHERE (`id` = '47');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '8' WHERE (`id` = '40');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '9' WHERE (`id` = '42');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '53');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '54');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '55');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '56');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '57');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '58');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '65');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '13' WHERE (`id` = '66');
+UPDATE `smi_dev`.`seccion` SET `idTipoInfra` = '2' WHERE (`id` = '20');
