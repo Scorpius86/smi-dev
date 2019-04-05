@@ -54,5 +54,6 @@ update smi_dev.seccion set activo=0 where id=69;
 CREATE TABLE `tipo_infraestructura` (
   `id` int(11) NOT NULL,
   `descripcion` varchar(100) NOT NULL,
-  PRIMARY KEY (`idTipoInfra`)
+  `eliminado` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 );
