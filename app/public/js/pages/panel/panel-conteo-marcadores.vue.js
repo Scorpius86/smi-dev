@@ -24,17 +24,29 @@ export default {
             <div v-if="(sections.length > 0)">
               <div class="statisticTable" v-for="parentSection in sections" >
                 <div class="row">
-                  <div class="col-9 headerTable">
+                  <div v-if="(!isCircle)" class="col-9 headerTable">
+                    {{parentSection.name}}
+                  </div>
+                  <div v-if="(isCircle)" class="col-6 headerTable">
                     {{parentSection.name}}
                   </div>
                   <div class="col-3 headerTable">
                     Cantidad
                   </div>
+                  <div v-if="(isCircle)" class="col-3 headerTable">
+                    Distancia
+                  </div>
                 </div>
                 <div class="bodyTable">
                   <div v-for="section in parentSection.sections">
                     <div class="row">
-                      <div class="col-9 cellTextTable">
+                      <div v-if="(!isCircle)" class="col-9 cellTextTable">
+                        <div class="iconLegend" v-bind:style="{ backgroundColor: section.color}"></div>
+                        <div class="padLeft15">
+                          {{section.name}}
+                        </div>
+                      </div>
+                      <div v-if="(isCircle)" class="col-6 cellTextTable">
                         <div class="iconLegend" v-bind:style="{ backgroundColor: section.color}"></div>
                         <div class="padLeft15">
                           {{section.name}}
@@ -43,13 +55,17 @@ export default {
                       <div class="col-3 cellNumberTable">
                         {{section.count}}
                       </div>
+                      
+                      <div v-if="(isCircle)" class="col-3 cellNumberTable">
+                      {{section.distancia}}km
+                    </div>
                     </div>
                   </div>
                 </div>   
               </div>  
             </div>    
             
-            <button type="button" class="btn btn-sm btn-primary" v-on:click="btnExportClick">
+            <button v-if="(!isCircle)" type="button" class="btn btn-sm btn-primary" v-on:click="btnExportClick">
               {{labels.button_export}}
             </button>
           </div>
@@ -63,6 +79,7 @@ export default {
       sections: [],
       labels: {},
       area: 0,
+      isCircle: false,
       geometryLoader: GeometryLoader
     };
   },
@@ -86,9 +103,11 @@ export default {
       this.geometryLoader.addCustomLayer(e);
 
       if (e.layerType === 'polygon') {
+        this.isCircle = false;
         isPolygon = 1;
         this.area = Math.round((L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0]) / 1000000) * 100) / 100;
       } else if (e.layerType === 'circle') {
+        this.isCircle = true;
         isPolygon = 0;
         radius = e.layer.getRadius();
         polygon = e.layer.toGeoJSON().geometry;
@@ -112,8 +131,13 @@ export default {
         success: function (res) {
           if (typeof (res !== "undefined") && res !== null) {
             if (res.status) {
+              if (e.layerType === 'polygon') {
+                me.buildStatistics(res.data);
+              } else if (e.layerType === 'circle') {
+                me.buildStatisticsCircle(res.tipos, res.dataCircle);
+              }
               //me.getIntersectionPoints(res.data);
-              me.buildStatistics(res.data);
+
               me.parentPanel.show();
             }
           }
@@ -157,6 +181,45 @@ export default {
               color: data[i].seccion.color,
               parentSectionId: data[i].seccion.idSeccionPadre,
               sections: []
+            });
+          }
+        }
+      }
+    },
+    buildStatisticsCircle: function (tipos, arrayTipoData) {
+      this.sections = [];
+
+      for (var dataTmp in arrayTipoData) {
+        for (var i in arrayTipoData[dataTmp]) {
+          let tipo = tipos.find(item => item.id == dataTmp)
+          let section;
+          if(this.sections != undefined) {
+            section = this.sections.find(item => item.id == tipo.id);
+          } 
+          if (!section) {
+            this.sections.push({
+              name: tipo.descripcion,
+              id: tipo.id,
+              colorPadre: 0,
+              sections: [
+                {
+                  name: arrayTipoData[dataTmp][i].seccion,
+                  id: i,
+                  count: arrayTipoData[dataTmp][i].cantidad,
+                  color: arrayTipoData[dataTmp][i].color,
+                  parentSectionId: 0,
+                  distancia: arrayTipoData[dataTmp][i].distancia
+                }
+              ]
+            });
+          } else {
+            section.sections.push({
+              name: arrayTipoData[dataTmp][i].seccion,
+              id: i,
+              count: arrayTipoData[dataTmp][i].cantidad,
+              color: arrayTipoData[dataTmp][i].color,
+              parentSectionId: 0,
+              distancia: arrayTipoData[dataTmp][i].distancia
             });
           }
         }

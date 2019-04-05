@@ -52,7 +52,7 @@ class SeccionesController extends Controller
         $tipos = $queryTipo->get();
 
         foreach ($tipos as $tipo) {
-            $myhashmap[$tipo['id']] = new TipoInfraDto();
+            $myhashmap[$tipo['id']] = array();
         }
 
         //$polygon = array("-77.82141 -9.215983","-76.413292 -11.922895","-73.245027 -10.34194","-75.122518 -8.724029","-77.82141 -9.215983");
@@ -93,7 +93,22 @@ class SeccionesController extends Controller
         $secciones = $query->get();
         $pointLocation = new PointLocation();
 
+        $id = 0;
+        $seccionHashMap = array();
         foreach ($secciones as $seccion) {
+            if($id == 0) {
+                $id = $seccion->idTipoInfra;
+            }else if($id != $seccion->idTipoInfra) {
+                $myhashmap[$id] = $seccionHashMap;
+                $id = $seccion->idTipoInfra;
+                $seccionHashMap = array();
+            }
+
+            $seccionTipoInfraDto = new TipoInfraDto();
+            $seccionTipoInfraDto->seccion = $seccion->nombre;
+            $seccionTipoInfraDto->idTipoInfra = $seccion->idTipoInfra;
+            $seccionTipoInfraDto->color = $seccion->color;
+
             $dataGeoJson = array();
             $fileName = $seccion->geoJsonFile;
             $baseSrc = '/storage/app/public/json//';
@@ -115,19 +130,17 @@ class SeccionesController extends Controller
                             }
                         } else {
                             if ($pointCircle != null) {
-                                $tipoInfraDto = $myhashmap[$seccion['idTipoInfra']];
-                                $tipoInfraDto->cantidad = $tipoInfraDto->cantidad + 1;
                                 $coordA = explode(" ", $point);
                                 $coordB = explode(" ", $pointCircle);
                                 $dist = $pointLocation->haversineGreatCircleDistance($coordB[1], $coordB[0], $coordA[1], $coordA[0]);
-                                if ($tipoInfraDto->distancia == 0 || $tipoInfraDto->distancia < ($dist / 1000)) {
-                                    $tipoInfraDto->distancia = number_format($dist / 1000, 2);
-                                }
                                 if ((float)$dist <= (float)$radius) {
+                                    $seccionTipoInfraDto->cantidad++;
+                                    if ($seccionTipoInfraDto->distancia == 0 || $seccionTipoInfraDto->distancia < ($dist / 1000)) {
+                                        $seccionTipoInfraDto->distancia = number_format($dist / 1000, 2);
+                                    }
                                     array_push($dataGeoJson, $component->out("json"));
                                     $seccionOK = true;
                                 }
-                                $myhashmap[$seccion['idTipoInfra']] = $tipoInfraDto;
                             }
                         }
                     }
@@ -135,6 +148,7 @@ class SeccionesController extends Controller
                 }
 
                 if ($seccionOK) {
+                    $seccionHashMap[$seccion->id] = $seccionTipoInfraDto;
                     $logoUrl = null;
                     $fullLogoUrl = null;
                     if ($seccion->logo <> null) {
@@ -158,7 +172,6 @@ class SeccionesController extends Controller
                     array_push(
                         $data,
                         array(
-                            'tipo' => $tipos,
                             'seccion' => $seccion,
                             'geoJsonFile' => $dataGeoJson,
                             'fullLogoUrl' => $fullLogoUrl,
@@ -174,8 +187,12 @@ class SeccionesController extends Controller
             }
         }
 
+        $myhashmap[$id] = $seccionHashMap;
+        error_log(json_encode($myhashmap));
         $response = array(
             'status' => true,
+            'tipos' => $tipos,
+            'dataCircle' => $myhashmap,
             'data' => $data
         );
         return $response;
