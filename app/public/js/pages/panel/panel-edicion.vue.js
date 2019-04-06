@@ -33,7 +33,7 @@ export default {
                     <template v-if="detalle.permiteEditar && tipoId != 'panelConteoMarcadores'">
                         <div>
                             <br>
-                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
+                            <button id="btnEditar" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
                                 data-whatever="@mdo">{{detalle.label.button_edit}}
                             </button>
                         </div>
@@ -110,6 +110,10 @@ export default {
         let panel =this. assignPanel();
         panel.show();
         $("#nav-panel").show();
+    },
+    showModal: function() {    
+        $("#btnEditar").click();
+        
     },
     clearAllSections: function(){
         const customLayer = this.geometryLoader.getCustomLayer();

@@ -262,7 +262,7 @@ function SMIMapFeature(map) {
 
         data.nombre = $detalleCodigoGIS;
         data.permiteEditar = false;
-        
+
         if (data.detalles.length > 0 && seccionDetalle) {
           data.nombre = seccionDetalle.nombre;
         }
@@ -297,9 +297,15 @@ function SMIMapFeature(map) {
         smiPanel.$refs.param.input = {};
         smiPanel.$refs.param.input.seccion = $seccion.seccion;        
         smiPanel.$refs.param.detalle = data;
-        smiPanel.$refs.param.show();
-
         $("#modal-content-atributos").html($templateAtributos);
+
+        if (smiPanel.$refs.param.tipo !== "edicion"){
+          smiPanel.$refs.param.show();
+        }else{
+          setTimeout(smiPanel.$refs.param.showModal, 50);
+          
+        }
+
       });
   };
 
