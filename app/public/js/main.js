@@ -194,19 +194,12 @@ function initMap($regiones, $afterMapIsLoaded) {
   });
 
   map.on(L.Draw.Event.CREATED, function (e) {
-    smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
+    if (e.layerType == 'polygon'){
+      smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
+    }
     smiPanel.$refs.param.DrawEventCREATED(e);
 
-    ///
-    var type = e.layerType,
-    layer = e.layer;
-
-    if (type === 'marker') {
-        layer.bindPopup('A popup!');
-    }
-
-    ///
-
+    drawnItems.addLayer(e.layer);
 
   });
     
@@ -851,6 +844,7 @@ function removeMarker($id, $seccionId) {
   const $map_legend = $("#map-legend");
   if ($map_legend[0].childElementCount == 0){
     map.removeControl(window.drawControl);
+    smiPanel.$refs.param.clearAllSections();
   }
 }
 

@@ -193,7 +193,9 @@ function SMIMapFeature(map) {
           }
         }
       },
-      error: function(xhr, status) {},
+      error: function(xhr, status) {
+
+      },
       complete: function(xhr, status) {
         hideLoading();
       }
@@ -299,11 +301,11 @@ function SMIMapFeature(map) {
         smiPanel.$refs.param.detalle = data;
         $("#modal-content-atributos").html($templateAtributos);
 
-        if (smiPanel.$refs.param.tipo !== "edicion"){
-          smiPanel.$refs.param.show();
-        }else{
+        smiPanel.$refs.param.show();
+
+        if (smiPanel.$refs.param.tipo === "edicion"){
+          smiPanel.$refs.param.hide();
           setTimeout(smiPanel.$refs.param.showModal, 50);
-          
         }
 
       });

@@ -106,10 +106,10 @@ export default {
         $("#btnClosePanel").on("click",function(){
             $("#nav-panel").hide();
         });
-        
-        let panel =this. assignPanel();
+        let panel =this.assignPanel();
         panel.show();
         $("#nav-panel").show();
+        this.codigoSeccion = '';
     },
     showModal: function() {    
         $("#btnEditar").click();
