@@ -311,10 +311,10 @@
                                 {{#each detallePrincipal.atributos}}
                                 <tr  data-id="{{idSeccionAtributo}}">
                                     <td>
-                                        <input type="text" class="atributo-nombre" value="{{nombre}}" data-field-id="{{id}}">
+                                        <input type="text" class="atributo-nombre" value="{{nombre}}" data-field-id="{{idSeccionAtributo}}">
                                     </td>
                                     <td>
-                                        <input type="text" class="atributo-valor" value="{{valor}}" data-field-id="{{id}}">
+                                        <input type="text" class="atributo-valor" value="{{valor}}" data-field-id="{{idSeccionAtributo}}">
                                     </td>
                                     <td>
                                         <a class="nav-link" style="cursor: pointer;" onClick="quitarAtributo('{{idSeccionAtributo}}')">
