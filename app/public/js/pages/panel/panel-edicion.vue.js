@@ -82,6 +82,7 @@ export default {
   },
   methods: {
     DrawEventCREATED:function(e){
+        this.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
         let panel =this.assignPanel();
         panel.DrawEventCREATED(e);
     },

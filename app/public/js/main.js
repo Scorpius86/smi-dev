@@ -1241,6 +1241,7 @@ function quitarAtributo($id) {
 }
 
 function saveSeccionDetalleClick() {
+  debugger;
   let $seccionDetalle = {};
   let $atributos = [];
 
@@ -1258,12 +1259,13 @@ function saveSeccionDetalleClick() {
   let $fields = $("#modal-content-atributos").find(
     "input[data-validate = 'true']"
   );
-
+    
   $($fields).each(function() {
     $seccionDetalle[$(this).attr("data-field")] = $(this).val();
   });
 
   $seccionDetalle.atributos = $atributos;
-
+  console.log($seccionDetalle);
+  console.log($seccionDetalle.idSeccion);
   saveSeccionDetalleRequest($seccionDetalle.idSeccion, $seccionDetalle);
 }
