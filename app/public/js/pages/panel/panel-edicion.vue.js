@@ -13,8 +13,8 @@ export default {
                     <div class="navbar-nav">
                         <div class="d-flex justify-content-between">
                             <div class="nav-item" id="btnClosePanel">
-                                <a class="border-right px-3 nav-link closePanel-button" >
-                                    <i class="fas fa-2x fa-angle-right"></i>
+                                <a class="border-right px-3 nav-link closePanel-button" v-on:click="btnCerrarClick" >
+                                    <i class="fas fa-2x fa-times"></i>
                                 </a>
                             </div>
                         </div>
@@ -86,6 +86,13 @@ export default {
         let panel =this.assignPanel();
         panel.DrawEventCREATED(e);
     },
+    btnCerrarClick: function() {
+        map.eachLayer(function(layer){
+        if (layer instanceof L.Circle || layer instanceof L.Polygon){
+            map.removeLayer(layer);
+        }
+        });
+    },
     assignPanel: function () {
         let tipoId;
         if(this.tipo == 'grafico'){tipoId = 'panelTipoGrafico';}
@@ -118,11 +125,13 @@ export default {
     },
     clearAllSections: function(){
         const customLayer = this.geometryLoader.getCustomLayer();
-
+        
         this.geometryLoader.removeMarkerAll();
 
         if(customLayer && customLayer.layer){            
             this.geometryLoader.removeCustomLayer();
+            $("#nav-panel").hide();
+            
         }        
     },
     setDataChild(child){

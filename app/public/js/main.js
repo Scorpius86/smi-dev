@@ -16,10 +16,10 @@ var mapFeature = {};
 var model = {};
 model.selectedLayers = [];
 
-jQuery(function($) {
+jQuery(function ($) {
   showLoading();
 
-  setTimeout(function() {
+  setTimeout(function () {
     $(".logout-button").off("click");
     $(".logout-button").on("click", onLogoutButtonClick);
 
@@ -57,7 +57,7 @@ function validateAuthentication() {
 }
 
 function settings() {
-  $(".sidebar-dropdown > a").click(function() {
+  $(".sidebar-dropdown > a").click(function () {
     $(".sidebar-submenu").slideUp(200);
     if (
       $(this)
@@ -79,15 +79,15 @@ function settings() {
     }
   });
 
-  $("#close-sidebar").click(function() {
+  $("#close-sidebar").click(function () {
     $(".page-wrapper").removeClass("toggled");
   });
-  $("#show-sidebar").click(function() {
+  $("#show-sidebar").click(function () {
     $(".page-wrapper").addClass("toggled");
   });
   var themes =
     "chiller-theme ice-theme cool-theme light-theme green-theme spicy-theme purple-theme";
-  $("[data-theme]").click(function() {
+  $("[data-theme]").click(function () {
     $(".page-wrapper").removeClass(themes);
     $(".page-wrapper").addClass($(this).attr("data-theme"));
   });
@@ -105,7 +105,7 @@ function settings() {
     $(".sidebar-content").addClass("desktop");
   }
 
-  $("#btnShowMenu").on("click", function() {
+  $("#btnShowMenu").on("click", function () {
     $("#sidebar").toggle();
   });
 
@@ -167,34 +167,144 @@ function initMap($regiones, $afterMapIsLoaded) {
 
   window.drawControl = new L.Control.Draw({
     draw: {
-        polyline:false,
-        polygon: {
-					shapeOptions: {
-            color: 'orange',
-            weight: 1,
-            fillColor: 'green'
-          }
-        },
-        circle:{
-					shapeOptions: {
-            color: 'orange',
-            weight: 1,
-            fillColor: 'green'
-          }
-        },
-        marker: false,
-        rectangle:false,
-        circlemarker:false
+      polyline: false,
+      polygon: {
+        shapeOptions: {
+          color: 'orange',
+          weight: 1,
+          fillColor: 'green'
+        }
+      },
+      circle: {
+        shapeOptions: {
+          color: 'orange',
+          weight: 1,
+          fillColor: 'green'
+        }
+      },
+      marker: false,
+      rectangle: false,
+      circlemarker: false
     },
     edit: {
       featureGroup: drawnItems,
       remove: true,
-      edit:false
+      edit: false
     }
   });
 
+  L.drawLocal = {
+    draw: {
+      toolbar: {
+        // #TODO: this should be reorganized where actions are nested in actions
+        // ex: actions.undo  or actions.cancel
+        actions: {
+          title: 'Cancelar',
+          text: 'Cancelar'
+        },
+        finish: {
+          title: 'Finalizar',
+          text: 'Finalizar'
+        },
+        undo: {
+          title: 'Deshacer',
+          text: 'Deshacer'
+        },
+        buttons: {
+          polyline: 'Polilinea',
+          polygon: 'Polígono',
+          rectangle: 'Rectángulo',
+          circle: 'Círculo',
+          marker: 'Marcador',
+          circlemarker: 'Marcador Circular'
+        }
+      },
+      handlers: {
+        circle: {
+          tooltip: {
+            start: 'Haga clic y arrastre para dibujar círculo.',
+            end: 'Suelte el mouse para terminar de dibujar.'
+          },
+          radius: 'Radio'
+        },
+        circlemarker: {
+          tooltip: {
+            start: '- your text-.'
+          }
+        },
+        marker: {
+          tooltip: {
+            start: '- your text-.'
+          }
+        },
+        polygon: {
+          tooltip: {
+            start: 'Haga clic para comenzar a dibujar la forma.',
+            cont: 'Haga clic para continuar dibujando la forma.',
+            end: 'Haga clic en el primer punto para cerrar esta forma.'
+          }
+        },
+        polyline: {
+          error: '<strong> Error: </strong> ¡los bordes de la forma no se pueden cruzar!',
+          tooltip: {
+            start: 'Haga clic para comenzar a dibujar la línea.',
+            cont: 'Haga clic para continuar dibujando línea.',
+            end: 'Haga clic en el último punto para terminar la línea.'
+          }
+        },
+        rectangle: {
+          tooltip: {
+            start: '- your text-.'
+          }
+        },
+        simpleshape: {
+          tooltip: {
+            end: 'Suelte el mouse para terminar de dibujar.'
+          }
+        }
+      }
+    },
+    edit: {
+      toolbar: {
+        actions: {
+          save: {
+            title: 'Elimina todas las capas seleccionadas.',
+            text: 'Guardar'
+          },
+          cancel: {
+            title: 'Cancelar edición, descarta todos los cambios.',
+            text: 'Cancelar'
+          },
+          clearAll: {
+            title: 'Elimina todas las capas.',
+            text: 'Limpiar Todo'
+          }
+        },
+        buttons: {
+          edit: 'Editar capas',
+          editDisabled: 'No hay capas para editar.',
+          remove: 'Eliminar capas',
+          removeDisabled: 'No hay capas para eliminar.'
+        }
+      },
+      handlers: {
+        edit: {
+          tooltip: {
+            text: 'Arrastre los controles o capas para editar las características.',
+            subtext: 'Haga clic en Cancelar para deshacer los cambios.'
+          }
+        },
+        remove: {
+          tooltip: {
+            text: 'Haga clic en una capa para eliminar.'
+          }
+        }
+      }
+    }
+  };
+
   map.on(L.Draw.Event.CREATED, function (e) {
-    if (e.layerType == 'polygon'){
+    if (e.layerType == 'polygon') {
       smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
     }
     smiPanel.$refs.param.DrawEventCREATED(e);
@@ -202,7 +312,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     drawnItems.addLayer(e.layer);
 
   });
-    
+
 }
 
 function markers() {
@@ -245,15 +355,15 @@ function loadAtributosSeccionDetalle(
     url: $url,
     type: "GET",
     dataType: "json",
-    success: function($response) {
+    success: function ($response) {
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           $afterLoadAtributosSeccionDetalle($response.data);
         }
       }
     },
-    error: function(xhr, status) {},
-    complete: function(xhr, status) {
+    error: function (xhr, status) { },
+    complete: function (xhr, status) {
       hideLoading();
     }
   });
@@ -267,21 +377,21 @@ function saveSeccionDetalleRequest($idSeccion, $seccionDetalle) {
     type: "POST",
     dataType: "json",
     data: $seccionDetalle,
-    success: function($response) {
+    success: function ($response) {
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           alert("guardado");
         }
       }
     },
-    error: function(xhr, status) {},
-    complete: function(xhr, status) {
+    error: function (xhr, status) { },
+    complete: function (xhr, status) {
       hideLoading();
     }
   });
 }
 
-function generarGraficasLimites($idElement, cultivo) {  
+function generarGraficasLimites($idElement, cultivo) {
   const canvaProduccion = $("#" + $idElement).find(".chartProduccion");
   const canvaProductividad = $("#" + $idElement).find(".chartProductividad");
   const canvaArea = $("#" + $idElement).find(".chartArea");
@@ -292,35 +402,35 @@ function generarGraficasLimites($idElement, cultivo) {
 
   const dataAniosPronostico = [];
   const dataAnios = cultivo.producciones.map(x => x.anio);
-  const primerAnioPronostico = dataAnios[dataAnios.length-1]+1;
+  const primerAnioPronostico = dataAnios[dataAnios.length - 1] + 1;
 
-  for (let i = 0; i < ANIOS_PRONOSTICO; i++) {    
-    dataAniosPronostico.push(primerAnioPronostico+i);
+  for (let i = 0; i < ANIOS_PRONOSTICO; i++) {
+    dataAniosPronostico.push(primerAnioPronostico + i);
   }
 
   const dataValuesProduccion = cultivo.producciones.map(x => x.produccion);
   const dataValuesProductividad = cultivo.producciones.map(x => x.productividad);
   const dataValuesArea = cultivo.producciones.map(x => x.area);
 
-  const dataRegresionProduccion = cultivo.producciones.map(function(d){return {x:d.anio,y:d.produccion};} );
-  const dataRegresionProductividad = cultivo.producciones.map(function(d){return {x:d.anio,y:d.productividad};} );
-  const dataRegresionArea = cultivo.producciones.map(function(d){return {x:d.anio,y:d.area};} );
+  const dataRegresionProduccion = cultivo.producciones.map(function (d) { return { x: d.anio, y: d.produccion }; });
+  const dataRegresionProductividad = cultivo.producciones.map(function (d) { return { x: d.anio, y: d.productividad }; });
+  const dataRegresionArea = cultivo.producciones.map(function (d) { return { x: d.anio, y: d.area }; });
 
-  let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion,dataAniosPronostico);
-  const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesProduccion);
-  const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion=>(produccion!=null?produccion*(TASA/100.000):produccion));
+  let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion, dataAniosPronostico);
+  const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProduccion);
+  const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? produccion * (TASA / 100.000) : produccion));
 
-  dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad,dataAniosPronostico);
-  const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesProductividad);
-  const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad=>(productividad!=null?productividad*(TASA/100.000):productividad));
+  dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad, dataAniosPronostico);
+  const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProductividad);
+  const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? productividad * (TASA / 100.000) : productividad));
 
-  dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea,dataAniosPronostico);
-  const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesArea);
-  const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area=>(area!=null?area*(TASA/100.000):area));
+  dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea, dataAniosPronostico);
+  const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesArea);
+  const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? area * (TASA / 100.000) : area));
   let dataLabels = [];
 
-  dataAnios.forEach(d=>dataLabels.push(d));
-  dataAniosPronostico.forEach(d=>dataLabels.push(d));
+  dataAnios.forEach(d => dataLabels.push(d));
+  dataAniosPronostico.forEach(d => dataLabels.push(d));
 
   var ctxProduccion = canvaProduccion[0];
   var ctxProductividad = canvaProductividad[0];
@@ -338,8 +448,8 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesProduccion,
           backgroundColor: 'rgb(5, 121, 197)',
           borderColor: 'rgb(5, 121, 197)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false
         },
         {
@@ -347,20 +457,20 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesPronosticoProduccion,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(138, 202, 244)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         },
         {
           label: "Tasa",
           data: dataValuesPronosticoProduccionTasa,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(255, 99, 132)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         }
       ]
     },
@@ -408,8 +518,8 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesProductividad,
           backgroundColor: 'rgb(5, 121, 197)',
           borderColor: 'rgb(5, 121, 197)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false
         },
         {
@@ -417,20 +527,20 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesPronosticoProductividad,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(138, 202, 244)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         },
         {
           label: "Tasa",
           data: dataValuesPronosticoProductividadTasa,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(255, 99, 132)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         }
       ]
     },
@@ -481,8 +591,8 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesArea,
           backgroundColor: 'rgb(5, 121, 197)',
           borderColor: 'rgb(54, 162, 235)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false
         },
         {
@@ -490,20 +600,20 @@ function generarGraficasLimites($idElement, cultivo) {
           data: dataValuesPronosticoArea,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(138, 202, 244)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         },
         {
           label: "Tasa",
           data: dataValuesPronosticoAreaTasa,
           backgroundColor: 'rgb(255, 255, 255)',
           borderColor: 'rgb(255, 99, 132)',
-          borderWidth:CHART_BORDER_WIDTH,
-          pointRadius:CHART_POINT_RADIUS,
+          borderWidth: CHART_BORDER_WIDTH,
+          pointRadius: CHART_POINT_RADIUS,
           fill: false,
-          borderDash: [1,1]
+          borderDash: [1, 1]
         }
       ]
     },
@@ -543,69 +653,69 @@ function generarGraficasLimites($idElement, cultivo) {
     }
   });
 
-  generarSliderAnioTasa(cultivo,charts);
+  generarSliderAnioTasa(cultivo, charts);
 }
 
-function tranformarDatosPronostico(dataValuesPronostico,aniosReales,valoresReales){
+function tranformarDatosPronostico(dataValuesPronostico, aniosReales, valoresReales) {
   let data = [];
 
-  for (let index = 0; index < aniosReales.length-1; index++) {
+  for (let index = 0; index < aniosReales.length - 1; index++) {
     data.push(null);
   }
 
-  data.push(valoresReales[valoresReales.length-1]);
+  data.push(valoresReales[valoresReales.length - 1]);
 
-  dataValuesPronostico.forEach(function(pronostico){
+  dataValuesPronostico.forEach(function (pronostico) {
     data.push(pronostico.y);
   });
 
   return data;
 }
 
-function actualizarGraficasLimites(cultivo,charts,rangoAnios,tasa){
+function actualizarGraficasLimites(cultivo, charts, rangoAnios, tasa) {
   const min = rangoAnios[0];
   const max = rangoAnios[1];
-  const ultimoAnioReal = cultivo.producciones[cultivo.producciones.length-1].anio;
-  const minProduccionReal = cultivo.producciones.find(produccion=>produccion.anio==min);
-  const minReal = minProduccionReal?minProduccionReal.anio:undefined;
-  const maxProduccionReal = cultivo.producciones.find(produccion=>produccion.anio==max);
-  let maxReal = maxProduccionReal?maxProduccionReal.anio:undefined;
-  const minPronostico = (min - ultimoAnioReal)<=0?(ultimoAnioReal+1):min;
-  const maxPronostico = (max - ultimoAnioReal)<=0?undefined:max;
+  const ultimoAnioReal = cultivo.producciones[cultivo.producciones.length - 1].anio;
+  const minProduccionReal = cultivo.producciones.find(produccion => produccion.anio == min);
+  const minReal = minProduccionReal ? minProduccionReal.anio : undefined;
+  const maxProduccionReal = cultivo.producciones.find(produccion => produccion.anio == max);
+  let maxReal = maxProduccionReal ? maxProduccionReal.anio : undefined;
+  const minPronostico = (min - ultimoAnioReal) <= 0 ? (ultimoAnioReal + 1) : min;
+  const maxPronostico = (max - ultimoAnioReal) <= 0 ? undefined : max;
 
-  maxReal = maxReal||ultimoAnioReal;
+  maxReal = maxReal || ultimoAnioReal;
 
-  if(minReal){
-    if(maxPronostico){
+  if (minReal) {
+    if (maxPronostico) {
       let dataAniosPronostico = [];
-      const aniosPronostico = (maxPronostico-minPronostico)+1;
+      const aniosPronostico = (maxPronostico - minPronostico) + 1;
       for (let i = 0; i < aniosPronostico; i++) {
-        dataAniosPronostico.push(minPronostico+i);
+        dataAniosPronostico.push(minPronostico + i);
       }
 
-      const dataAnios = cultivo.producciones.map(x=>x.anio);
+      const dataAnios = cultivo.producciones.map(x => x.anio);
 
-      const dataRegresionProduccion =  cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function(d){return {x:d.anio,y:d.produccion};} );
-      const dataRegresionProductividad =  cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function(d){return {x:d.anio,y:d.productividad};} );
-      const dataRegresionArea =  cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function(d){return {x:d.anio,y:d.area};} );
+      const dataRegresionProduccion = cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function (d) { return { x: d.anio, y: d.produccion }; });
+      const dataRegresionProductividad = cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function (d) { return { x: d.anio, y: d.productividad }; });
+      const dataRegresionArea = cultivo.producciones.filter(x => x.anio >= minReal && x.anio <= maxReal).map(function (d) { return { x: d.anio, y: d.area }; });
 
-      const dataValuesProduccion = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.produccion:null);
-      const dataValuesProductividad = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.productividad:null);
-      const dataValuesArea = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.area:null);
+      const dataValuesProduccion = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.produccion : null);
+      const dataValuesProductividad = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.productividad : null);
+      const dataValuesArea = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.area : null);
 
-      let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion,dataAniosPronostico);
-      const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesProduccion);
-      const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion=>(produccion!=null?produccion*(tasa/100.000):produccion));
-      
-      dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad,dataAniosPronostico);
-      const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesProductividad);
-      const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad=>(productividad!=null?productividad*(tasa/100.000):productividad));
-      
-      dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea,dataAniosPronostico);
-      const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico,dataAnios,dataValuesArea);
-      const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area=>(area!=null?area*(tasa/100.000):area));
-      
-      
+      let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion, dataAniosPronostico);
+      const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProduccion);
+      const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? produccion * (tasa / 100.000) : produccion));
+
+      dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad, dataAniosPronostico);
+      const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProductividad);
+      const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? productividad * (tasa / 100.000) : productividad));
+
+      dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea, dataAniosPronostico);
+      const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesArea);
+      const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? area * (tasa / 100.000) : area));
+
+
       charts['produccion'].config.data.datasets[0].data = dataValuesProduccion;
       charts['produccion'].config.data.datasets[1].data = dataValuesPronosticoProduccion;
       charts['produccion'].config.data.datasets[2].data = dataValuesPronosticoProduccionTasa;
@@ -617,33 +727,33 @@ function actualizarGraficasLimites(cultivo,charts,rangoAnios,tasa){
       charts['area'].config.data.datasets[0].data = dataValuesArea;
       charts['area'].config.data.datasets[1].data = dataValuesPronosticoArea;
       charts['area'].config.data.datasets[2].data = dataValuesPronosticoAreaTasa;
-    }else{
-      const dataValuesProduccion = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.produccion:null);
-      const dataValuesProductividad = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.productividad:null);
-      const dataValuesArea = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ?x.area:null);
+    } else {
+      const dataValuesProduccion = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.produccion : null);
+      const dataValuesProductividad = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.productividad : null);
+      const dataValuesArea = cultivo.producciones.map(x => (x.anio >= minReal && x.anio <= maxReal) ? x.area : null);
 
-      Object.keys(charts).forEach(key=>{ charts[key].config.data.datasets.forEach(dataset => {dataset.data=[];});});
+      Object.keys(charts).forEach(key => { charts[key].config.data.datasets.forEach(dataset => { dataset.data = []; }); });
 
       charts['produccion'].config.data.datasets[0].data = dataValuesProduccion;
       charts['productividad'].config.data.datasets[0].data = dataValuesProductividad;
       charts['area'].config.data.datasets[0].data = dataValuesArea;
     }
-  }else{
-    Object.keys(charts).forEach(key=>{ charts[key].config.data.datasets.forEach(dataset => {dataset.data=[];});});
+  } else {
+    Object.keys(charts).forEach(key => { charts[key].config.data.datasets.forEach(dataset => { dataset.data = []; }); });
   }
-  Object.keys(charts).forEach(key=>{
+  Object.keys(charts).forEach(key => {
     charts[key].update();
   });
 }
 
-function generarSliderAnioTasa(cultivo,charts){
+function generarSliderAnioTasa(cultivo, charts) {
   const idTipoCultivo = cultivo.tipoCultivo.idTipoCultivo;
-  const sliderAnio = $("#sliderAnio"+"-"+idTipoCultivo);
-  const sliderAnioTexto = $("#sliderAnioVal"+"-"+idTipoCultivo);
-  const sliderTasa = $("#sliderTasa"+"-"+idTipoCultivo);
-  const sliderTasaTexto = $("#sliderTasaVal"+"-"+idTipoCultivo);
-  const min = Math.min.apply(Math, cultivo.producciones.map(function(produccion){return produccion.anio}));
-  const max = Math.max.apply(Math, cultivo.producciones.map(function(produccion){return produccion.anio}));
+  const sliderAnio = $("#sliderAnio" + "-" + idTipoCultivo);
+  const sliderAnioTexto = $("#sliderAnioVal" + "-" + idTipoCultivo);
+  const sliderTasa = $("#sliderTasa" + "-" + idTipoCultivo);
+  const sliderTasaTexto = $("#sliderTasaVal" + "-" + idTipoCultivo);
+  const min = Math.min.apply(Math, cultivo.producciones.map(function (produccion) { return produccion.anio }));
+  const max = Math.max.apply(Math, cultivo.producciones.map(function (produccion) { return produccion.anio }));
 
   sliderAnio.bootstrapSlider();
   sliderTasa.bootstrapSlider();
@@ -656,35 +766,35 @@ function generarSliderAnioTasa(cultivo,charts){
   sliderTasa[0].cultivo = cultivo;
   sliderTasa.off("change");
 
-  sliderAnio.on("change", function(slideEvt) {
+  sliderAnio.on("change", function (slideEvt) {
     sliderAnioTexto.text(slideEvt.value.newValue);
     //const sliderTasa = $("#sliderTasa");
-    actualizarGraficasLimites(cultivo,charts,slideEvt.value.newValue,sliderTasa.val());
+    actualizarGraficasLimites(cultivo, charts, slideEvt.value.newValue, sliderTasa.val());
   });
-  sliderTasa.on("change", function(slideEvt) {
+  sliderTasa.on("change", function (slideEvt) {
     sliderTasaTexto.text(slideEvt.value.newValue);
     //const sliderAnio = $("#sliderAnio");
-    actualizarGraficasLimites(cultivo,charts,sliderAnio.val().split(","),slideEvt.value.newValue);
+    actualizarGraficasLimites(cultivo, charts, sliderAnio.val().split(","), slideEvt.value.newValue);
   });
 
-  sliderAnio.bootstrapSlider('setAttribute','min', min);
-  sliderAnio.bootstrapSlider('setAttribute', 'max', max +ANIOS_PRONOSTICO);
-  sliderAnio.bootstrapSlider('setAttribute','value', [min,max+ANIOS_PRONOSTICO]);
-  sliderAnioTexto.text(sliderAnio.bootstrapSlider('getAttribute','value'));
+  sliderAnio.bootstrapSlider('setAttribute', 'min', min);
+  sliderAnio.bootstrapSlider('setAttribute', 'max', max + ANIOS_PRONOSTICO);
+  sliderAnio.bootstrapSlider('setAttribute', 'value', [min, max + ANIOS_PRONOSTICO]);
+  sliderAnioTexto.text(sliderAnio.bootstrapSlider('getAttribute', 'value'));
   sliderAnio.bootstrapSlider('refresh');
 
-  sliderTasa.bootstrapSlider('setAttribute','value', TASA);
-  sliderTasaTexto.text(sliderTasa.bootstrapSlider('getAttribute','value'));
+  sliderTasa.bootstrapSlider('setAttribute', 'value', TASA);
+  sliderTasaTexto.text(sliderTasa.bootstrapSlider('getAttribute', 'value'));
   sliderTasa.bootstrapSlider('refresh');
 }
 
-function obtenerPronosticoRegresionLineal(datos,consulta){
-  const data = datos.filter(f=>f.x!= null);
+function obtenerPronosticoRegresionLineal(datos, consulta) {
+  const data = datos.filter(f => f.x != null);
   const xs = data.map(d => d.x);
   const ys = data.map(d => d.y);
-  const xys = data.map(d => d.x*d.y);
-  const xxs = data.map(d => d.x*d.x);
-  const yys = data.map(d => d.y*d.y);
+  const xys = data.map(d => d.x * d.y);
+  const xxs = data.map(d => d.x * d.x);
+  const yys = data.map(d => d.y * d.y);
   const n = data.length;
   let xsum = 0;
   let ysum = 0;
@@ -697,26 +807,25 @@ function obtenerPronosticoRegresionLineal(datos,consulta){
   let a = 0;
   let result = [];
 
-  xs.forEach(function(x){xsum = xsum+x;});
-  ys.forEach(function(y){ysum = ysum+parseFloat(y);});
-  xprom = xsum/n;
-  yprom = ysum/n
-  xxs.forEach(function(xx){xxsum = xxsum+xx;});
-  yys.forEach(function(yy){yysum = yysum+yy;});
-  xys.forEach(function(xy){xysum = xysum+xy;});
-  b = (xysum - (n*xprom*yprom))/(xxsum - (n*(xprom*xprom)));
-  a = yprom - (b*xprom);
+  xs.forEach(function (x) { xsum = xsum + x; });
+  ys.forEach(function (y) { ysum = ysum + parseFloat(y); });
+  xprom = xsum / n;
+  yprom = ysum / n
+  xxs.forEach(function (xx) { xxsum = xxsum + xx; });
+  yys.forEach(function (yy) { yysum = yysum + yy; });
+  xys.forEach(function (xy) { xysum = xysum + xy; });
+  b = (xysum - (n * xprom * yprom)) / (xxsum - (n * (xprom * xprom)));
+  a = yprom - (b * xprom);
 
-  consulta.forEach(function(x){
-    const y = a + (b*x);
-    result.push({x:x,y:y});
+  consulta.forEach(function (x) {
+    const y = a + (b * x);
+    result.push({ x: x, y: y });
   });
 
   return result;
 }
 
 function generarGrafico($idElement, data) {
-  console.log(data);
   const elements = $("#" + $idElement).find(".chart");
 
   if (elements.length == 0) {
@@ -728,7 +837,7 @@ function generarGrafico($idElement, data) {
   data.grafico = data.tipoGrafico == "lineal" ? "line" : data.grafico;
   data.grafico = data.tipoGrafico == "barras" ? "bar" : data.grafico;
 
-  data.detalle.filter(function(y) {
+  data.detalle.filter(function (y) {
     return y.eliminado === 0;
   });
 
@@ -776,7 +885,7 @@ function loadRegiones($afterLoadRegiones) {
     url: API_REGIONES,
     type: "GET",
     dataType: "json",
-    success: function($response) {
+    success: function ($response) {
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           const $onceMapIsLoaded = onceMapIsLoaded;
@@ -784,8 +893,8 @@ function loadRegiones($afterLoadRegiones) {
         }
       }
     },
-    error: function(xhr, status) {},
-    complete: function(xhr, status) {}
+    error: function (xhr, status) { },
+    complete: function (xhr, status) { }
   });
 }
 
@@ -796,25 +905,23 @@ function addLegend($idElement, $seccion) {
 
   let seccionHtmlIcon = `<i class="mr-2 fas fa-map-marker-alt" />`;
 
-  console.log($seccion);
-
   if ($seccion.logo && $seccion.logo != null && $seccion.logo != "") {
     seccionHtmlIcon = `<i class="mr-2 fas"><img v-bind: src="${
       $seccion.logo
-    }" alt="" width="24px"></i> `;
+      }" alt="" width="24px"></i> `;
   }
 
   $map_legend.append(
     '&nbsp;<button type="button" class="btn btn-sm btn-light" onClick="removeMarker(' +
-      $idElement +
-      "," +
-      $seccion.id +
-      ');" seccion-id="SECCION-' +
-      $seccion.id +
-      '"> ' +
-      seccionHtmlIcon +
-      $seccion.nombre +
-      ' <span class="badge badge-light"> X </span></button>'
+    $idElement +
+    "," +
+    $seccion.id +
+    ');" seccion-id="SECCION-' +
+    $seccion.id +
+    '"> ' +
+    seccionHtmlIcon +
+    $seccion.nombre +
+    ' <span class="badge badge-light"> X </span></button>'
   );
 }
 
@@ -827,13 +934,13 @@ function removeLegend($seccionId) {
 }
 
 function removeMarker($id, $seccionId) {
-  const $checkedLayer = layers.find(function($item, $index) {
+  const $checkedLayer = layers.find(function ($item, $index) {
     if ($item.id === $id) return $item;
   });
 
   if ($checkedLayer) {
     map.removeLayer($checkedLayer.layer);
-    _.remove(layers, function($item) {
+    _.remove(layers, function ($item) {
       return $item.id === $checkedLayer.id;
     });
   }
@@ -842,9 +949,15 @@ function removeMarker($id, $seccionId) {
   removeLegend($seccionId);
 
   const $map_legend = $("#map-legend");
-  if ($map_legend[0].childElementCount == 0){
+  if ($map_legend[0].childElementCount == 0) {
     map.removeControl(window.drawControl);
     smiPanel.$refs.param.clearAllSections();
+    map.eachLayer(function (layer) {
+      if (layer instanceof L.Circle || layer instanceof L.Polygon) {
+        map.removeLayer(layer);
+      }
+    });
+
   }
 }
 
@@ -853,11 +966,11 @@ function removeMarkerAll() {
   var menus = sidebar.find("input[type='checkbox'].menu-item");
 
   for (let i = 0; i < menus.length; i++) {
-    const menuItem = menus[i]; 
+    const menuItem = menus[i];
     const menuId = parseInt($(menuItem).prop("id"));
     const seccionId = $(menuItem).attr("data-id");
 
-    removeMarker(menuId,seccionId);
+    removeMarker(menuId, seccionId);
   }
 }
 
@@ -866,7 +979,7 @@ function onceMapIsLoaded() {
 
   const $menu_container = $("#menu-sidebar");
   var $items = $menu_container.find("input[type='checkbox'].menu-item");
-  const $whenMenuItemIsChecked = function() {
+  const $whenMenuItemIsChecked = function () {
     const $isChecked = $(this).prop("checked");
     const $id = parseInt($(this).prop("id"));
 
@@ -876,32 +989,30 @@ function onceMapIsLoaded() {
     $seccion.color = $(this).attr("data-color");
     $seccion.logo = $(this).attr("data-logo");
     $seccion.codigoSeccion = $(this).attr("data-codigoseccion");
-    
+
     map.removeControl(window.drawControl);
     smiPanel.$refs.param.codigoSeccion = $seccion.codigoSeccion;
     smiPanel.$refs.param.tipo = '';
     smiPanel.$refs.param.input = {};
-    
+
     map.addControl(window.drawControl);
-    if(smiPanel.$refs.param.geometryLoader.getCustomLayer()){
-      smiPanel.$refs.param.clearAllSections();
-    }
 
     if (!$isChecked) {
       removeMarker($id, $seccion.id);
       return;
     }
+
     showLoading();
     addLegend($id, $seccion);
 
-    const $addNewLayer = function($id, $layer) {
+    const $addNewLayer = function ($id, $layer) {
       layers.push({
         id: $id,
         layer: $layer
       });
     };
 
-    const $styleColor = function($seccion) {
+    const $styleColor = function ($seccion) {
       return {
         color: $seccion.seccion.color,
         weight: 2,
@@ -911,7 +1022,7 @@ function onceMapIsLoaded() {
       };
     };
 
-    const $afterLoadPuntos = function($seccion, $cacheLayer) {
+    const $afterLoadPuntos = function ($seccion, $cacheLayer) {
       mapFeature.styleColorDefault = $styleColor($seccion);
 
       //mapFeature.selectedFeature.removeAllArea();
@@ -920,17 +1031,17 @@ function onceMapIsLoaded() {
       $("#multiple").prop("disabled", false);
       $("#multiple").prop("checked", false);
 
-      
+
       if ($seccion.geoJsonFile && $seccion.geoJsonFile != null) {
-        const $onEachFeature = function(feature, layer) {
+        const $onEachFeature = function (feature, layer) {
           layer.on({
-            mouseover: function(e) {
+            mouseover: function (e) {
               mapFeature.highlightFeature(e, $seccion, $cacheLayer);
             },
-            mouseout: function(e) {
+            mouseout: function (e) {
               mapFeature.resetHighlightFeature(e, $seccion, $cacheLayer);
             },
-            click: function(e) {
+            click: function (e) {
               mapFeature.selectLayer(e, $seccion, $cacheLayer);
             }
             //dblclick : selectFeature
@@ -945,7 +1056,7 @@ function onceMapIsLoaded() {
 
           let markers = L.markerClusterGroup({
             maxClusterRadius: 120,
-            iconCreateFunction: function(cluster) {
+            iconCreateFunction: function (cluster) {
               let childMarkers = cluster.getAllChildMarkers();
               let n = cluster.getChildCount();
 
@@ -959,7 +1070,7 @@ function onceMapIsLoaded() {
           let $geoJsonLayer = L.geoJson($points, {
             style: $styleColor($seccion),
             onEachFeature: $onEachFeature,
-            pointToLayer: function(feature, latlng) {
+            pointToLayer: function (feature, latlng) {
               return L.marker(latlng, { icon: icon });
             }
           });
@@ -970,7 +1081,7 @@ function onceMapIsLoaded() {
             $geoJsonLayer = L.geoJson($points, {
               style: $styleColor($seccion),
               onEachFeature: $onEachFeature,
-              pointToLayer: function(feature, latlng) {
+              pointToLayer: function (feature, latlng) {
                 let pointMarker = L.marker(latlng, {
                   icon: icon
                 });
@@ -1068,20 +1179,20 @@ function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer) {
     url: API_SECCIONES + "/" + $seccion.id,
     type: "GET",
     dataType: "json",
-    success: function($response) {
+    success: function ($response) {
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           $afterLoadPuntos($response.data, $cacheLayer);
         }
       }
     },
-    error: function(xhr, status) {
+    error: function (xhr, status) {
       hideLoading();
       smiMensaje.$refs.message.mensaje.text =
         "Ha ocurrido un error no controlado. Consulte al administrador.";
       smiMensaje.$refs.message.onMostrarMensaje();
     },
-    complete: function(xhr, status) {}
+    complete: function (xhr, status) { }
   });
 }
 
@@ -1092,15 +1203,15 @@ function loadSecciones($afterLoadSecciones) {
     url: API_SECCIONES,
     type: "GET",
     dataType: "json",
-    success: function($response) {
+    success: function ($response) {
       if (typeof ($response !== "undefined") && $response !== null) {
         if ($response.status) {
           buildSecciones($response.data, $afterLoadSecciones);
         }
       }
     },
-    error: function(xhr, status) {},
-    complete: function(xhr, status) {}
+    error: function (xhr, status) { },
+    complete: function (xhr, status) { }
   });
 }
 
@@ -1109,18 +1220,18 @@ function buildSecciones($secciones, $afterBuildSecciones) {
 
   if (typeof $secciones == "undefined" || $secciones === null) return false;
   if (typeof _ == "undefined") throw Exception("No lodash object found");
-  $secciones = _.groupBy($secciones, function($item) {
+  $secciones = _.groupBy($secciones, function ($item) {
     let key = $item.idSeccionPadre;
     if ($item.idSeccionPadre == null) key = "0";
     return key;
   });
 
-  $cabecera = _.find($secciones, function($item, $key) {
+  $cabecera = _.find($secciones, function ($item, $key) {
     if ($key === "" || $key == null || $key === "0") return $item;
   });
 
-  $cabecera = _.map($cabecera, function($item, $key) {
-    $children = _.filter($secciones, function($children, $subKey) {
+  $cabecera = _.map($cabecera, function ($item, $key) {
+    $children = _.filter($secciones, function ($children, $subKey) {
       return $item.id == $subKey;
     });
     $item["children"] =
@@ -1129,7 +1240,7 @@ function buildSecciones($secciones, $afterBuildSecciones) {
 
     return $item;
   });
-  $secciones = _.filter($secciones, function($item, $key) {
+  $secciones = _.filter($secciones, function ($item, $key) {
     if ($key !== "" || $key !== null) return true;
   });
 
@@ -1154,7 +1265,7 @@ function getTemplateAjax(path, callback) {
   $.ajax({
     url: path,
     dataType: "html",
-    success: function(data) {
+    success: function (data) {
       source = data;
       template = Handlebars.compile(source);
       if (callback) callback(template);
@@ -1184,7 +1295,7 @@ function renderHandlebarsTemplate(
     return;
   }
 
-  getTemplateAjax(withTemplate, function(template) {
+  getTemplateAjax(withTemplate, function (template) {
     if (inElement === null || inElement === "") return template(withData);
     var targetDiv = typeof inElement == "string" ? $(inElement) : inElement;
     targetDiv.html(template(withData));
@@ -1217,7 +1328,7 @@ function guid() {
 }
 
 function onSeleccionarPanelFeature(value) {
-  console.log(value);
+
 }
 
 function agregarAtributo() {
@@ -1241,7 +1352,6 @@ function quitarAtributo($id) {
 }
 
 function saveSeccionDetalleClick() {
-  debugger;
   let $seccionDetalle = {};
   let $atributos = [];
 
@@ -1259,13 +1369,11 @@ function saveSeccionDetalleClick() {
   let $fields = $("#modal-content-atributos").find(
     "input[data-validate = 'true']"
   );
-    
-  $($fields).each(function() {
+
+  $($fields).each(function () {
     $seccionDetalle[$(this).attr("data-field")] = $(this).val();
   });
 
   $seccionDetalle.atributos = $atributos;
-  console.log($seccionDetalle);
-  console.log($seccionDetalle.idSeccion);
   saveSeccionDetalleRequest($seccionDetalle.idSeccion, $seccionDetalle);
 }
