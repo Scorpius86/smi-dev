@@ -313,6 +313,10 @@ function initMap($regiones, $afterMapIsLoaded) {
 
   });
 
+  map.on("draw:deletestop", function (e) {
+    $("#nav-panel").hide();
+  });
+
 }
 
 function markers() {
@@ -994,8 +998,40 @@ function onceMapIsLoaded() {
     smiPanel.$refs.param.codigoSeccion = $seccion.codigoSeccion;
     smiPanel.$refs.param.tipo = '';
     smiPanel.$refs.param.input = {};
-
     map.addControl(window.drawControl);
+
+    const $map_legend = $("#map-legend");
+    if ($map_legend[0].childElementCount == 0) {
+      try {
+        var elementos = document.getElementsByClassName("leaflet-draw-toolbar leaflet-bar");
+        for (let i = 0; i < elementos.length; i++) {
+          const element1 = elementos[i];
+          for (let k = 0; k < element1.childNodes.length; k++) {
+            const element = element1.childNodes[k];
+            if (element.className.includes('leaflet-draw-edit-remove')) {
+              element.click();
+            }
+          }
+        }
+
+        var ul = document.getElementsByClassName("leaflet-draw-actions leaflet-draw-actions-top leaflet-draw-actions-bottom");
+        for (let i = 0; i < ul.length; i++) {
+          const elementUl = ul[i];
+          for (let k = 0; k < elementUl.childNodes.length; k++) {
+            const li = elementUl.childNodes[k];
+            for (let j = 0; j < li.childNodes.length; j++) {
+              const a = li.childNodes[j];
+              if (a.title === 'Elimina todas las capas.') {
+                a.click();
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
 
     if (!$isChecked) {
       removeMarker($id, $seccion.id);
