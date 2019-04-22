@@ -101,7 +101,6 @@ export default {
 
       //this.geometryLoader.removeMarkerAll();
       this.geometryLoader.addCustomLayer(e);
-
       if (e.layerType === 'polygon') {
         this.isCircle = false;
         isPolygon = 1;
@@ -115,7 +114,6 @@ export default {
         this.area = Math.round(radioKm * radioKm * Math.PI);
 
       }
-
       let listaSecciones = [];
       layers.forEach(obj => {
         if (obj.id !== 'customLayer') {

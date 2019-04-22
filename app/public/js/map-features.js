@@ -9,7 +9,7 @@ function SMIMapFeature(map) {
     weight: 0.5
   };
   this.styleLayer = {
-    default: function() {
+    default: function () {
       console.log(me.styleColorDefault);
       return me.styleColorDefault;
     },
@@ -29,13 +29,13 @@ function SMIMapFeature(map) {
   this.map = map;
   this.selectedLayers = [];
 
-  this.highlightFeature = function(event, $seccion, $cacheLayer) {
+  this.highlightFeature = function (event, $seccion, $cacheLayer) {
     var layer = event.target;
 
     // layer.setStyle(stylelayer.highlight);
     // info.update(layer.feature.properties);
   };
-  this.resetHighlightFeature = function(event) {
+  this.resetHighlightFeature = function (event) {
     var layer = event.target;
     var feature = event.target.feature;
 
@@ -45,7 +45,7 @@ function SMIMapFeature(map) {
     //   setStyleLayer(layer, stylelayer.default);
     // }
   };
-  this.selectLayer = function(event, $seccion, $cacheLayer) {
+  this.selectLayer = function (event, $seccion, $cacheLayer) {
     const me = this;
     var layer = event.target;
     var feature = event.target.feature;
@@ -82,35 +82,34 @@ function SMIMapFeature(map) {
       //Marcar como seleccionado
       if (layer.feature.geometry.type == "Polygon") {
         this.removeAllSelection();
-        console.log(layer);
         this.addSelectedLayer(keyFeature, layer);
       }
       me.showInfo($detalleCodigoGIS, $seccion);
     }
   };
 
-  this.checkSelectedLayers = function(key) {
+  this.checkSelectedLayers = function (key) {
     return _.some(this.selectedLayers, { key: key });
   };
 
-  this.addSelectedLayer = function(key, layer) {
+  this.addSelectedLayer = function (key, layer) {
     if (!_.some(this.selectedLayers, { key: key })) {
       this.selectedLayers.push({ key: key, layer: layer });
       if (layer) layer.setStyle(this.styleLayer.selected);
     }
   };
 
-  this.removeAllSelection = function() {
+  this.removeAllSelection = function () {
     this.selectedLayers.forEach(x => {
       x.layer.setStyle(me.styleLayer.default());
     });
-    _.remove(this.selectedLayers, function(x) {
+    _.remove(this.selectedLayers, function (x) {
       return x.key != null;
     });
   };
 
-  this.removeSelectedLayer = function(key, layer) {
-    _.remove(this.selectedLayers, function(x) {
+  this.removeSelectedLayer = function (key, layer) {
+    _.remove(this.selectedLayers, function (x) {
       return x.key == key;
     });
     layer.setStyle(this.styleLayer.default());
@@ -123,15 +122,15 @@ function SMIMapFeature(map) {
       url: $url,
       type: "GET",
       dataType: "json",
-      success: function($response) {
+      success: function ($response) {
         if (typeof ($response !== "undefined") && $response !== null) {
           if ($response.status) {
             $afterLoadSeccionDetalle($response.data);
           }
         }
       },
-      error: function(xhr, status) {},
-      complete: function(xhr, status) {
+      error: function (xhr, status) { },
+      complete: function (xhr, status) {
         hideLoading();
       }
     });
@@ -154,21 +153,21 @@ function SMIMapFeature(map) {
       url: $url,
       type: "GET",
       dataType: "json",
-      success: function($response) {
+      success: function ($response) {
         if (typeof ($response !== "undefined") && $response !== null) {
           if ($response.status) {
             $afterLoadAtributosSeccionDetalle($response.data);
           }
         }
       },
-      error: function(xhr, status) {},
-      complete: function(xhr, status) {
+      error: function (xhr, status) { },
+      complete: function (xhr, status) {
         hideLoading();
       }
     });
   }
 
-  this.loadPanel = function(
+  this.loadPanel = function (
     $idSeccion,
     $listCodigoGIS,
     $idCultivo,
@@ -186,17 +185,17 @@ function SMIMapFeature(map) {
       type: "POST",
       data: paramPanel,
       dataType: "json",
-      success: function($response) {
+      success: function ($response) {
         if (typeof ($response !== "undefined") && $response !== null) {
           if ($response.status) {
             $afterLoadPanel($response.data);
           }
         }
       },
-      error: function(xhr, status) {
+      error: function (xhr, status) {
 
       },
-      complete: function(xhr, status) {
+      complete: function (xhr, status) {
         hideLoading();
       }
     });
@@ -238,7 +237,7 @@ function SMIMapFeature(map) {
     return propiedades;
   }
 
-  this.showInfo = function($detalleCodigoGIS, $seccion) {
+  this.showInfo = function ($detalleCodigoGIS, $seccion) {
     const $idSeccion = $seccion.seccion.id;
     const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
@@ -251,67 +250,70 @@ function SMIMapFeature(map) {
     }
     const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
 
-      let paramLista = [];
-      paramLista.push($detalleCodigoGIS);
+    let paramLista = [];
+    paramLista.push($detalleCodigoGIS);
 
-      this.loadPanel($idSeccion, paramLista, $idCultivo, function(data) {
-        const seccionDetalle = data.detalles.find(d=>d.codigoGIS == $detalleCodigoGIS);
+    this.loadPanel($idSeccion, paramLista, $idCultivo, function (data) {
+      const seccionDetalle = data.detalles.find(d => d.codigoGIS == $detalleCodigoGIS);
 
-        if (data == undefined || data.length == 0) {
-          const propiedades = loadDefaultProperties();
-          data = propiedades;
-        }
+      if (data == undefined || data.length == 0) {
+        const propiedades = loadDefaultProperties();
+        data = propiedades;
+      }
 
-        data.nombre = $detalleCodigoGIS;
-        data.permiteEditar = false;
+      data.nombre = $detalleCodigoGIS;
+      data.permiteEditar = false;
 
-        if (data.detalles.length > 0 && seccionDetalle) {
-          data.nombre = seccionDetalle.nombre;
-        }
-        
-        let authenticate = authenticatedUser();
-        if (authenticate != null && authenticate.id > 0) {
-          data.permiteEditar = true;
-        }
-        let language = getLanguage();
-        if (language == null || language.length == 0) {
-          language = "es";
-        }        
+      if (data.detalles.length > 0 && seccionDetalle) {
+        data.nombre = seccionDetalle.nombre;
+      }
 
-        data.label = messages[language].label;
-        data.detallePrincipal = seccionDetalle;
-        data.codigoGISPrincipal = $detalleCodigoGIS;
+      let authenticate = authenticatedUser();
+      if (authenticate != null && authenticate.id > 0) {
+        data.permiteEditar = true;
+      }
+      let language = getLanguage();
+      if (language == null || language.length == 0) {
+        language = "es";
+      }
 
-        const $templateAtributos = renderHandlebarsTemplate(
-          "#secciones-editar-atributos",
-          null,
-          { data: data },
-          null,
-          true
-        );
+      data.label = messages[language].label;
+      data.detallePrincipal = seccionDetalle;
+      data.codigoGISPrincipal = $detalleCodigoGIS;
 
-        if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
-          smiPanel.$refs.param.tipo = "grafico";
-        }else{
-          smiPanel.$refs.param.tipo = "edicion";
-        }
+      const $templateAtributos = renderHandlebarsTemplate(
+        "#secciones-editar-atributos",
+        null,
+        { data: data },
+        null,
+        true
+      );
 
-        smiPanel.$refs.param.input = {};
-        smiPanel.$refs.param.input.seccion = $seccion.seccion;        
-        smiPanel.$refs.param.detalle = data;
-        $("#modal-content-atributos").html($templateAtributos);
+      console.log($listaLimitesSeccionGIS);
+      console.log($seccionCodigoGIS);
 
-        smiPanel.$refs.param.show();
+      if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
+        smiPanel.$refs.param.tipo = "grafico";
+      } else {
+        smiPanel.$refs.param.tipo = "edicion";
+      }
 
-        if (smiPanel.$refs.param.tipo === "edicion"){
-          smiPanel.$refs.param.hide();
-          setTimeout(smiPanel.$refs.param.showModal, 50);
-        }
+      smiPanel.$refs.param.input = {};
+      smiPanel.$refs.param.input.seccion = $seccion.seccion;
+      smiPanel.$refs.param.detalle = data;
+      $("#modal-content-atributos").html($templateAtributos);
 
-      });
+      //smiPanel.$refs.param.show();
+
+      if (smiPanel.$refs.param.tipo === "edicion") {
+        //smiPanel.$refs.param.hide();
+        setTimeout(smiPanel.$refs.param.showModal, 50);
+      }
+
+    });
   };
 
-  this.showInfoMultiple = function($detalleCodigoGIS, $seccion) {
+  this.showInfoMultiple = function ($detalleCodigoGIS, $seccion) {
     this.showInfo($detalleCodigoGIS, $seccion);
     console.log(this.selectedLayers);
   };

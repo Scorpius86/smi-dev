@@ -38,6 +38,15 @@ export default {
                             </button>
                         </div>
                     </template>
+
+                    <template v-if="detalle.permiteEditar && tipoId == 'panelConteoMarcadores'">
+                    <div>
+                        <br>
+                        <button id="btnEditar" style="display:none;" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
+                            data-whatever="@mdo">{{detalle.label.button_edit}}
+                        </button>
+                    </div>
+                </template>
                 </div>                
             </template>
         </div>
@@ -62,6 +71,7 @@ export default {
       tipo: "edicion", //grafico,
       tipoId:"",
       geometryLoader:GeometryLoader,
+      center: null,
       idChildrenComponents:{
           panelTipoGrafico: "panelTipoGrafico",
           panelTipoEdicion: "panelTipoEdicion",
@@ -81,6 +91,11 @@ export default {
     this.labels = messages[language].label;
   },
   methods: {
+    RemoveLayers: function(e) {
+        this.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
+        let panel =this.assignPanel();
+        panel.RemoveLayers(e);
+      },
     DrawEventCREATED:function(e){
         this.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
         let panel =this.assignPanel();

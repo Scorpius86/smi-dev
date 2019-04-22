@@ -100,7 +100,7 @@
 
     <div class="main-form container-fluid px-0">
         <div class="page-wrapper chiller-theme toggled d-flex">
-            <nav id="sidebar" class="sidebar-wrapper">
+            <nav id="sidebar" class="sidebar-wrapper"  style="z-index: 1032;">
                 <div id="home-menu" class="sidebar-content">
                     <!-- sidebar-header  -->
                     <vue-home-menu ref="param"></vue-home-menu>

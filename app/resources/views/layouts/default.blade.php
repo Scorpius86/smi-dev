@@ -103,7 +103,7 @@
 
     <div class="container-fluid px-0">
         <div class="page-wrapper chiller-theme toggled d-flex">
-            <nav id="sidebar" class="sidebar-wrapper">
+            <nav id="sidebar" class="sidebar-wrapper"  style="z-index: 1032;">
                 <div class="sidebar-content">
                     <!-- sidebar-header  -->
                     <div id="menu-sidebar" class="sidebar-menu mt-4"></div>

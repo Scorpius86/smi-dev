@@ -12,7 +12,7 @@ const CHART_POINT_RADIUS = 1;
 var map = {};
 var layers = [];
 var mapFeature = {};
-
+var center = null;
 var model = {};
 model.selectedLayers = [];
 
@@ -100,7 +100,11 @@ function settings() {
     $(".sidebar-content").mCustomScrollbar({
       axis: "y",
       autoHideScrollbar: true,
-      theme: "minimal"
+      theme: "minimal",
+      mouseWheel: {
+        enable: true,
+        scrollAmount: 300
+      }
     });
     $(".sidebar-content").addClass("desktop");
   }
@@ -306,17 +310,30 @@ function initMap($regiones, $afterMapIsLoaded) {
   map.on(L.Draw.Event.CREATED, function (e) {
     if (e.layerType == 'polygon') {
       smiPanel.$refs.param.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
+    } else {
+      center = L.circle(e.layer._latlng, { radius: 2 }).addTo(map);
     }
+
     smiPanel.$refs.param.DrawEventCREATED(e);
 
     drawnItems.addLayer(e.layer);
 
   });
 
-  map.on("draw:deletestop", function (e) {
-    $("#nav-panel").hide();
-  });
+  map.on("draw:deleted", function (e) {
 
+    var layers = e.layers;
+    layers.eachLayer(function (layer) {
+      if (layer instanceof L.Circle) {
+        $("#nav-panel").hide();
+        if (center !== null) {
+          map.removeLayer(center);
+        }
+      } else if (layer instanceof L.Polygon) {
+        $("#nav-panel").hide();
+      }
+    });
+  });
 }
 
 function markers() {
@@ -1088,7 +1105,7 @@ function onceMapIsLoaded() {
           let $points = JSON.parse($seccion.geoJsonFile);
           const $myCustomColour = $seccion.seccion.color;
 
-          const icon = getIconMarkerPoint($myCustomColour);
+          const icon = getIconMarkerPoint($myCustomColour, $seccion.seccion.logo);
 
           let markers = L.markerClusterGroup({
             maxClusterRadius: 120,
@@ -1162,7 +1179,7 @@ function onceMapIsLoaded() {
   $items.on("change", $whenMenuItemIsChecked);
 }
 
-function getIconMarkerPoint($myCustomColour) {
+function getIconMarkerPoint($myCustomColour, logo) {
   const $markerHtmlStyles = `
                     background-color: ${$myCustomColour};
                     width: 2rem;
@@ -1175,13 +1192,25 @@ function getIconMarkerPoint($myCustomColour) {
                     transform: rotate(45deg);
                     border: 1px solid #FFFFFF`;
 
-  const icon = L.divIcon({
-    className: "my-custom-pin",
-    iconAnchor: [0, 24],
-    labelAnchor: [-6, 0],
-    popupAnchor: [0, -36],
-    html: `<span style="${$markerHtmlStyles}" />`
-  });
+  let icon;
+  if (logo !== undefined && logo !== null && logo.length > 0) {
+    icon = L.icon({
+      className: "my-custom-pin",
+      iconUrl: logo,
+      iconSize: [38, 38],
+      iconAnchor: [0, 24],
+      labelAnchor: [-6, 0],
+      popupAnchor: [0, -36]
+    });
+  } else {
+    icon = L.divIcon({
+      className: "my-custom-pin",
+      iconAnchor: [0, 24],
+      labelAnchor: [-6, 0],
+      popupAnchor: [0, -36],
+      html: `<span style="${$markerHtmlStyles}" />`
+    });
+  }
 
   return icon;
 }
