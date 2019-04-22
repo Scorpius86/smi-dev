@@ -1,7 +1,7 @@
 <?php
 namespace smi\Http\Controllers;
 
-include_once(app_path() . '/geoPHP/geoPHP.inc');
+include_once(app_path() . '/geoPHP/geoPHP.inc'); 
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
