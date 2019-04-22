@@ -11,7 +11,7 @@ class ExportController extends Controller
 {
     public function export($fileId){
         $fileName = $fileId.'.xlsx';
-        $pathToTheFile = base_path() .'\\public\\'.$fileName;
+        $pathToTheFile = base_path() .'/public/'.$fileName;
         $fileContents = file_get_contents($pathToTheFile);
         $response = Response::make($fileContents, 200);
 
