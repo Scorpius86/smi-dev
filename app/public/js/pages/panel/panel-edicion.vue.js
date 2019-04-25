@@ -30,23 +30,13 @@ export default {
                     <vue-panel-tipo-grafico :id="idChildrenComponents.panelTipoGrafico"></vue-panel-tipo-grafico>
                     <vue-panel-tipo-edicion :id="idChildrenComponents.panelTipoEdicion"></vue-panel-tipo-edicion>
                     <vue-panel-conteo-marcadores :id="idChildrenComponents.panelConteoMarcadores"></vue-panel-conteo-marcadores>
-                    <template v-if="detalle.permiteEditar && tipoId != 'panelConteoMarcadores'">
-                        <div>
-                            <br>
-                            <button id="btnEditar" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
-                                data-whatever="@mdo">{{detalle.label.button_edit}}
-                            </button>
-                        </div>
-                    </template>
-
-                    <template v-if="detalle.permiteEditar && tipoId == 'panelConteoMarcadores'">
+                   
                     <div>
                         <br>
                         <button id="btnEditar" style="display:none;" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" 
                             data-whatever="@mdo">{{detalle.label.button_edit}}
                         </button>
                     </div>
-                </template>
                 </div>                
             </template>
         </div>
