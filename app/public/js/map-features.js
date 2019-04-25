@@ -10,7 +10,6 @@ function SMIMapFeature(map) {
   };
   this.styleLayer = {
     default: function () {
-      console.log(me.styleColorDefault);
       return me.styleColorDefault;
     },
     highlight: {
@@ -289,9 +288,6 @@ function SMIMapFeature(map) {
         true
       );
 
-      console.log($listaLimitesSeccionGIS);
-      console.log($seccionCodigoGIS);
-
       if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
         smiPanel.$refs.param.tipo = "grafico";
       } else {
@@ -308,6 +304,9 @@ function SMIMapFeature(map) {
       if (smiPanel.$refs.param.tipo === "edicion") {
         //smiPanel.$refs.param.hide();
         setTimeout(smiPanel.$refs.param.showModal, 50);
+      } else if(smiPanel.$refs.param.tipo === "grafico"){
+        smiPanel.$refs.param.tipo = "grafico";
+        smiPanel.$refs.param.show();
       }
 
     });
@@ -315,6 +314,5 @@ function SMIMapFeature(map) {
 
   this.showInfoMultiple = function ($detalleCodigoGIS, $seccion) {
     this.showInfo($detalleCodigoGIS, $seccion);
-    console.log(this.selectedLayers);
   };
 }

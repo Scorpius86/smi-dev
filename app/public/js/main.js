@@ -313,7 +313,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     } else {
       center = L.circle(e.layer._latlng, { radius: 2 }).addTo(map);
     }
-
+    smiPanel.$refs.param.tipo = "edicion";
     smiPanel.$refs.param.DrawEventCREATED(e);
 
     drawnItems.addLayer(e.layer);
