@@ -48,6 +48,7 @@
         <vue-mensaje-modal ref="message"></vue-mensaje-modal>
     </div>
     
+    
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div id="modal-content-atributos" class="modal-content">
@@ -56,7 +57,20 @@
         </div>
     </div>    
     
-    <nav id="app" class="main-form bs-bottom navbar navbar-expand-md navbar-light bg-custom py-0">
+
+        <div class="page-wrapper chiller-theme toggled d-flex">
+            <nav id="sidebar" class="sidebar-wrapper" style="z-index: 1032;">
+                <div class="sidebar-content">
+                    <!-- sidebar-header  -->
+                    <div id="menu-sidebar" class="sidebar-menu">
+                        <vue-seccion-component ref="param"></vue-seccion-component>
+                    </div> 
+                    <!-- sidebar-menu  -->
+                </div>
+
+            </nav>
+            <main class="page-content">
+            <nav id="app" class="main-form bs-top navbar navbar-expand-md navbar-light bg-custom py-0">
         <a class="nav-link pl-3" id="btnShowMenu">
             <i class="fas fa-2x fa-bars"></i>
         </a>
@@ -136,20 +150,6 @@
             
         </div>
     </nav>
-
-    <div class="main-form container-fluid px-0">
-        <div class="page-wrapper chiller-theme toggled d-flex">
-            <nav id="sidebar" class="sidebar-wrapper" style="z-index: 1032;">
-                <div class="sidebar-content">
-                    <!-- sidebar-header  -->
-                    <div id="menu-sidebar" class="sidebar-menu mt-4">
-                        <vue-seccion-component ref="param"></vue-seccion-component>
-                    </div>
-                    <!-- sidebar-menu  -->
-                </div>
-            </nav>
-            <main class="page-content">
-                
                 <div class="container-fluid" id="map-container">
                     <div id="dialog-panel" title="Dialog Title">
                         <div class="dialog-content"></div>
@@ -162,7 +162,8 @@
                 </div>
             </nav>
         </div>
-    </div>
+
+
 
     <nav class="main-form navbar fixed-bottom navbar-expand-sm navbar-dark bg-brown custom-navbar">
         <div class="d-block w-100">
@@ -182,6 +183,14 @@
 
         </div>
     </nav>
+    </div>
+    </div>
+
+    
+
+    
+
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
