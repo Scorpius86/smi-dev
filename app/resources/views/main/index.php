@@ -307,7 +307,7 @@
                         {{#each detallePrincipal.atributos}}
                         <div class="form-group" data-id="{{idSeccionAtributo}}">
                             <label>{{nombre}}</label>
-                            <input type="text" class="form-control" value="{{valor}}">
+                            <input type="text" disabled class="form-control" value="{{valor}}">
                         </div>
                         {{/each}}
                     </div>
