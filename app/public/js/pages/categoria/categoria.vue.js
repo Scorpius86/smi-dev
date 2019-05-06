@@ -224,7 +224,7 @@ var smiCategoria = Vue.component("Categoria", {
       this.mensaje = {};
       this.mensaje.title = "Confirmación";
       this.mensaje.text =
-        'Va ha eliminar la categoría "' +
+        'Va a eliminar la categoría "' +
         seccion.nombre +
         '". Desea continuar ?';
       this.onMostrarConfirmacion();

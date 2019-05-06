@@ -286,6 +286,8 @@
                     <div class="tab-pane fade show active" id="seccion-informacion" role="tabpanel" aria-labelledby="seccion-informacion-tab">
                         <br>
                         {{#with detallePrincipal}}
+                        {{detallePrincipal}}
+                        {{descripcion}}
                         <input type="hidden" data-validate="true" data-field="idSeccion" value="{{panelData.idSeccion}}">
                         <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{idSeccionDetalle}}">
                         <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{panelData.codigoGISPrincipal}}">
@@ -298,10 +300,16 @@
                             <input type="text" class="form-control" data-validate="true" data-field="abreviatura" placeholder="{{panelData.label.panel_label_short_name}}" value="{{abreviatura}}">
                         </div>
                         <div class="form-group">
-                            <label for="formGroupExampleInput2">{{panelData.label.panel_label_description}}</label>
+                            <label for="formGroupExampleInput3">{{panelData.label.panel_label_description}}</label>
                             <input type="text" class="form-control" data-validate="true" data-field="descripcion" placeholder="{{panelData.label.panel_label_description}}"  value="{{descripcion}}">
                         </div>
                         {{/with}}
+                        {{#each detallePrincipal.atributos}}
+                        <div class="form-group" data-id="{{idSeccionAtributo}}">
+                            <label>{{nombre}}</label>
+                            <input type="text" class="form-control" value="{{valor}}">
+                        </div>
+                        {{/each}}
                     </div>
                     <div class="tab-pane fade" id="seccion-atributos" role="tabpanel" aria-labelledby="seccion-informacion-tab">
                         <br>

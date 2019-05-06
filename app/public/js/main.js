@@ -1414,6 +1414,9 @@ function agregarAtributo() {
 function quitarAtributo($id) {
   let row = $("#table-atributo").find("[data-id=" + $id + "]");
   row.remove();
+
+  let div = $("#seccion-informacion").find("[data-id=" + $id + "]");
+  div.remove();
 }
 
 function saveSeccionDetalleClick() {
@@ -1430,7 +1433,6 @@ function saveSeccionDetalleClick() {
     row.valor = $(atributosValor[index]).val();
     $atributos.push(row);
   }
-
   let $fields = $("#modal-content-atributos").find(
     "input[data-validate = 'true']"
   );

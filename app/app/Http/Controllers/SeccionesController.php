@@ -188,7 +188,6 @@ class SeccionesController extends Controller
         }
 
         $myhashmap[$id] = $seccionHashMap;
-        error_log(json_encode($myhashmap));
         $response = array(
             'status' => true,
             'tipos' => $tipos,
@@ -273,8 +272,6 @@ class SeccionesController extends Controller
         $user = 'admin';
         $terminal = $request->getHttpHost();
 
-        error_log($request->input('id'));
-
         $seccion = new Seccion;
 
         if ($request->input('id') == 0) {
@@ -337,7 +334,6 @@ class SeccionesController extends Controller
 
     public function delete(Request $request, $id)
     {
-        error_log($id);
         $seccion = Seccion::findOrFail($id);
         $seccion->eliminado = 1;
         $seccion->save();
@@ -353,8 +349,6 @@ class SeccionesController extends Controller
 
         $seccion = Seccion::findOrFail($id);
         $fileName = "Seccion-" . $id . "-file.geojson";
-
-        error_log(Storage::exists($pathBase . $fileName));
 
         if (Storage::exists($pathBase . $fileName)) {
             //Eliminar
@@ -397,7 +391,7 @@ class SeccionesController extends Controller
         $seccionDto->idTipoGeoData = $seccion->idTipoGeoData;
         $seccionDto->idSeccionPadre = $seccion->idSeccionPadre;
         $seccionDto->geoJsonFile = $seccion->geoJsonFile;
-
+ 
         $seccionDetalleDtos = SeccionDetalle::Where([
             ['seccion_detalle.idSeccion', '=', $seccion->id],
             ['seccion_detalle.eliminado', '=', '0']
