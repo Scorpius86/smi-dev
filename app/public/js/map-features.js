@@ -307,6 +307,8 @@ function SMIMapFeature(map) {
       } else if(smiPanel.$refs.param.tipo === "grafico"){
         smiPanel.$refs.param.tipo = "grafico";
         smiPanel.$refs.param.show();
+
+        setTimeout(smiPanel.$refs.param.showModal, 50);
       }
 
     });
