@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,7 +29,80 @@
     <link href="css/main.css" rel="stylesheet">
 
     <link href="css/panel/panel-conteo-marcadores.css" rel="stylesheet"/>
+
+    <!-- Optional JavaScript -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+        crossorigin=""></script>
+    <script src="js/library/leaflet/leaflet.markercluster.js"></script>
+    <script src="js/library/leaflet/leaflet.SelectAreaFeature.js"></script>
+    <script src="js/library/leaflet.draw/leaflet.draw-src.js"></script>
+    <script src="js/library/turf/turf.min.js" charset="utf-8"></script>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+
+    <script src="js/utils/custom-polyfills.js"></script>
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/handlebars/handlebars-v4.0.11.js"></script>
+    <script src="js/handlebars/custom-helpers.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/> 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+    
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="js/library/bootstrap-slide/css/bootstrap-slider.css"/> 
+    <script src="js/library/bootstrap-slide/bootstrap-slider.js"></script>
+
+    <!-- Se agrega la librería VueJS -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/2.1.1/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.3.5/vuetify.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/8.3.0/vue-i18n.min.js"></script>
+    
+    
+    <!-- https://bootstrap-vue.js.org/docs/ -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+    <script src="js/utils/environment.js"></script>
+    <script src="js/shared/constantes.js"></script>
+    <script src="js/shared/lang.js"></script>
+    <script src="js/shared/services.js"></script>
+    <script src="js/app/app.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/map-features.js"></script>
+
+    <script src="js/pages/ui/message.vue.js"></script>
+    <script src="js/pages/seccion/seccion.component.vue.js"></script>
+    <!-- <script type="module" src="js/pages/panel/panel-conteo-marcadores.vue.js"></script> -->
+    <!-- <script type="module" src="js/pages/panel/panel-edicion.vue.js"></script> -->
     <title>Peru Cacao</title>
+
+    <script>
+    function showLoading() {
+  $("#loading").modal("show");
+}
+        $(window).show(function(){ 
+            showLoading();
+        });
+    </script>
 
 </head>
 
@@ -184,78 +259,7 @@
         </div>
     </nav>
     </div>
-    </div>
-
-    
-
-    
-
-    
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-        crossorigin=""></script>
-    <script src="js/library/leaflet/leaflet.markercluster.js"></script>
-    <script src="js/library/leaflet/leaflet.SelectAreaFeature.js"></script>
-    <script src="js/library/leaflet.draw/leaflet.draw-src.js"></script>
-    <script src="js/library/turf/turf.min.js" charset="utf-8"></script>
-
-    <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
-
-    <script src="js/utils/custom-polyfills.js"></script>
-    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/handlebars/handlebars-v4.0.11.js"></script>
-    <script src="js/handlebars/custom-helpers.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/> 
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-
-    
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="js/library/bootstrap-slide/css/bootstrap-slider.css"/> 
-    <script src="js/library/bootstrap-slide/bootstrap-slider.js"></script>
-
-    <!-- Se agrega la librería VueJS -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/2.1.1/vee-validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
-    <script src="https://unpkg.com/http-vue-loader"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.3.5/vuetify.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/8.3.0/vue-i18n.min.js"></script>
-    
-    
-    <!-- https://bootstrap-vue.js.org/docs/ -->
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
-    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-
-    <script src="js/utils/environment.js"></script>
-    <script src="js/shared/constantes.js"></script>
-    <script src="js/shared/lang.js"></script>
-    <script src="js/shared/services.js"></script>
-    <script src="js/app/app.js"></script>
-
-    <script src="js/main.js"></script>
-    <script src="js/map-features.js"></script>
-
-    <script src="js/pages/ui/message.vue.js"></script>
-    <script src="js/pages/seccion/seccion.component.vue.js"></script>
-    <!-- <script type="module" src="js/pages/panel/panel-conteo-marcadores.vue.js"></script> -->
-    <!-- <script type="module" src="js/pages/panel/panel-edicion.vue.js"></script> -->
+    </div>    
         
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
