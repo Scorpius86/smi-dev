@@ -17,8 +17,10 @@ var model = {};
 model.selectedLayers = [];
 
 jQuery(function ($) {
-  showLoading();
-
+  $(window).show(function(){ 
+    showLoading();
+  });
+  
   setTimeout(function () {
     $(".logout-button").off("click");
     $(".logout-button").on("click", onLogoutButtonClick);
@@ -36,7 +38,7 @@ jQuery(function ($) {
     loadSecciones($afterLoadSecciones);
 
     hideLoading();
-  }, 500);
+  }, 700);
 });
 
 function onLogoutButtonClick() {
