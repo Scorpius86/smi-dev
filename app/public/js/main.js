@@ -441,15 +441,16 @@ function generarGraficasLimites($idElement, cultivo) {
 
   let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion, dataAniosPronostico);
   const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProduccion);
-  const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? produccion * (TASA / 100.000) : produccion));
+
+  const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? (produccion * (TASA / 100.000)).toFixed(2): produccion));
 
   dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad, dataAniosPronostico);
   const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProductividad);
-  const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? productividad * (TASA / 100.000) : productividad));
+  const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? (productividad * (TASA / 100.000)).toFixed(2) : productividad));
 
   dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea, dataAniosPronostico);
   const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesArea);
-  const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? area * (TASA / 100.000) : area));
+  const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? (area * (TASA / 100.000)).toFixed(2) : area));
   let dataLabels = [];
 
   dataAnios.forEach(d => dataLabels.push(d));
@@ -689,7 +690,7 @@ function tranformarDatosPronostico(dataValuesPronostico, aniosReales, valoresRea
   data.push(valoresReales[valoresReales.length - 1]);
 
   dataValuesPronostico.forEach(function (pronostico) {
-    data.push(pronostico.y);
+    data.push(pronostico.y.toFixed(2));
   });
 
   return data;
@@ -728,15 +729,15 @@ function actualizarGraficasLimites(cultivo, charts, rangoAnios, tasa) {
 
       let dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProduccion, dataAniosPronostico);
       const dataValuesPronosticoProduccion = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProduccion);
-      const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? produccion * (tasa / 100.000) : produccion));
+      const dataValuesPronosticoProduccionTasa = dataValuesPronosticoProduccion.map(produccion => (produccion != null ? (produccion * (tasa / 100.000)).toFixed(2) : produccion));
 
       dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionProductividad, dataAniosPronostico);
       const dataValuesPronosticoProductividad = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesProductividad);
-      const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? productividad * (tasa / 100.000) : productividad));
+      const dataValuesPronosticoProductividadTasa = dataValuesPronosticoProductividad.map(productividad => (productividad != null ? (productividad * (tasa / 100.000)).toFixed(2) : productividad));
 
       dataValuesPronostico = obtenerPronosticoRegresionLineal(dataRegresionArea, dataAniosPronostico);
       const dataValuesPronosticoArea = tranformarDatosPronostico(dataValuesPronostico, dataAnios, dataValuesArea);
-      const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? area * (tasa / 100.000) : area));
+      const dataValuesPronosticoAreaTasa = dataValuesPronosticoArea.map(area => (area != null ? (area * (tasa / 100.000)).toFixed(2) : area));
 
 
       charts['produccion'].config.data.datasets[0].data = dataValuesProduccion;

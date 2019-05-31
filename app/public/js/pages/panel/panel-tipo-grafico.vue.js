@@ -203,8 +203,6 @@ export default {
         me.selTasaBase.proyecciones.forEach(x => {
           x.detalle.forecast = x.detalle.forecast.filter(y => y.dato <= anio);
         });
-  
-        console.log(me.selTasa);
       },
       onSeleccionarPanelFeature: function() {
         const me = this;
@@ -223,7 +221,6 @@ export default {
           lista,
           this.selCultivoId,
           function(data) {
-            console.log(data);
             if(data){
               me.detalle = data;
               me.show();
