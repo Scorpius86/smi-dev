@@ -254,7 +254,7 @@ function SMIMapFeature(map) {
 
     this.loadPanel($idSeccion, paramLista, $idCultivo, function (data) {
       const seccionDetalle = data.detalles.find(d => d.codigoGIS == $detalleCodigoGIS);
-      console.log(seccionDetalle);
+
       if (data == undefined || data.length == 0) {
         const propiedades = loadDefaultProperties();
         data = propiedades;

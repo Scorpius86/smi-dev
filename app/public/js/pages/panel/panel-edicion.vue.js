@@ -87,6 +87,7 @@ export default {
             panel.RemoveLayers(e);
         },
         DrawEventCREATED: function (e) {
+            mapFeature.removeAllSelection();
             this.codigoSeccion = CONSTANTES.SECCIONES.CONTEO_MARCADORES;
             let panel = this.assignPanel();
             panel.DrawEventCREATED(e);
@@ -94,7 +95,6 @@ export default {
         btnCerrarClick: function () {
             if (this.tipo !== 'grafico') {
                 map.eachLayer(function (layer) {
-                   
                     if (layer instanceof L.Circle || layer instanceof L.Polygon) {
                         if(layer.feature === undefined || layer.feature === null){
                             map.removeLayer(layer); 
@@ -102,8 +102,9 @@ export default {
                         
                     }
                 });
+            } else {
+                mapFeature.removeAllSelection();
             }
-
         },
         assignPanel: function () {
             let tipoId;

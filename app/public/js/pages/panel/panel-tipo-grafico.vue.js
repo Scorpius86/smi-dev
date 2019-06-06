@@ -17,7 +17,7 @@ export default {
 
                 <li v-for="cultivo in detalle.forecast.cultivos" class="nav-item">
                     <a class="nav-link active" v-bind:id="'cultivo-' + cultivo.id + '-tab'" data-toggle="pill" v-on:click="onSeleccionCultivo(cultivo)"
-                        v-bind:href="'#cultivo-'+ cultivo.id" role="tab" :aria-controls="'cultivo-' + cultivo.id" aria-selected="true">
+                        v-bind:href="'#cultivo-'+ cultivo.id" role="tab" :aria-controls="'cultivo-' + cultivo.id" aria-selected="true">z
                         {{cultivo.nombre}}
                     </a>
                 </li>
@@ -162,6 +162,9 @@ export default {
           this.detalle.forecast.selectedFeatures = selectedElements;
           this.title = "Región";
         }
+        setTimeout(function() {
+           $("#ui-id-1").text(me.detalle.nombre);
+      }, 200);
       },
       onSeleccionCultivo: function(cultivo) {
         this.selCultivoId = cultivo.id;
@@ -203,8 +206,6 @@ export default {
         me.selTasaBase.proyecciones.forEach(x => {
           x.detalle.forecast = x.detalle.forecast.filter(y => y.dato <= anio);
         });
-  
-        console.log(me.selTasa);
       },
       onSeleccionarPanelFeature: function() {
         const me = this;
@@ -223,7 +224,6 @@ export default {
           lista,
           this.selCultivoId,
           function(data) {
-            console.log(data);
             if(data){
               me.detalle = data;
               me.show();
