@@ -31,7 +31,7 @@ export default {
                     <div class="panel-tabs">
                         <ul>
                             <li v-for="cultivo in detalle.forecast.cultivos">
-                                <a v-if="cultivo.producciones.length>0" v-bind:href="'#cultivo-tabs-' + cultivo.id">{{cultivo.nombre}}</a>
+                                <a v-if="cultivo.producciones.length>0" v-bind:href="'#cultivo-tabs-' + cultivo.id"><span id="textoCultivo">{{cultivo.nombre}}</span></a>
                             </li>
                         </ul>
                         <div v-for="cultivo in detalle.forecast.cultivos" v-bind:id="'cultivo-tabs-' + cultivo.id">
@@ -163,7 +163,7 @@ export default {
           this.title = "Región";
         }
         setTimeout(function() {
-           $("#ui-id-1").text(me.detalle.nombre);
+           $("#textoCultivo").text(me.detalle.nombre);
       }, 200);
       },
       onSeleccionCultivo: function(cultivo) {
