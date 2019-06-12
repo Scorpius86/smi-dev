@@ -31,7 +31,7 @@ export default {
                     <div class="panel-tabs">
                         <ul>
                             <li v-for="cultivo in detalle.forecast.cultivos">
-                                <a v-if="cultivo.producciones.length>0" v-bind:href="'#cultivo-tabs-' + cultivo.id"><span id="textoCultivo">{{cultivo.nombre}}</span></a>
+                                <a v-if="cultivo.producciones.length>0" v-bind:href="'#cultivo-tabs-' + cultivo.id">{{cultivo.nombre}}</a>
                             </li>
                         </ul>
                         <div v-for="cultivo in detalle.forecast.cultivos" v-bind:id="'cultivo-tabs-' + cultivo.id">
@@ -113,6 +113,7 @@ export default {
         
       },
       show: function() {
+        $("#textoCultivo").text("");
         const me = this;
         this.display = true;
   

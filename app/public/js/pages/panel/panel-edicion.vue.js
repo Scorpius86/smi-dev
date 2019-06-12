@@ -23,7 +23,7 @@ export default {
                 
                 <div class="row">
                     <div class="col-12  text-center">
-                        <h4>{{title}}</h4>
+                        <h4 id="textoCultivo"></h4>
                     </div>                    
                 </div>
                 <div class="content">                   
