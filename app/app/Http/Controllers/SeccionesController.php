@@ -345,7 +345,7 @@ class SeccionesController extends Controller
     public function uploadFile(Request $request, $id)
     {
 
-        $pathBase = '/home/admin01/smi-dev/app/storage/app/public/json/';
+        $pathBase = '/public/json/';
 
         $seccion = Seccion::findOrFail($id);
         $fileName = "Seccion-" . $id . "-file.geojson";
