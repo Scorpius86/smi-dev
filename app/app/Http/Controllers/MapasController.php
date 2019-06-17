@@ -9,7 +9,7 @@ class MapasController extends Controller
     //
     public function getDistritos(){
         //$path = storage_path() . "/json/${filename}.json";
-        $path= '/home/admin01/smi-dev/app/storage/app/public/json/peru_departamental_simple.geojson';
+        $path=base_path() . 'z/storage/app/public/json/peru_departamental_simple.geojson';
 
         $jsonData = json_decode(file_get_contents($path), true);
         
@@ -22,7 +22,7 @@ class MapasController extends Controller
 
     public function getRegiones(){
         //$path = storage_path() . "/json/${filename}.json";
-        $path='/home/admin01/smi-dev/app/storage/app/public/json/peru_departamental_simple.geojson';
+        $path=base_path() . '/storage/app/public/json/peru_departamental_simple.geojson';
 
         $jsonData = json_decode(file_get_contents($path), true);
         
