@@ -210,8 +210,8 @@ class SeccionesController extends Controller
 
         if ($seccion->geoJsonFile <> null) {
             $fileName = $seccion->geoJsonFile;
-            $baseSrc = '/storage/app/public/json//';
-            $file = base_path() . $baseSrc . ($fileName);
+            $baseSrc = '/home/admin01/smi-dev/app/storage/app/public/json//';
+            $file =  $baseSrc . ($fileName);
             $geoFile = @file_get_contents($file);
 
             if ($geoFile != false) {
@@ -376,7 +376,7 @@ class SeccionesController extends Controller
         $listCodigoGIS = $request->input('listCodigoGIS');
         $idSeccion = $request->input('idSeccion');
 
-        $path = base_path() . '/storage/app/public/json/data-panel.json';
+        $path = '/home/admin01/smi-dev/app/storage/app/public/json/data-panel.json';
 
         $jsonData = json_decode(file_get_contents($path), true);
 
