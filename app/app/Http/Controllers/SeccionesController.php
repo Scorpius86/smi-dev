@@ -213,7 +213,6 @@ class SeccionesController extends Controller
             $baseSrc = '/storage/app/public/json//';
             $file = base_path() . $baseSrc . ($fileName);
             $geoFile = @file_get_contents($file);
-
             if ($geoFile != false) {
                 $dataGeoJson = file_get_contents($file);
             }
@@ -345,7 +344,7 @@ class SeccionesController extends Controller
     public function uploadFile(Request $request, $id)
     {
 
-        $pathBase = '/home/admin01/smi-dev/app/storage/app/public/json/';
+        $pathBase = '/app/public/json/';
 
         $seccion = Seccion::findOrFail($id);
         $fileName = "Seccion-" . $id . "-file.geojson";
