@@ -102,6 +102,7 @@ export default {
                         
                     }
                 });
+                smiPanel.$refs.param.notOpen = false;
             } else {
                 mapFeature.removeAllSelection();
             }

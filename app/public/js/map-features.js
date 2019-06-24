@@ -45,6 +45,7 @@ function SMIMapFeature(map) {
     // }
   };
   this.selectLayer = function (event, $seccion, $cacheLayer) {
+    debugger;
     const me = this;
     var layer = event.target;
     var feature = event.target.feature;
@@ -67,12 +68,12 @@ function SMIMapFeature(map) {
         // removerlayers(feature, setStyleLayer, layer, stylelayer.default);
         // removeBounds(layer);
 
-        this.removeSelectedLayer(keyFeature, layer);
+        //this.removeSelectedLayer(keyFeature, layer);
         me.showInfoMultiple($detalleCodigoGIS, $seccion);
       } else {
         // addLayers(feature, setStyleLayer, layer, stylelayer.highlight);
         // addBounds(layer);
-        this.addSelectedLayer(keyFeature, layer);
+        //this.addSelectedLayer(keyFeature, layer);
         me.showInfoMultiple($detalleCodigoGIS, $seccion);
       }
       //   map.fitBounds(arrayBounds);
@@ -80,8 +81,8 @@ function SMIMapFeature(map) {
     } else {
       //Marcar como seleccionado
       if (layer.feature.geometry.type == "Polygon") {
-        this.removeAllSelection();
-        this.addSelectedLayer(keyFeature, layer);
+        //this.removeAllSelection();
+        //this.addSelectedLayer(keyFeature, layer);
       }
       me.showInfo($detalleCodigoGIS, $seccion);
     }
@@ -92,10 +93,10 @@ function SMIMapFeature(map) {
   };
 
   this.addSelectedLayer = function (key, layer) {
-    if (!_.some(this.selectedLayers, { key: key })) {
+    /*if (!_.some(this.selectedLayers, { key: key })) {
       this.selectedLayers.push({ key: key, layer: layer });
       if (layer) layer.setStyle(this.styleLayer.selected);
-    }
+    }*/
   };
 
   this.removeAllSelection = function () {
@@ -237,81 +238,96 @@ function SMIMapFeature(map) {
   }
 
   this.showInfo = function ($detalleCodigoGIS, $seccion) {
+    const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
     const $idSeccion = $seccion.seccion.id;
     const $seccionCodigoGIS = $seccion.seccion.codigoGIS;
 
-    const $idCultivo = 0;
-    if ($detalleCodigoGIS == undefined) {
-      smiMensaje.$refs.message.mensaje.text =
-        "No se puede leer el atributo ID_SEC, ID__SEC del archivo geojson.";
-      smiMensaje.$refs.message.onMostrarMensaje();
-      return;
+    let $temp;
+    let execute = true;
+    if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
+      $temp = "grafico";
+    } else {
+      $temp = "edicion";
     }
-    const $listaLimitesSeccionGIS = ["M004", "M005", "M006"];
 
-    let paramLista = [];
-    paramLista.push($detalleCodigoGIS);
+    if(smiPanel.$refs.param.notOpen && $temp == 'grafico') {
+      execute = false;
+    } 
 
-    this.loadPanel($idSeccion, paramLista, $idCultivo, function (data) {
-      const seccionDetalle = data.detalles.find(d => d.codigoGIS == $detalleCodigoGIS);
-
-      if (data == undefined || data.length == 0) {
-        const propiedades = loadDefaultProperties();
-        data = propiedades;
+    if(execute) {
+      const $idCultivo = 0;
+      if ($detalleCodigoGIS == undefined) {
+        smiMensaje.$refs.message.mensaje.text =
+          "No se puede leer el atributo ID_SEC, ID__SEC del archivo geojson.";
+        smiMensaje.$refs.message.onMostrarMensaje();
+        return;
       }
+     
 
-      data.nombre = $detalleCodigoGIS;
-      data.permiteEditar = false;
+      let paramLista = [];
+      paramLista.push($detalleCodigoGIS);
 
-      if (data.detalles.length > 0 && seccionDetalle) {
-        data.nombre = seccionDetalle.nombre;
-      }
+      this.loadPanel($idSeccion, paramLista, $idCultivo, function (data) {
+        const seccionDetalle = data.detalles.find(d => d.codigoGIS == $detalleCodigoGIS);
 
-      let authenticate = authenticatedUser();
-      if (authenticate != null && authenticate.id > 0) {
-        data.permiteEditar = true;
-      }
-      let language = getLanguage();
-      if (language == null || language.length == 0) {
-        language = "es";
-      }
+        if (data == undefined || data.length == 0) {
+          const propiedades = loadDefaultProperties();
+          data = propiedades;
+        }
 
-      data.label = messages[language].label;
-      data.detallePrincipal = seccionDetalle;
-      data.codigoGISPrincipal = $detalleCodigoGIS;
+        data.nombre = $detalleCodigoGIS;
+        data.permiteEditar = false;
 
-      const $templateAtributos = renderHandlebarsTemplate(
-        "#secciones-editar-atributos",
-        null,
-        { data: data },
-        null,
-        true
-      );
+        if (data.detalles.length > 0 && seccionDetalle) {
+          data.nombre = seccionDetalle.nombre;
+        }
 
-      if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
-        smiPanel.$refs.param.tipo = "grafico";
-      } else {
-        smiPanel.$refs.param.tipo = "edicion";
-      }
+        let authenticate = authenticatedUser();
+        if (authenticate != null && authenticate.id > 0) {
+          data.permiteEditar = true;
+        }
+        let language = getLanguage();
+        if (language == null || language.length == 0) {
+          language = "es";
+        }
 
-      smiPanel.$refs.param.input = {};
-      smiPanel.$refs.param.input.seccion = $seccion.seccion;
-      smiPanel.$refs.param.detalle = data;
-      $("#modal-content-atributos").html($templateAtributos);
+        data.label = messages[language].label;
+        data.detallePrincipal = seccionDetalle;
+        data.codigoGISPrincipal = $detalleCodigoGIS;
 
-      //smiPanel.$refs.param.show();
+        const $templateAtributos = renderHandlebarsTemplate(
+          "#secciones-editar-atributos",
+          null,
+          { data: data },
+          null,
+          true
+        );
 
-      if (smiPanel.$refs.param.tipo === "edicion") {
-        //smiPanel.$refs.param.hide();
-        setTimeout(smiPanel.$refs.param.showModal, 50);
-      } else if(smiPanel.$refs.param.tipo === "grafico"){
-        smiPanel.$refs.param.tipo = "grafico";
-        smiPanel.$refs.param.show();
+        if ($listaLimitesSeccionGIS.indexOf($seccionCodigoGIS) >= 0) {
+          smiPanel.$refs.param.tipo = "grafico";
+        } else {
+          smiPanel.$refs.param.tipo = "edicion";
+        }
 
-        setTimeout(smiPanel.$refs.param.showModal, 50);
-      }
+        smiPanel.$refs.param.input = {};
+        smiPanel.$refs.param.input.seccion = $seccion.seccion;
+        smiPanel.$refs.param.detalle = data;
+        $("#modal-content-atributos").html($templateAtributos);
 
-    });
+        //smiPanel.$refs.param.show();
+
+        if (smiPanel.$refs.param.tipo === "edicion") {
+          //smiPanel.$refs.param.hide();
+          setTimeout(smiPanel.$refs.param.showModal, 50);
+        } else if(smiPanel.$refs.param.tipo === "grafico"){
+          smiPanel.$refs.param.tipo = "grafico";
+          smiPanel.$refs.param.show();
+
+          setTimeout(smiPanel.$refs.param.showModal, 50);
+        }
+
+      });
+    }
   };
 
   this.showInfoMultiple = function ($detalleCodigoGIS, $seccion) {

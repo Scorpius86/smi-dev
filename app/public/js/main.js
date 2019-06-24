@@ -317,7 +317,7 @@ function initMap($regiones, $afterMapIsLoaded) {
     }
     smiPanel.$refs.param.tipo = "edicion";
     smiPanel.$refs.param.DrawEventCREATED(e);
-
+    smiPanel.$refs.param.notOpen = true;
     drawnItems.addLayer(e.layer);
 
   });
@@ -335,6 +335,7 @@ function initMap($regiones, $afterMapIsLoaded) {
         $("#nav-panel").hide();
       }
     });
+    smiPanel.$refs.param.notOpen = false;
   });
 }
 
