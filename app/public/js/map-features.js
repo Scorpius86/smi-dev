@@ -45,7 +45,6 @@ function SMIMapFeature(map) {
     // }
   };
   this.selectLayer = function (event, $seccion, $cacheLayer) {
-    debugger;
     const me = this;
     var layer = event.target;
     var feature = event.target.feature;
