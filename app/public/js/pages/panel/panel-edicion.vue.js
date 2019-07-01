@@ -114,19 +114,23 @@ export default {
             }
         },
         mostrarConfirmacion: function () {
-            let language = getLanguage();
-            if (language == null || language.length == 0) {
-              language = "es";
+            if (this.tipo !== 'grafico') {
+                let language = getLanguage();
+                if (language == null || language.length == 0) {
+                language = "es";
+                }
+                const $templateAtributos = renderHandlebarsTemplate(
+                    "#confirmar-cierre",
+                    null,
+                    {label: messages[language].label},
+                    null,
+                    true
+                );
+                $("#modal-content-atributos").html($templateAtributos);
+                setTimeout(smiPanel.$refs.param.showModal, 50);
+            }  else {
+                mapFeature.removeAllSelection();
             }
-            const $templateAtributos = renderHandlebarsTemplate(
-                "#confirmar-cierre",
-                null,
-                {label: messages[language].label},
-                null,
-                true
-            );
-            $("#modal-content-atributos").html($templateAtributos);
-            setTimeout(smiPanel.$refs.param.showModal, 50);
         },
         assignPanel: function () {
             let tipoId;
