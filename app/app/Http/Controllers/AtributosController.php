@@ -62,7 +62,15 @@ class AtributosController extends Controller
         $seccionDetalle = SeccionDetalle::findOrFail( $request->input('idSeccionDetalle'));
         $seccionDetalle->nombre=$request->input('nombre'); 
         $seccionDetalle->abreviatura=$request->input('abreviatura'); 
-        $seccionDetalle->descripcion=$request->input('descripcion');         
+        $seccionDetalle->descripcion=$request->input('descripcion');      
+        if(strlen($seccionDetalle->descripcion)==0) {
+            $seccionDetalle->descripcion = ' ';
+        }
+
+        if(strlen($seccionDetalle->abreviatura)==0) {
+            $seccionDetalle->abreviatura = ' ';
+        }
+        
         $seccionDetalle->fechaCambio=Carbon::now();
         $seccionDetalle->usuarioCambio=$user;
         $seccionDetalle->terminalCambio=$terminal;

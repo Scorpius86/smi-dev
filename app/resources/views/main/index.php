@@ -264,6 +264,9 @@
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
         {{#with data as |panelData|}}
+        <input type="hidden" id="idSeccionModal" data-validate="true" data-field="idSeccion" value="{{panelData.idSeccion}}">
+        <input type="hidden" id="idSeccionDetalleModal" data-validate="true" data-field="idSeccionDetalle" >
+        <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{panelData.codigoGISPrincipal}}">
         <div class="modal-header">
             <h3 class="modal-title"> {{panelData.nombre}} </h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -289,12 +292,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="seccion-informacion" role="tabpanel" aria-labelledby="seccion-informacion-tab">
                         <br>
-                        {{#with detallePrincipal}}
-                        {{detallePrincipal}}
-                        {{descripcion}}
-                        <input type="hidden" data-validate="true" data-field="idSeccion" value="{{panelData.idSeccion}}">
-                        <input type="hidden" data-validate="true" data-field="idSeccionDetalle" value="{{idSeccionDetalle}}">
-                        <input type="hidden" data-validate="true" data-field="codigoGIS" value="{{panelData.codigoGISPrincipal}}">
+                        {{#with detallePrincipal}}                        
                         <div class="form-group">
                             <label for="formGroupExampleInput">{{panelData.label.panel_label_name}}</label>
                             <input type="text" class="form-control" data-validate="true" data-field="nombre" placeholder="{{panelData.label.panel_label_name}}" value="{{nombre}}">

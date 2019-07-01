@@ -213,7 +213,6 @@ class SeccionesController extends Controller
             $baseSrc = '/storage/app/public/json//';
             $file = base_path() . $baseSrc . ($fileName);
             $geoFile = @file_get_contents($file);
-            error_log($file);
             if ($geoFile != false) {
                 $dataGeoJson = file_get_contents($file);
             }
@@ -391,13 +390,35 @@ class SeccionesController extends Controller
         $seccionDto->idTipoGeoData = $seccion->idTipoGeoData;
         $seccionDto->idSeccionPadre = $seccion->idSeccionPadre;
         $seccionDto->geoJsonFile = $seccion->geoJsonFile;
- 
+
         $seccionDetalleDtos = SeccionDetalle::Where([
             ['seccion_detalle.idSeccion', '=', $seccion->id],
             ['seccion_detalle.eliminado', '=', '0']
         ])
             ->whereIn('seccion_detalle.CodigoGIS', $listCodigoGIS)
             ->get();
+        if(count($seccionDetalleDtos) == 0 && count($listCodigoGIS) == 1) { 
+            $seccionDetalleTmp = new SeccionDetalle();
+            $seccionDetalleTmp->codigoGIS = $listCodigoGIS[0];
+            $seccionDetalleTmp->idSeccion = $idSeccion;
+            $seccionDetalleTmp->codigo = ' ';
+            $seccionDetalleTmp->descripcion = ' ';
+            $seccionDetalleTmp->abreviatura = ' ';
+            $seccionDetalleTmp->nombre = $listCodigoGIS[0];
+            $seccionDetalleTmp->ubigeo = ' ';
+            $seccionDetalleTmp->fechaCrea = Carbon::now();
+            $seccionDetalleTmp->usuarioCrea = ' ';
+            $seccionDetalleTmp->terminalCrea = ' ';
+            $seccionDetalleTmp->activo = 1;
+            $seccionDetalleTmp->eliminado = 0;
+            $seccionDetalleTmp->save();
+            $seccionDetalleDtos = SeccionDetalle::Where([
+                ['seccion_detalle.idSeccion', '=', $seccion->id],
+                ['seccion_detalle.eliminado', '=', '0']
+            ])
+                ->whereIn('seccion_detalle.CodigoGIS', $listCodigoGIS)
+                ->get();
+        }
 
         $seccionDto->detalles = $seccionDetalleDtos->map(function ($seccionDetalle) {
             $seccionDetalleDto = new SeccionDetalleDto();
@@ -414,7 +435,6 @@ class SeccionesController extends Controller
                 ['seccion_atributo.eliminado', '=', '0']
             ])
                 ->get();
-
             $seccionDetalleDto->atributos = $seccionAtributoDtos->map(function ($seccionAtributo) {
                 $seccionAtributoDto = new SeccionAtributoDto();
                 $seccionAtributoDto->idSeccionAtributo = $seccionAtributo->id;
@@ -427,7 +447,6 @@ class SeccionesController extends Controller
 
             return $seccionDetalleDto;
         });
-
         if (count($listCodigoGIS) > 1) {
             $tipoCultivos = Forecast::where([['forecast.eliminado', '=', '0']])
                 ->join('cultivo', 'cultivo.idForecast', 'forecast.id')
@@ -518,7 +537,6 @@ class SeccionesController extends Controller
                 $forecast = $forecastDto;
             }
         }
-
         $seccionDto->forecast = $forecast;
         $jsonData = $seccionDto;
 

@@ -188,6 +188,11 @@ function SMIMapFeature(map) {
         if (typeof ($response !== "undefined") && $response !== null) {
           if ($response.status) {
             $afterLoadPanel($response.data);
+            if($response.data !== undefined && $response.data !== 'undefined' 
+            && $response.data.detalles !== undefined && $response.data.detalles !== 'undefined' 
+            && $response.data.detalles.length > 0) {
+              $("#idSeccionDetalleModal").val($response.data.detalles[0].idSeccionDetalle);
+            }
           }
         }
       },

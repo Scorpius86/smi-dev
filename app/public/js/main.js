@@ -1429,7 +1429,7 @@ function saveSeccionDetalleClick() {
 
   let atributosNombre = $("#modal-content-atributos").find(".atributo-nombre");
   let atributosValor = $("#modal-content-atributos").find(".atributo-valor");
-
+  let idSeccion = $("#idSeccionModal").val();
   for (let index = 0; index < atributosNombre.length; index++) {
     let row = {};
     row.id = $(atributosNombre[index]).attr("data-field-id");
@@ -1446,5 +1446,5 @@ function saveSeccionDetalleClick() {
   });
 
   $seccionDetalle.atributos = $atributos;
-  saveSeccionDetalleRequest($seccionDetalle.idSeccion, $seccionDetalle);
+  saveSeccionDetalleRequest(idSeccion, $seccionDetalle);
 }
