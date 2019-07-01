@@ -25,7 +25,9 @@ const messages = {
       button_cancel: "Cancelar",
       button_delete: "Eliminar",
       panel_attribute_title_attribute: "Atributo",
-      panel_attribute_title_value: "Valor"
+      panel_attribute_title_value: "Valor",
+      message_confirmation: "¿Está seguro que desea salir? Si cierra el panel se borrará el polígono/círculo dibujado",
+      title_confirmation: "Confirmación"
     }
   },
   en: {
@@ -54,7 +56,9 @@ const messages = {
       button_cancel: "Cancel",
       button_delete: "Delete",
       panel_attribute_title_attribute: "Attribute",
-      panel_attribute_title_value: "Value"
+      panel_attribute_title_value: "Value",
+      message_confirmation: "Are you sure you want to leave? If you close the panel, the drawn polygon / circle will be deleted",
+      title_confirmation: "Confirmation"
     }
   }
 };

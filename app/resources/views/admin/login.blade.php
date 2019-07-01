@@ -208,7 +208,6 @@
                             dataLogin.nombre = $response.data.nombre;
                             dataLogin.language = $authData.language;
                             $afterLogin(dataLogin);
-                            console.log("autenticado");
                         } else {
                             $mensaje.text($response.error);
                         }

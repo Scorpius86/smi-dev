@@ -13,9 +13,14 @@ export default {
                     <div class="navbar-nav">
                         <div class="d-flex justify-content-between">
                             <div class="nav-item" id="btnClosePanel">
-                                <a class="border-right px-3 nav-link closePanel-button" v-on:click="btnCerrarClick" >
+                                <a class="border-right px-3 nav-link closePanel-button" v-on:click="mostrarConfirmacion" >
                                     <i class="fas fa-2x fa-times"></i>
                                 </a>
+                                <button id="btnCerrarPanel" style="display:none;" v-on:click="btnCerrarClick" >
+                                </button>
+                                <button id="btnCerrarPanel2" style="display:none;" data-dismiss="modal" class="border-right px-3 nav-link closePanel-button">
+                                    <i class="fas fa-2x fa-times"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -93,6 +98,7 @@ export default {
             panel.DrawEventCREATED(e);
         },
         btnCerrarClick: function () {
+
             if (this.tipo !== 'grafico') {
                 map.eachLayer(function (layer) {
                     if (layer instanceof L.Circle || layer instanceof L.Polygon) {
@@ -106,6 +112,21 @@ export default {
             } else {
                 mapFeature.removeAllSelection();
             }
+        },
+        mostrarConfirmacion: function () {
+            let language = getLanguage();
+            if (language == null || language.length == 0) {
+              language = "es";
+            }
+            const $templateAtributos = renderHandlebarsTemplate(
+                "#confirmar-cierre",
+                null,
+                {label: messages[language].label},
+                null,
+                true
+            );
+            $("#modal-content-atributos").html($templateAtributos);
+            setTimeout(smiPanel.$refs.param.showModal, 50);
         },
         assignPanel: function () {
             let tipoId;
@@ -124,10 +145,10 @@ export default {
         },
         show: function () {
             this.hideChildComponents();
-            $("#btnClosePanel").off("click");
+            /*$("#btnClosePanel").off("click");
             $("#btnClosePanel").on("click", function () {
                 $("#nav-panel").hide();
-            });
+            });*/
             let panel = this.assignPanel();
             panel.show();
             $("#nav-panel").show();

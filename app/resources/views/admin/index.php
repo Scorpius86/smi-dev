@@ -242,7 +242,6 @@
       
       var smiHomeMenu=new Vue({ el: '#home-menu' });
 
-      console.log(smiHomeMenu);
       smiHomeMenu.$refs.param.show();
 
       jQuery(function($) {

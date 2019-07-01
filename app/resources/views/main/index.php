@@ -260,7 +260,24 @@
     </nav>
     </div>
     </div>    
-        
+
+    <script id="confirmar-cierre" type="text/x-handlebars-template">
+        {{#with label as |panelData|}}
+        <div class="modal-header">
+            <h3 class="modal-title">{{panelData.title_confirmation}}</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="height:100px;">
+            <span>{{panelData.message_confirmation}}</span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="closeModal" class="btn btn-secondary" data-dismiss="modal">{{panelData.button_cancel}}</button>
+            <button type="button" class="btn btn-primary" onClick="btnCerrarClick()">{{panelData.button_ok}}</button>
+        </div>
+        {{/with}}
+    </script>        
 
     <script id="secciones-editar-atributos" type="text/x-handlebars-template">
         {{#with data as |panelData|}}
@@ -387,7 +404,6 @@
             },
             methods: {
                 onChangeLanguage: function(language){
-                    console.log('aqui');
                     i18n.locale= language;
                     setLanguage(language);
                     smiSeccion.$refs.param.language = language;

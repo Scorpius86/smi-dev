@@ -1448,3 +1448,15 @@ function saveSeccionDetalleClick() {
   $seccionDetalle.atributos = $atributos;
   saveSeccionDetalleRequest(idSeccion, $seccionDetalle);
 }
+
+function btnCerrarClick() {
+  $("#btnCerrarPanel2").off("click");
+  $("#btnCerrarPanel2").on("click", function () {
+      $("#nav-panel").hide();
+  });
+  $("#btnCerrarPanel").click();
+  $("#btnCerrarPanel2").click();
+  $("#closeModal").click();
+
+  
+}
