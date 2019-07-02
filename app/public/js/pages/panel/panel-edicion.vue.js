@@ -18,9 +18,6 @@ export default {
                                 </a>
                                 <button id="btnCerrarPanel" style="display:none;" v-on:click="btnCerrarClick" >
                                 </button>
-                                <button id="btnCerrarPanel2" style="display:none;" data-dismiss="modal" class="border-right px-3 nav-link closePanel-button">
-                                    <i class="fas fa-2x fa-times"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -117,7 +114,7 @@ export default {
             if (this.tipo !== 'grafico') {
                 let language = getLanguage();
                 if (language == null || language.length == 0) {
-                language = "es";
+                    language = "es";
                 }
                 const $templateAtributos = renderHandlebarsTemplate(
                     "#confirmar-cierre",
@@ -128,9 +125,13 @@ export default {
                 );
                 $("#modal-content-atributos").html($templateAtributos);
                 setTimeout(smiPanel.$refs.param.showModal, 50);
+                setTimeout(function() {
+                    $("#nav-panel").show();
+                }, 50);
             }  else {
                 mapFeature.removeAllSelection();
             }
+            
         },
         assignPanel: function () {
             let tipoId;

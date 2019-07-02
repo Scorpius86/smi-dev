@@ -1450,13 +1450,7 @@ function saveSeccionDetalleClick() {
 }
 
 function btnCerrarClick() {
-  $("#btnCerrarPanel2").off("click");
-  $("#btnCerrarPanel2").on("click", function () {
-      $("#nav-panel").hide();
-  });
   $("#btnCerrarPanel").click();
-  $("#btnCerrarPanel2").click();
+  $("#nav-panel").hide();
   $("#closeModal").click();
-
-  
 }
