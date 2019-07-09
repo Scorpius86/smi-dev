@@ -154,32 +154,30 @@ export default {
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length; i++) {
                     const section = this.sections.find(item => item.id == data[i].seccion.idSeccionPadre);
-                    if (section != undefined && section != null) {
-                        if (!section) {
-                            this.sections.push({
-                                name: data[i].seccion.nombrePadre,
-                                id: data[i].seccion.idSeccionPadre,
-                                colorPadre: data[i].seccion.colorPadre,
-                                sections: [{
-                                    name: data[i].seccion.nombre,
-                                    id: data[i].seccion.id,
-                                    count: data[i].geoJsonFile.length,
-                                    color: data[i].seccion.color,
-                                    parentSectionId: data[i].seccion.idSeccionPadre,
-                                    sections: []
-                                }]
-                            });
-
-                        } else {
-                            section.sections.push({
+                    if (!section) {
+                        this.sections.push({
+                            name: data[i].seccion.nombrePadre,
+                            id: data[i].seccion.idSeccionPadre,
+                            colorPadre: data[i].seccion.colorPadre,
+                            sections: [{
                                 name: data[i].seccion.nombre,
                                 id: data[i].seccion.id,
                                 count: data[i].geoJsonFile.length,
                                 color: data[i].seccion.color,
                                 parentSectionId: data[i].seccion.idSeccionPadre,
                                 sections: []
-                            });
-                        }
+                            }]
+                        });
+
+                    } else {
+                        section.sections.push({
+                            name: data[i].seccion.nombre,
+                            id: data[i].seccion.id,
+                            count: data[i].geoJsonFile.length,
+                            color: data[i].seccion.color,
+                            parentSectionId: data[i].seccion.idSeccionPadre,
+                            sections: []
+                        });
                     }
                 }
             }
@@ -194,7 +192,7 @@ export default {
                     if (this.sections != undefined) {
                         section = this.sections.find(item => item.id == tipo.id);
                     }
-                    if (section != undefined && section != null) {
+                    if (tipo != undefined && tipo != null) {
                         if (!section) {
                             this.sections.push({
                                 name: tipo.descripcion,
