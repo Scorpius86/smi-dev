@@ -22,7 +22,7 @@ var smiUsuario = Vue.component("Usuario", {
                       <template v-if="usuarioEditar != null">
   
                       <div class="row">
-                          <form class="p-2 w-100">
+                          <form class="p-2 w-100" autocomplete="off">
                               <div class="form-group row">
                                   <div class="col-sm-6">
                                       <label for="">C&oacute;digo</label>
@@ -47,7 +47,16 @@ var smiUsuario = Vue.component("Usuario", {
                               <div class="form-group row">
                                   <div class="col-sm-6">
                                       <label for="">Usuario</label>
-                                      <input type="text" class="form-control" placeholder="Usuario" v-model="usuarioEditar.login">
+                                      <input type="text" class="form-control" placeholder="Usuario" v-model="usuarioEditar.login" autocomplete="new-password"/>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <div class="col-sm-6">
+                                      <label for="">Contrase&ntilde;a</label>
+                                      <input type="password" class="form-control" placeholder="Usuario" v-model="usuarioEditar.password" autocomplete="new-password"/>
                                   </div>
                                   <div class="col-sm-6">
                                     
@@ -183,7 +192,6 @@ var smiUsuario = Vue.component("Usuario", {
       this.$http.get(UrlAPI.base + "/usuarios").then(
         response => {
           if (response.body.status == true) {
-            console.log(response);
             this.usuarios = response.body.data;
             this.usuarios.forEach(x => {
               x.activoBoolean = x.activo == 1 ? true : false;
@@ -215,7 +223,7 @@ var smiUsuario = Vue.component("Usuario", {
       usuario.nombre = null;
       usuario.email = null;
       usuario.login = null;
-      //usuario.password = null;
+      usuario.password = null;
       //usuario.passwordConfirmar = null;
       usuario.idPerfil = null;
       usuario.telefono = null;
@@ -258,6 +266,15 @@ var smiUsuario = Vue.component("Usuario", {
         this.usuarioEditar.login.length == 0
       ) {
         this.mensajeValidacion.text = "Debe ingresar el usuario";
+        this.mensajeValidacion.visible = true;
+        return false;
+      }
+
+      if (
+        this.usuarioEditar.password == null ||
+        this.usuarioEditar.password.length == 0
+      ) {
+        this.mensajeValidacion.text = "Debe ingresar una contraseña";
         this.mensajeValidacion.visible = true;
         return false;
       }

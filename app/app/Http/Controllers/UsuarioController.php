@@ -27,7 +27,7 @@ class UsuarioController extends Controller
 
         if($request->input('id')==0){            
             $usuario->login=$request->input('login');
-            $usuario->password=$passwordDefault;
+            $usuario->password=$request->input('password');
             $usuario->nombre=$request->input('nombre');
             $usuario->idPerfil=$request->input('idPerfil');
             $usuario->telefono=$request->input('telefono');
@@ -46,7 +46,7 @@ class UsuarioController extends Controller
         else{
             $usuario = Usuario::findOrFail($request->input('id'));
             //$usuario->login=$request->input('login');
-            //$usuario->password=$request->input('password');
+            $usuario->password=$request->input('password');
             $usuario->nombre=$request->input('nombre');
             $usuario->idPerfil=$request->input('idPerfil');
             $usuario->telefono=$request->input('telefono');
